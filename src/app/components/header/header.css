@@ -1,20 +1,26 @@
 .header {
     display: flex;
     width: 100%;
-    justify-content: center;
+    justify-content: space-between;
     gap: 20px;
 
+}
+
+.logo {
+    width: 3em;
+    padding: 0 10px;
 }
 
 nav {
     display: flex;
     gap: 15px;
     margin-top: 20px;
+    padding: 0 20px;
 }
 
 nav a {
     text-decoration: none;
-    color: #000;
+    color: #cacaca;
     font-weight: 500;
     overflow: hidden;
     display: inline-block;
@@ -31,7 +37,7 @@ nav span::before {
     position: absolute;
     top: 120%;
     content: attr(data-hover);
-    color: #030303;
+    color: #ffffff;
 }
 
 nav a:hover span {
