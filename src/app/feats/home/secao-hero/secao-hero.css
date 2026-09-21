@@ -19,7 +19,7 @@
 }
 
 .box-texto h2 {
-    font-size: 26px;
+    font-size: 34px;
     font-weight: 400;
 }
 
@@ -28,8 +28,22 @@
 }
 
 .box-texto p {
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 200;
+}
+
+#repositorio {
+    background-color: #2561E8;
+    padding: 12px 25px;
+    border-radius: 50px;
+    color: white;
+    font-size: 15px;
+    font-family: var(--fonte);
     font-weight: 300;
+    border: 0px solid;
+    margin: 40px auto;
+    display: block;
+    cursor: pointer;
 }
 
 /* Div que contém o card Conscious Score */
@@ -81,7 +95,7 @@
 }
 
 .score-progress {
-    width: 86%;
+    width: 70%;
     height: 100%;
     background: #55a8f5;
     border-radius: 10px;
