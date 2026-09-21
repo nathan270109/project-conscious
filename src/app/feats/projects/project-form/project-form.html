@@ -11,8 +11,8 @@
       (ngSubmit)="onSubmit(projectForm)"
     >
 
-      <div class="project-form_field">
-        <label for="project-name">Nome do projeto</label>
+      <div class="project-form__field">
+        <label for="project-name">Nome do projeto <span class="project-form__required" aria-hidden="true">*</span></label>
 
         <!-- ngModel mantém o campo sincronizado com project.name; a referência expõe seu estado. -->
         <input
@@ -27,12 +27,12 @@
         />
         <!-- Exibe o erro após interação com o campo ou tentativa de envio. -->
         @if (projectName.invalid && (projectName.touched || submitted)) {
-          <small class="project-form_error"> Informe um nome com pelo menos 3 caracteres. </small>
+          <small class="project-form__error"> Informe um nome com pelo menos 3 caracteres. </small>
         }
       </div>
 
-      <div class="project-form_field">
-        <label for="repository-url">URL do repositório GitHub</label>
+      <div class="project-form__field">
+        <label for="repository-url">URL do repositório GitHub <span class="project-form__required" aria-hidden="true">*</span></label>
 
         <input
           id="repository-url"
@@ -45,11 +45,11 @@
         />
 
         @if (repositoryUrl.invalid && (repositoryUrl.touched || submitted)) {
-          <small class="project-form_error"> Informe uma URL válida do repositório GitHub. </small>
+          <small class="project-form__error"> Informe uma URL válida do repositório GitHub. </small>
         }
       </div>
 
-      <div class="project-form_field">
+      <div class="project-form__field">
         <label for="project-description">Descrição<span>(opcional)</span></label>
 
         <textarea

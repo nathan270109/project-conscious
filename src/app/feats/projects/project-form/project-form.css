@@ -58,6 +58,11 @@
     font-weight: 400;
 }
 
+.project-form label .project-form__required {
+    color: #b42318;
+    font-weight: 700;
+}
+
 .project-form input,
 .project-form textarea {
     width: 100%;
