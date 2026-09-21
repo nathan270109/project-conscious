@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
+import { SecaoHero } from './secao-hero/secao-hero';
 
 @Component({
-  imports: [],
+  imports: [SecaoHero],
   selector: 'app-home',
   styleUrl: './home.css',
   templateUrl: './home.html',
