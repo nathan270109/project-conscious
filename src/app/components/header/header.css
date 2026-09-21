@@ -3,6 +3,7 @@
     width: 100%;
     justify-content: space-between;
     gap: 20px;
+    font-family: Arial, Helvetica, sans-serif;
 
 }
 
@@ -11,19 +12,41 @@
     padding: 0 10px;
 }
 
+
 nav {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
-    padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background-color: transparent;
 }
 
 nav a {
-    text-decoration: none;
-    color: #323232;
-    font-weight: 500;
-    overflow: hidden;
-    display: inline-block;
-    height: 24px;
+  position: relative;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #000000; 
+  font-size: 16px;
+  font-weight: 500;
+  padding: 4px 0;
+  cursor: pointer;
 }
+
+nav a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background-color: #000000;
+  transition: width 0.3s ease-in-out;
+}
+
+nav a:hover::after {
+  width: 100%;
+}
+
+
+
+
 
