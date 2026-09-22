@@ -1,5 +1,85 @@
 # ProjectConscious
 
+O **Project Conscious** analisa repositórios públicos do GitHub e transforma sinais técnicos em uma visão clara da saúde do projeto. A aplicação apresentará um **Conscious Score**, as dimensões avaliadas, riscos encontrados e uma recomendação prioritária de melhoria.
+
+## O que o projeto avalia
+
+- Documentação
+- Testes
+- Acessibilidade
+- Organização
+- Manutenibilidade
+
+> O resultado deve ser explicável: cada risco informa o motivo, o arquivo e, quando disponível, a linha relacionada.
+
+## Estrutura do repositório
+
+```text
+project-conscious/
+├── src/                 # Frontend Angular
+├── backend/             # API NestJS
+├── package.json         # Dependências e scripts do frontend
+└── README.md
+```
+
+O frontend e o backend são aplicações separadas, mas fazem parte deste mesmo repositório Git.
+
+## Tecnologias
+
+- Angular 22 — interface web
+- NestJS 12 — API REST
+- TypeScript — linguagem principal
+- Vitest — testes
+
+## Executar o projeto localmente
+
+É necessário iniciar o frontend e o backend em terminais separados.
+
+### Frontend Angular
+
+Na raiz do repositório:
+
+```bash
+npm install
+npm start
+```
+
+Abra [http://localhost:4200](http://localhost:4200).
+
+### Backend NestJS
+
+Em outro terminal:
+
+```bash
+cd backend
+npm install
+npm run start:dev
+```
+
+Abra [http://localhost:3000](http://localhost:3000). Enquanto a API estiver na fase inicial, a rota `GET /` responde `Hello World!`; isso confirma que o servidor está ativo.
+
+Se a porta `3000` já estiver ocupada, identifique o processo antes de iniciar outra instância:
+
+```bash
+lsof -nP -iTCP:3000 -sTCP:LISTEN
+```
+
+## Estado atual
+
+- [x] Frontend Angular inicial estruturado
+- [x] Backend NestJS criado em `backend/` (`CONSCIOUS-34`)
+- [ ] Cadastro e validação do projeto
+- [ ] Leitura de repositórios públicos do GitHub
+- [ ] Motor de análise e Conscious Score
+- [ ] Dashboard com resultados
+- [ ] Modo demonstração
+
+## Convenções de colaboração
+
+- Crie uma branch por entrega e não faça commits diretamente na `main`.
+- Abra Pull Request e peça revisão de pelo menos uma pessoa.
+- Use commits objetivos, por exemplo: `feat(backend): inicializa API NestJS`.
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.8.
 
 ## Development server
