@@ -1,0 +1,91 @@
+/* Div 'container' que engloba tudo */
+.container {
+    background-color: #EFEFEF;
+    margin: 5px 45px 80px;
+    padding: 30px;
+    font-family: var(--fonte);
+    border-radius: 10px;
+}
+
+/* Textos da div 'textos' */
+.textos h3 {
+    color: rgb(197, 150, 20);
+    margin-bottom: 5px;
+}
+
+.textos h2 {
+    color: rgb(0, 0, 0);
+    font-weight: 500;
+}
+
+#subtitulo {
+    margin-bottom: 20px;
+}
+
+.textos p {
+    font-size: 18px;
+    font-weight: 200;
+    color: rgb(0, 0, 0);
+}
+
+/* Div 'boxes' que separa as as divs 'box' */
+.boxes {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+/* Div 'box' que toma conta dos cards */
+.box {
+    width: 100%;
+    margin: 25px 0 0 0;
+    padding: 25px 20px;
+    background-color: rgb(46, 36, 25);
+    color: rgb(255, 241, 222);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: var(--sombra);
+    transition: .4s;
+}
+
+.box:hover {
+    transform: translateY(-7px);
+    background-color: rgb(56, 48, 38);
+}
+
+/* Span que mexe apenas no número que está no card */
+.numero {
+    font-size: 32px;
+    color: rgb(201, 159, 46);
+    font-weight: 300;
+}
+
+/* Parágrafos dos cards */
+.paragrafo {
+    font-size: 16px;
+    font-weight: 500;
+    color: rgb(255, 255, 255);
+}
+
+.paragrafo-especial {
+    font-size: 13px;
+    font-weight: 100;
+    color: rgb(155, 155, 155);
+}
+
+/* Div 'caixa' que cuida dos textos da parte inferior do container */
+.caixa {
+    color: rgb(0, 0, 0);
+}
+
+.caixa h2 {
+    margin: 22px 0 0 0;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.caixa p {
+    font-size: 18px;
+    font-weight: 200;
+}
