@@ -17,7 +17,7 @@
     
     padding: 0px 25px;
     width: 450px;
-    color: rgb(0, 1, 73)
+    color: rgb(73, 47, 0)
 }
 
 .box-texto h2 {
@@ -35,7 +35,7 @@
 }
 
 #repositorio {
-    background-color: #2561E8;
+    background-color: #856a11;
     padding: 12px 25px;
     border-radius: 50px;
     color: white;
@@ -52,7 +52,7 @@
 .box-card {
     display: flex;
     flex-direction: column;
-    background-color: rgb(29, 25, 46);
+    background-color: rgb(46, 36, 25);
     padding: 25px;
     margin-top: 10px;
     border-radius: 10px;
@@ -67,14 +67,14 @@
 }
 
 #titulo {
-    color: #B8D8FF;
+    color: #ffecd5;
     font-size: 33px;
     font-weight: 300;
 }
 
 /* Páragrafo que contém a média do Conscious Score */
 #p-especial {
-    color: #8FA4BD;
+    color: #fff0dd;
     font-size: 18px;
 }
 
@@ -85,7 +85,7 @@
 
 #paragrafo {
     margin-bottom: 13px;
-    color: #B8D8FF;
+    color: #ffffff;
     font-weight: 200;
     font-size: 14px;
 }
@@ -95,7 +95,7 @@
     width: 100%;
     height: 13px;
     margin: -10px 0 30px;
-    background: #294d72;
+    background: #533a19;
     border-radius: 10px;
     overflow: hidden;
 }
@@ -103,7 +103,7 @@
 .score-progress {
     width: 70%;
     height: 100%;
-    background: #55a8f5;
+    background: #e0a21d;
     border-radius: 10px;
 }
 
@@ -112,7 +112,7 @@
     display: flex;
     justify-content: space-between;
     font-size: 15px;
-    color: #8FA4BD;
+    color: #fff1de;
     font-weight: 500;
 }
 
