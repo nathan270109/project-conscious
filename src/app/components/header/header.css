@@ -1,45 +1,101 @@
 .header {
     display: flex;
-    width: 100%;
+    background-color: #00000000;
     justify-content: space-between;
+    width: 100%;
     gap: 20px;
-
+    font-family: Arial, Helvetica, sans-serif;
+    position: fixed;
 }
+
+/*////////////////////*/
 
 .logo {
     width: 3em;
-    padding: 0 10px;
+    margin-left: 10px;
 }
 
-nav {
+/*////////////////////*/
+
+
+.nav {
+    margin: auto;
     display: flex;
-    gap: 15px;
-    margin-top: 20px;
-    padding: 0 20px;
+    padding: 0 0 0 70px;
+    gap: 24px;
+    background-color: transparent;
 }
 
-nav a {
+.nav a {
+
+    position: relative;
+    text-transform: uppercase;
     text-decoration: none;
-    color: #cacaca;
+    color: #000000;
+    font-size: 16px;
     font-weight: 500;
+    padding: 4px 0;
+    cursor: pointer;
+}
+
+.nav a::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background-color: #000000;
+    transition: width 0.3s ease-in-out;
+}
+
+.nav a:hover::after {
+    width: 100%;
+}
+
+
+/*////////////////////*/
+
+.botao {
+    margin-right: 10px;
+    padding: 5px 0;
+}
+
+.botao a {
+    text-decoration: none;
+    color: #ffffff;
+    background: #000000;
+    border-radius: 999px;
+    padding: 10px 16px;
+    font-weight: bold;
     overflow: hidden;
     display: inline-block;
-    height: 24px;
+    position: relative;
+    line-height: 1.2;
 }
 
-nav span {
+.botao span {
     position: relative;
-    display: inline-block;
+    display: block;
     transition: transform 0.3s ease;
 }
 
-nav span::before {
-    position: absolute;
-    top: 120%;
+.botao span::before {
     content: attr(data-hover);
+    position: absolute;
+    top: 200%;
+    left: 50%;
+    border-radius: 999px;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 50px;
+    background: #8f6031;
     color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-nav a:hover span {
-    transform: translateY(-120%);
+.botao a:hover span {
+    transform: translateY(-290%);
 }
