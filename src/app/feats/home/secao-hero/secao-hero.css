@@ -14,14 +14,14 @@
 
 /* Div que contém os textos */
 .box-texto {
-    margin: auto;
-    padding: 25px;
+    
+    padding: 0px 25px;
     width: 450px;
     color: rgb(0, 1, 73)
 }
 
 .box-texto h2 {
-    font-size: 34px;
+    font-size: 50px;
     font-weight: 400;
 }
 
@@ -30,7 +30,7 @@
 }
 
 .box-texto p {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 200;
 }
 
@@ -43,18 +43,21 @@
     font-family: var(--fonte);
     font-weight: 300;
     border: 0px solid;
-    margin: 40px auto;
+    margin: 30px 0;
     display: block;
     cursor: pointer;
 }
 
 /* Div que contém o card Conscious Score */
 .box-card {
+    display: flex;
+    flex-direction: column;
     background-color: rgb(29, 25, 46);
     padding: 25px;
+    margin-top: 10px;
     border-radius: 10px;
-    margin: auto;
     width: 310px;
+    height: 450px;
 }
 
 .box {
@@ -65,7 +68,7 @@
 
 #titulo {
     color: #B8D8FF;
-    font-size: 23px;
+    font-size: 33px;
     font-weight: 300;
 }
 
