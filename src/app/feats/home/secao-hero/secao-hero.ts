@@ -3,8 +3,8 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   imports: [RouterLink],
-  selector: 'app-footer',
-  styleUrl: './footer.css',
-  templateUrl: './footer.html',
+  selector: 'app-secao-hero',
+  styleUrl: './secao-hero.css',
+  templateUrl: './secao-hero.html',
 })
-export class Footer {}
+export class SecaoHero {}
