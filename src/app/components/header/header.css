@@ -18,6 +18,7 @@
 /*////////////////////*/
 
 .logo {
+    cursor: pointer;
     width: 3em;
     margin-left: 10px;
 }
