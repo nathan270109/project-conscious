@@ -14,14 +14,14 @@
 
 /* Div que contém os textos */
 .box-texto {
-    margin: auto;
-    padding: 25px;
+    
+    padding: 0px 25px;
     width: 450px;
-    color: rgb(0, 1, 73)
+    color: rgb(73, 47, 0)
 }
 
 .box-texto h2 {
-    font-size: 34px;
+    font-size: 50px;
     font-weight: 400;
 }
 
@@ -30,31 +30,65 @@
 }
 
 .box-texto p {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 200;
 }
 
-#repositorio {
-    background-color: #2561E8;
-    padding: 12px 25px;
-    border-radius: 50px;
-    color: white;
-    font-size: 15px;
-    font-family: var(--fonte);
-    font-weight: 300;
-    border: 0px solid;
-    margin: 40px auto;
-    display: block;
-    cursor: pointer;
+.botao {
+    margin-top: 28px;
 }
+
+
+.botao a {
+    text-decoration: none;
+    color: #ffffff;
+    background: #201300;
+    border-radius: 999px;
+    padding: 14px 16px;
+    font-weight: bold;
+    overflow: hidden;
+    display: inline-block;
+    position: relative;
+    line-height: 1.2;
+}
+
+.botao span {
+    position: relative;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.botao span::before {
+    content: attr(data-hover);
+    position: absolute;
+    top: 200%;
+    left: 50%;
+    border-radius: 999px;
+    transform: translateX(-50%);
+    width: 190px;
+    height: 50px;
+    background: #97720b;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.botao a:hover span {
+    transform: translateY(-290%);
+}
+
 
 /* Div que contém o card Conscious Score */
 .box-card {
-    background-color: rgb(29, 25, 46);
+    display: flex;
+    flex-direction: column;
+    background-color: #2e2419;
     padding: 25px;
+    margin-top: 10px;
     border-radius: 10px;
-    margin: auto;
     width: 310px;
+    height: 450px;
 }
 
 .box {
@@ -64,14 +98,14 @@
 }
 
 #titulo {
-    color: #B8D8FF;
-    font-size: 23px;
+    color: #ffecd5;
+    font-size: 33px;
     font-weight: 300;
 }
 
 /* Páragrafo que contém a média do Conscious Score */
 #p-especial {
-    color: #8FA4BD;
+    color: #fff0dd;
     font-size: 18px;
 }
 
@@ -82,7 +116,7 @@
 
 #paragrafo {
     margin-bottom: 13px;
-    color: #B8D8FF;
+    color: #ffffff;
     font-weight: 200;
     font-size: 14px;
 }
@@ -92,7 +126,7 @@
     width: 100%;
     height: 13px;
     margin: -10px 0 30px;
-    background: #294d72;
+    background: #533a19;
     border-radius: 10px;
     overflow: hidden;
 }
@@ -100,7 +134,7 @@
 .score-progress {
     width: 70%;
     height: 100%;
-    background: #55a8f5;
+    background: #e0a21d;
     border-radius: 10px;
 }
 
@@ -109,7 +143,7 @@
     display: flex;
     justify-content: space-between;
     font-size: 15px;
-    color: #8FA4BD;
+    color: #fff1de;
     font-weight: 500;
 }
 
