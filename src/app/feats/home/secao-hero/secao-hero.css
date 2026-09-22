@@ -1,5 +1,6 @@
 .hero {
     font-family: var(--fonte);
+    
 }
 
 /* Div container, que engloba a div box-texto e a div box-card*/
@@ -7,12 +8,14 @@
     display: flex;
     justify-content: center;
     gap: 0px;
+    height: 100vh;
     background-color: rgb(243, 241, 239);
     padding: 50px;
 }
 
 /* Div que contém os textos */
 .box-texto {
+    margin: auto;
     padding: 25px;
     width: 450px;
     color: rgb(0, 1, 73)
@@ -51,6 +54,7 @@
     background-color: rgb(29, 25, 46);
     padding: 25px;
     border-radius: 10px;
+    margin: auto;
     width: 310px;
 }
 
@@ -112,4 +116,24 @@
 
 .nota {
     color: white;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+        height: auto;
+        padding: 20px;
+    }
+
+    .box-texto {
+        width: 100%;
+        max-width: 450px;
+        padding: 15px 0;
+    }
+
+    .box-card {
+        width: 100%;
+        max-width: 310px;
+    }
 }
