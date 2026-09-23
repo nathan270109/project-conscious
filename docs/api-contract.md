@@ -1,14 +1,23 @@
 # Contrato de análise — Project Conscious
 
-Este documento define o formato de dados compartilhado entre frontend, backend e motor de análise.
+Este documento é a fonte única de verdade para a troca de dados entre o backend, o motor de análise e o dashboard.
 
-## Regras gerais
+## Objetivo e uso
 
-- Todos os campos usam `camelCase`.
-- Datas usam o formato ISO 8601.
-- O dashboard não deve criar chaves que não existam neste contrato.
-- O motor de análise deve devolver exatamente estas chaves.
-- `demoMode: true` identifica uma análise salva para demonstração; não representa uma análise criada naquele momento.
+- O backend deve devolver objetos neste formato.
+- O Integrante 5 deve gerar findings e resultados compatíveis.
+- O Integrante 3 deve criar o mock e renderizar o dashboard com estas mesmas chaves.
+- O modo demonstração deve reutilizar `AnalysisResult` com `demoMode: true`.
+
+> Este contrato descreve o resultado da análise. A rota definitiva de análise ainda será conectada; hoje, `POST /projects` cadastra somente o projeto validado.
+
+## Convenções
+
+- Campos usam `camelCase`.
+- Datas usam ISO 8601 em UTC.
+- Notas estão entre `0` e `100`.
+- Valores técnicos de categoria e severidade usam inglês em maiúsculas. O frontend traduz apenas o rótulo exibido.
+- Um `Finding` sempre informa `file` e `line`. Quando não houver linha precisa, use `null`.
 
 ## Entrada de cadastro
 
@@ -20,7 +29,8 @@ type ProjectDraft = {
 };
 ```
 
-- Exemplo
+Exemplo:
+
 ```json
 {
   "name": "Project Conscious Demo",
@@ -29,7 +39,8 @@ type ProjectDraft = {
 }
 ```
 
-- TypeScript
+## Tipos do resultado
+
 ```ts
 type AnalysisStatus = 'COMPLETED' | 'FAILED';
 
@@ -79,7 +90,17 @@ type AnalysisResult = {
 };
 ```
 
-- JSON
+## Regras por status
+
+| Status | `score` | `dimensions` e `findings` | `insight` | `error` |
+| --- | --- | --- | --- | --- |
+| `COMPLETED` | número de 0 a 100 | cinco dimensões; findings pode ser vazio | obrigatório | ausente |
+| `FAILED` | `null` | arrays vazios | `null` | obrigatório |
+
+Em uma análise concluída, cada categoria deve aparecer exatamente uma vez em `dimensions`.
+
+## Exemplo: análise concluída
+
 ```json
 {
   "projectId": "a5f68a91-2ff2-4928-a7b8-ef26e2bc37ad",
@@ -110,7 +131,9 @@ type AnalysisResult = {
   }
 }
 ```
-- JSON
+
+## Exemplo: análise com falha
+
 ```json
 {
   "projectId": "a5f68a91-2ff2-4928-a7b8-ef26e2bc37ad",
@@ -122,40 +145,20 @@ type AnalysisResult = {
   "insight": null,
   "error": {
     "code": "REPOSITORY_NOT_FOUND",
-    "message": "Não foi possível encontrar o repositório informado."
+    "message": "Não foi possível encontrar o repositório público informado."
   }
 }
 ```
-Acordo de integração
-- Integrante 3 deve usar este formato no mock do dashboard.
-- Integrante 5 deve usar este formato como retorno do motor de análise.
-- Integrante 4 deve devolver este formato no modo demonstração e, futuramente, na rota de resultado.
-- Qualquer alteração neste contrato exige atualizar o mock, o motor e a documentação na mesma Pull Request.
 
+## Checklist de integração
 
-## 3. Por que essas decisões importam
+Antes de integrar uma nova frente, confirme:
 
-- `score: number | null`: evita inventar uma nota quando a análise falhar.
-- `line: number | null`: mantém sempre a mesma chave, mesmo quando o risco não tiver linha específica.
-- `dimensions: []` em falha: impede o dashboard de tentar mostrar dimensões inexistentes.
-- Categorias e severidades em inglês e maiúsculas: são valores técnicos estáveis; o frontend traduz os rótulos exibidos.
-- `demoMode`: deixa transparente para avaliadores quando o resultado vem de uma análise salva.
+- [ ] O mock do dashboard possui as mesmas chaves de `AnalysisResult`.
+- [ ] O retorno do motor de análise possui as mesmas chaves de `AnalysisResult`.
+- [ ] O JSON do modo demonstração usa `demoMode: true` e contém evidências reais do repositório-demo.
+- [ ] O frontend trata `COMPLETED` e `FAILED` sem criar campos próprios.
 
-## 4. Revise antes do commit
+## Alterações no contrato
 
-Confirme que o documento contém:
-
-- `ProjectDraft`;
-- `Finding`;
-- `AnalysisResult`;
-- cinco dimensões;
-- `COMPLETED` e `FAILED`;
-- JSON de sucesso e falha;
-- `demoMode`.
-
-Então faça:
-
-```bash
-git add docs/api-contract.md
-git commit -m "docs(api): publica contrato de resultado da análise"
-git push origin docs/api-contract
+Qualquer alteração de chave, tipo ou significado deve ocorrer na mesma Pull Request que atualiza o backend, o mock do dashboard e o motor de análise. Não adicione campos locais sem registrar a mudança neste documento.
