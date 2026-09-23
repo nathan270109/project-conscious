@@ -6,6 +6,10 @@
 
 /* Variáveis definidas */
 :root { 
-    --fonte: "Stack Sans Text", sans-serif;;
+    --fonte: "Stack Sans Text", sans-serif;
     --sombra: 0 10px 20px rgba(0, 0, 0, .2);
+    --cor-destaque: rgb(201, 159, 46);
+    --cor-titulos: rgb(73, 47, 0);
+    --margin: 60px 70px;
+    --cor-textos: rgb(0, 0, 0);
 }
