@@ -3,7 +3,10 @@
 
 .header {
     display: flex;
-    background-color: #00000000;
+    background-color: #fcfbfbd3;
+    backdrop-filter: blur(8px);
+    height: 80px;
+    align-items: center;
     justify-content: space-between;
     width: 100%;
     padding-top: 10px;
@@ -27,8 +30,8 @@
 
 
 .nav {
-    margin: auto;
     display: flex;
+    align-items: center;
     padding: 0 0 0 80px;
     gap: 24px;
     background-color: transparent;
