@@ -1,44 +1,53 @@
-/* Adicionado padding no body para compensar a altura do header fixo */
-
-
-.header {
-    display: flex;
-    background-color: #fcfbfbd3;
-    backdrop-filter: blur(8px);
-    height: 80px;
-    align-items: center;
-    justify-content: space-between;
+/* Container pai relativo para alinhar os elementos superiores */
+.header-container {
+    position: relative;
     width: 100%;
-    padding-top: 10px;
-    gap: 20px;
+    padding-top: 15px;
     font-family: Arial, Helvetica, sans-serif;
+    background-color: #00000000;
+}
+
+/* 1. Elementos Fixos nas Pontas (Logo e Botão) */
+.fixed-left,
+.fixed-right {
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 15px;
     z-index: 1000;
 }
 
-/*////////////////////*/
-
-.logo {
-    cursor: pointer;
-    width: 3em;
-    margin-left: 10px;
+.fixed-left {
+    left: 20px;
 }
 
-/*////////////////////*/
+.fixed-right {
+    right: 20px;
+}
 
+/* Estilo da Logo */
+.logo-link {
+    display: block;
+    text-decoration: none;
+}
+
+.logo {
+    width: 3em;
+    display: block;
+}
+
+/* 2. Menu Central que ROLA junto com a página */
+.scrolling-nav {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
 
 .nav {
     display: flex;
-    align-items: center;
-    padding: 0 0 0 80px;
     gap: 24px;
-    background-color: transparent;
+    background-color: #00000000;
 }
 
 .nav a {
-
     position: relative;
     text-transform: uppercase;
     text-decoration: none;
@@ -64,14 +73,7 @@
     width: 100%;
 }
 
-
-/*////////////////////*/
-
-.botao {
-    margin-right: 15px;
-    padding: 5px 0;
-}
-
+/* 3. Estilo do Botão */
 .botao a {
     text-decoration: none;
     color: #ffffff;
