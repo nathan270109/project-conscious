@@ -1,118 +1,185 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Project Conscious
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+O **Project Conscious** é uma plataforma que analisa repositórios públicos do GitHub e traduz sinais técnicos em uma visão clara da saúde do software. O resultado apresenta o **Conscious Score**, as dimensões avaliadas, riscos encontrados e uma recomendação prioritária de melhoria.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+O projeto foi desenvolvido como parte do Entra21 e prioriza resultados objetivos, rastreáveis e fáceis de explicar.
 
-## Description
+## Visão geral
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+O fluxo principal da aplicação será:
 
-## Project setup
+1. A pessoa informa o nome do projeto e a URL de um repositório público do GitHub.
+2. A API identifica a branch padrão e busca somente os arquivos necessários.
+3. O motor de análise gera evidências nas cinco dimensões avaliadas.
+4. O dashboard apresenta a nota geral, os riscos e a melhoria mais importante.
 
-```bash
-$ npm install
+## Dimensões avaliadas
+
+- **Documentação:** existência e qualidade básica do README.
+- **Testes:** presença de arquivos de teste.
+- **Acessibilidade:** imagens sem `alt`, campos sem `label` e botões sem texto.
+- **Organização:** estrutura de pastas e nomes de arquivos.
+- **Manutenibilidade:** `TODO`, `console.log` e arquivos extensos.
+
+> Cada resultado deve apontar uma evidência real, como mensagem, arquivo e linha quando disponível. O Project Conscious não inventa análises.
+
+## Tecnologias
+
+| Camada | Tecnologia |
+| --- | --- |
+| Frontend | Angular 22 + TypeScript |
+| Backend | NestJS 12 + TypeScript |
+| Integração GitHub | Octokit REST |
+| Testes | Vitest |
+
+## Estrutura do repositório
+
+```text
+project-conscious/
+├── src/                 # Aplicação Angular
+├── backend/             # API NestJS
+├── public/              # Recursos estáticos do frontend
+├── package.json         # Scripts e dependências do frontend
+└── README.md
 ```
 
-## Compile and run the project
+Frontend e backend são aplicações separadas, executadas em terminais diferentes, mas pertencem ao mesmo repositório Git.
+
+## Pré-requisitos
+
+- Node.js em versão LTS compatível com Angular e NestJS.
+- npm.
+- Git.
+- Uma conta GitHub apenas se quiser criar um token opcional para aumentar o limite de requisições da API.
+
+## Como executar localmente
+
+### 1. Clone o repositório
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone <URL_DO_REPOSITORIO>
+cd project-conscious
 ```
 
-## Run tests
+### 2. Inicie o frontend
+
+No primeiro terminal, na raiz do projeto:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm ci
+npm start
 ```
 
-## Deployment
+Acesse [http://localhost:4200](http://localhost:4200).
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### 3. Inicie o backend
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+No segundo terminal:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+cd backend
+npm ci
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Acesse [http://localhost:3000](http://localhost:3000). Nesta fase inicial, a rota `GET /` responde `Hello World!`, confirmando que a API está ativa.
 
-## Observability
+## Variáveis de ambiente
 
-In production applications, observability is essential for understanding how your system behaves, detecting issues early, and maintaining reliable performance.
+O backend lê o token do GitHub exclusivamente pela variável `GITHUB_TOKEN`. Para repositórios públicos, ele é opcional; use-o apenas se precisar de um limite maior de requisições.
 
-[NestJS Observe](https://observe.nestjs.com) automatically instruments your NestJS application, giving you deep visibility into your system with minimal setup:
+No terminal do backend, antes de iniciar a API:
 
-- **Distributed tracing:** Follow requests across services and understand how they flow through your system.
-- **Waterfall analysis:** Visualize request execution and identify slow operations, bottlenecks, and unexpected delays.
-- **Performance analysis:** Analyze application performance in real time and quickly pinpoint areas that need optimization.
-- **Metrics:** Track key application and infrastructure metrics to understand system health and performance trends.
-- **Logging:** Centralize and correlate logs with traces and other telemetry to make debugging easier.
-- **Error tracking:** Detect errors quickly and investigate their root causes with the surrounding context.
-- **SLA monitoring:** Track service-level objectives and identify when your application is approaching or exceeding defined thresholds.
-- **Alarms and alerts:** Set up alerts for critical errors, performance degradation, SLA violations, and other anomalies so your team can react quickly.
+```bash
+export GITHUB_TOKEN="seu_token"
+npm run start:dev
+```
 
-This project is already instrumented. Create a free account at [observe.nestjs.com](https://observe.nestjs.com), add an application, and paste the generated app key and secret into the `ObserveModule.forRoot()` call in `src/app.module.ts`.
+Nunca escreva tokens no código, no README, no Jira ou em commits.
 
-The free plan needs no payment details and covers 300,000 events a month. You can also browse the [live demo](https://www.observe-demo.nestjs.com/dashboard) first - the whole dashboard over a busy service's data, with nothing to install.
+## Scripts úteis
 
-## Resources
+### Frontend
 
-Check out a few resources that may come in handy when working with NestJS:
+| Comando | Finalidade |
+| --- | --- |
+| `npm start` | Executa o Angular em modo de desenvolvimento. |
+| `npm test` | Executa os testes do frontend em modo de observação. |
+| `npm run build` | Gera a versão de produção do frontend. |
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Auto-instrument your application with [NestJS Observe](https://observe.nestjs.com). Distributed tracing, metrics, and logging made easy. Error tracking and performance monitoring for your NestJS applications.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Backend
 
-## Support
+Execute os comandos dentro de `backend/`.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+| Comando | Finalidade |
+| --- | --- |
+| `npm run start:dev` | Executa o NestJS e observa alterações. |
+| `npm run build` | Compila a API para `backend/dist`. |
+| `npm test` | Executa os testes unitários. |
+| `npm run lint` | Verifica problemas de código. |
 
-## Stay in touch
+## Estado atual
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- [x] Estrutura inicial do frontend Angular.
+- [x] Backend NestJS iniciado em `backend/`.
+- [x] Serviço para leitura seletiva de repositórios públicos com Octokit.
+- [ ] Formulário completo e rota de scanning.
+- [ ] Endpoint para iniciar a análise de um projeto.
+- [ ] Motor de análise, Score e Risk Radar.
+- [ ] Dashboard com resultado da análise.
+- [ ] Modo demonstração sem internet.
 
-## License
+## API atual
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+| Método | Rota | Descrição |
+| --- | --- | --- |
+| `GET` | `/` | Verifica se o backend NestJS está em execução. |
+
+As rotas de projetos e análise serão documentadas aqui quando o contrato da API estiver publicado.
+
+## Contribuição
+
+1. Atualize sua cópia da `main` antes de iniciar uma entrega.
+2. Crie uma branch com nome objetivo, por exemplo `feat/github-integration`.
+3. Faça commits pequenos e descritivos.
+4. Envie a branch com `git push origin nome-da-branch`.
+5. Abra uma Pull Request para revisão antes do merge.
+
+Exemplos de commits:
+
+```text
+feat(github): lê arquivos relevantes de repositórios públicos
+feat(dashboard): exibe conscious score e dimensões
+fix(project-form): valida URL do GitHub
+docs(readme): documenta execução local
+```
+
+Não faça commits diretamente na `main` e não altere arquivos de outra frente sem alinhamento com a equipe.
+
+## Solução de problemas
+
+### A porta 3000 já está em uso
+
+Descubra o processo que ocupa a porta:
+
+```bash
+lsof -nP -iTCP:3000 -sTCP:LISTEN
+```
+
+Depois encerre somente o PID retornado:
+
+```bash
+kill <PID>
+```
+
+### O backend mostra erro de telemetria 401
+
+O aviso do `NestJS Observe` é uma configuração opcional do template e não impede a execução da API ou do serviço GitHub. Ele pode ser removido ou configurado posteriormente.
+
+## Organização no Jira
+
+O quadro utiliza a chave `CONSCIOUS`. Ao concluir uma entrega:
+
+1. Atualize o status da subtarefa correspondente.
+2. Registre uma observação curta sobre o que foi feito e testado.
+3. Inclua o link da Pull Request quando ela existir.
