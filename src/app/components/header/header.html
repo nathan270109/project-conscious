@@ -1,11 +1,11 @@
 <div class="header-container">
-    <!-- Logo fixa no canto esquerdo -->
+
     <div class="fixed-left">
         <a routerLink="/home" class="logo-link">
             <img class="logo" src="/assets/logo-black.png" alt="logo">
         </a>
     </div>
-    <!-- Container da navegação que rola com a página -->
+
     <div class="scrolling-nav">
         <nav class="nav">
             <a routerLink="/home">Início</a>
@@ -13,8 +13,8 @@
             <a routerLink="/">Contato</a>
         </nav>
     </div>
+
     <div class="container-right">
-        <!-- Botão fixo no canto direito -->
         <div class="scrolling-button">
             <div class="botao">
                 <a routerLink="/"><span data-hover="Contact us">Contact us</span></a>
@@ -29,10 +29,12 @@
     </div>
 
     <div class="overlay" [class.open]="isMenuOpen()" (click)="closeMenu()"></div>
+
     <div class="sidebar-menu" [class.open]="isMenuOpen()">
         <div class="sidebar-header">
             <button class="close-btn" (click)="closeMenu()">&times;</button>
         </div>
+        
         <ul class="sidebar-links">
             <li><a routerLink="/home" (click)="closeMenu()">Início</a></li>
             <li><a routerLink="/" (click)="closeMenu()">Sobre</a></li>
