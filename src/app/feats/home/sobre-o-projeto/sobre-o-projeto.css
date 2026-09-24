@@ -1,9 +1,12 @@
+.sobre-o-projeto {
+    background-color: #EFEFEF;
+}
+
 /* Div 'container' que engloba tudo */
 .container {
     margin: var(--margin);
     padding: 50px;
     font-family: var(--fonte);
-    border-radius: 10px;
 }
 
 /* Textos da div 'textos' */
