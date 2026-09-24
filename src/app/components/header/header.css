@@ -2,7 +2,7 @@
 .header-container {
     position: relative;
     width: 100%;
-    padding-top: 15px;
+    padding-top: 20px;
     font-family: Arial, Helvetica, sans-serif;
     background-color: #00000000;
 }
@@ -21,6 +21,7 @@
 
 .fixed-right {
     right: 20px;
+    top: 20px;
 }
 
 /* Estilo da Logo */
@@ -74,6 +75,18 @@
 }
 
 /* 3. Estilo do Botão */
+
+.container-right {
+    display: flex;
+    justify-content: end;
+    margin-top: -35px;
+}
+
+.scrolling-button {
+    margin-right: 60px;
+    margin-top: 0px;
+}
+
 .botao a {
     text-decoration: none;
     color: #ffffff;
@@ -112,3 +125,84 @@
 .botao a:hover span {
     transform: translateY(-290%);
 }
+
+/* ///////////////// */
+
+/* Overlay escuro de fundo */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 998;
+}
+
+.overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Painel do Menu Lateral */
+.sidebar-menu {
+  position: fixed;
+  top: 0;
+  right: 0; /* Aparece vindo da direita */
+  width: 280px;
+  height: 100vh;
+  background-color: #111;
+  color: #fff;
+  z-index: 999;
+  padding: 20px;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+  transform: translateX(100%); /* Esconde fora da tela à direita */
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-menu.open {
+  transform: translateX(0); /* Desliza para dentro da tela */
+}
+
+/* Botão de fechar (X) */
+.sidebar-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 40px;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+/* Links no Menu Lateral */
+.sidebar-links {
+  list-style: none;
+  padding: 0;
+  margin-top: 40px;
+}
+
+.sidebar-links li {
+  margin-bottom: 20px;
+}
+
+.sidebar-links a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  display: block;
+}
+
+.sidebar-links a:hover {
+  opacity: 0.8;
+}
+
+
+
