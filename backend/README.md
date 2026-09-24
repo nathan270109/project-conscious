@@ -21,6 +21,26 @@ O fluxo principal da aplicação será:
 - **Organização:** estrutura de pastas e nomes de arquivos.
 - **Manutenibilidade:** `TODO`, `console.log` e arquivos extensos.
 
+### Regras iniciais de organização e manutenibilidade
+
+Estas regras são sinais determinísticos para orientar a revisão, não provas de
+que o código contém um bug:
+
+- A profundidade conta somente os diretórios antes do arquivo. Mais de 6
+  diretórios gera um finding `MEDIUM`, pois caminhos muito profundos dificultam
+  localizar e mover arquivos.
+- Pastas usam nomes em kebab-case minúsculo. Arquivos usam letras minúsculas,
+  números, hífens e pontos para extensões; `README`, `LICENSE` e `CHANGELOG`
+  são nomes convencionais aceitos. Uma violação gera um finding `LOW`.
+- `TODO` gera um finding `LOW` com a linha encontrada, para que pendências não
+  sejam esquecidas.
+- `console.log` gera um finding `LOW` com a linha encontrada. Ele é apenas um
+  sinal de manutenção: logs podem ser intencionais e devem ser avaliados no
+  contexto antes de serem removidos.
+- Arquivos com mais de 300 linhas geram um finding `MEDIUM`. O limite favorece
+  módulos menores e mais fáceis de testar; arquivos exatamente com 300 linhas
+  ainda estão dentro do limite.
+
 > Cada resultado deve apontar uma evidência real, como mensagem, arquivo e linha quando disponível. O Project Conscious não inventa análises.
 
 ## Tecnologias
