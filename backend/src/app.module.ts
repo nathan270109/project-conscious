@@ -4,6 +4,7 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { GithubModule } from './github/github.module.js';
 import { ProjectsModule } from './projects/projects.module.js';
+import { AnalysisModule } from './analysis/analysis.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -16,6 +17,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     }),
     GithubModule,
     ProjectsModule,
+    AnalysisModule,
   ],
   controllers: [AppController],
   providers: [AppService],

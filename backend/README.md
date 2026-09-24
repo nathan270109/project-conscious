@@ -167,6 +167,24 @@ A rota de análise que chamará este serviço ainda será criada. Quando ela exi
 
 A API não retorna token, stack trace nem detalhes internos. Os logs do backend registram somente o status técnico necessário para diagnóstico.
 
+## Regra de análise de documentação
+
+O `DocumentationAnalyzer` avalia somente arquivos README, sem usar IA.
+
+A regra é determinística:
+
+| Situação | Nota | Resultado |
+| --- | ---: | --- |
+| README ausente | `0` | finding `HIGH` |
+| Descrição ausente | -30 pontos | finding `MEDIUM` |
+| Instalação ausente | -30 pontos | finding `MEDIUM` |
+| Execução ausente | -30 pontos | finding `MEDIUM` |
+| README completo | `100` | nenhum finding |
+
+O analisador reconhece arquivos como `README`, `README.md` e `docs/README.md`.
+
+Cada finding informa categoria, severidade, mensagem, arquivo e linha quando disponível. Os resultados são reproduzíveis: os mesmos arquivos sempre geram a mesma nota e os mesmos findings.
+
 ## Contribuição
 
 1. Atualize sua cópia da `main` antes de iniciar uma entrega.
