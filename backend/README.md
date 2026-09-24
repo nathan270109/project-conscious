@@ -133,9 +133,39 @@ Execute os comandos dentro de `backend/`.
 
 | Método | Rota | Descrição |
 | --- | --- | --- |
-| `GET` | `/` | Verifica se o backend NestJS está em execução. |
+| `POST` | `/projects` | Cria um projeto em memória após validar nome, URL e descrição opcional. |
 
-As rotas de projetos e análise serão documentadas aqui quando o contrato da API estiver publicado.
+### Respostas esperadas
+
+#### Cadastro de projeto — `POST /projects`
+
+| Situação | Status | Resposta esperada |
+| --- | --- | --- |
+| Projeto válido | `201 Created` | Retorna `id`, `name`, `repositoryUrl`, `description` quando informada e `createdAt`. |
+| Corpo inválido | `400 Bad Request` | Retorna mensagens de validação, por exemplo para nome com menos de 3 caracteres ou URL inválida. |
+
+Exemplo de requisição válida:
+
+```json
+{
+  "name": "Project Conscious Demo",
+  "repositoryUrl": "https://github.com/octocat/Hello-World",
+  "description": "Repositório usado para demonstração"
+}
+```
+
+#### Leitura de repositório público — `GithubService`
+
+A rota de análise que chamará este serviço ainda será criada. Quando ela existir, deve preservar as respostas abaixo para que o frontend trate erros de forma previsível:
+
+| Situação | Status | Mensagem segura para o frontend |
+| --- | --- | --- |
+| URL fora do padrão `https://github.com/owner/repo` | `400 Bad Request` | `Informe uma URL válida, como https://github.com/owner/repo` |
+| Repositório público inexistente | `404 Not Found` | `Repositório público não encontrado.` |
+| Limite de requisições, acesso negado ou GitHub indisponível | `503 Service Unavailable` | `GitHub indisponível ou limite de requisições atingido. Tente novamente mais tarde.` |
+| Falha de rede ou erro técnico sem status | `503 Service Unavailable` | `Não foi possível consultar o GitHub. Verifique sua conexão e tente novamente.` |
+
+A API não retorna token, stack trace nem detalhes internos. Os logs do backend registram somente o status técnico necessário para diagnóstico.
 
 ## Contribuição
 

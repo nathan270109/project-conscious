@@ -1,4 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  Injectable,
+  Logger,
+  NotFoundException,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { Octokit } from '@octokit/rest';
 
 export interface RepositoryFile {
@@ -13,6 +20,7 @@ interface RepositoryReference {
 
 @Injectable()
 export class GithubService {
+  private readonly logger = new Logger(GithubService.name);
   private readonly octokit = new Octokit({
     auth: process.env.GITHUB_TOKEN || undefined,
   });
@@ -50,34 +58,67 @@ export class GithubService {
   async getRepositoryFiles(repositoryUrl: string): Promise<RepositoryFile[]> {
     const { owner, repo } = this.parseRepositoryUrl(repositoryUrl);
 
-    // Busca dados do repositório para descobrir a branch padrão, como main ou master.
-    const repository = await this.octokit.rest.repos.get({
-      owner,
-      repo,
-    });
+    try {
+      const repository = await this.octokit.rest.repos.get({
+        owner,
+        repo,
+      });
 
-    // Busca somente a árvore de arquivos da branch padrão.
-    const tree = await this.octokit.rest.git.getTree({
-      owner,
-      repo,
-      tree_sha: repository.data.default_branch,
-      recursive: '1',
-    });
+      const tree = await this.octokit.rest.git.getTree({
+        owner,
+        repo,
+        tree_sha: repository.data.default_branch,
+        recursive: '1',
+      });
 
-    const relevantFiles = tree.data.tree.filter(
-      (entry) =>
-        entry.type === 'blob' &&
-        typeof entry.path === 'string' &&
-        typeof entry.sha === 'string' &&
-        this.isRelevantPath(entry.path),
+      const relevantFiles = tree.data.tree.filter(
+        (entry) =>
+          entry.type === 'blob' &&
+          typeof entry.path === 'string' &&
+          typeof entry.sha === 'string' &&
+          this.isRelevantPath(entry.path),
+      );
+
+      return await Promise.all(
+        relevantFiles.map(async (file) => ({
+          path: file.path!,
+          content: await this.getFileContent(owner, repo, file.sha!),
+        })),
+      );
+    } catch (error) {
+      this.handleGithubError(error);
+    }
+  }
+
+  private handleGithubError(error: unknown): never {
+    if (error instanceof HttpException) {
+      throw error;
+    }
+
+    const status =
+      typeof error === 'object' &&
+      error !== null &&
+      'status' in error &&
+      typeof error.status === 'number'
+        ? error.status
+        : undefined;
+
+    this.logger.error(
+      `Falha ao consultar o GitHub. Status: ${status ?? 'indisponível'}.`,
     );
 
-    // Faz download de conteúdo somente dos arquivos que interessam à análise.
-    return Promise.all(
-      relevantFiles.map(async (file) => ({
-        path: file.path!,
-        content: await this.getFileContent(owner, repo, file.sha!),
-      })),
+    if (status === 404) {
+      throw new NotFoundException('Repositório público não encontrado.');
+    }
+
+    if (status === 401 || status === 403 || status === 429) {
+      throw new ServiceUnavailableException(
+        'GitHub indisponível ou limite de requisições atingido. Tente novamente mais tarde.',
+      );
+    }
+
+    throw new ServiceUnavailableException(
+      'Não foi possível consultar o GitHub. Verifique sua conexão e tente novamente.',
     );
   }
 
