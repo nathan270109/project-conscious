@@ -1,21 +1,33 @@
 .hero {
     font-family: var(--fonte);
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
-/* Div container, que engloba a div box-texto e a div box-card*/
 .container {
     display: flex;
     justify-content: center;
-    gap: 0px;
-    margin: var(--margin);
-    padding: 50px;
+    align-items: center;
+    gap: 40px;
+    margin: 0 auto;
+    padding: 100px 20px 50px 20px;
+    width: 100%;
+    max-width: 1200px;
+    z-index: 1;
+    
 }
 
-/* Div que contém os textos */
 .box-texto {
     padding: 0px 25px;
     width: 450px;
-    color: rgb(73, 47, 0)
+    color: rgb(0, 0, 0);
+
+    
 }
 
 .box-texto h2 {
@@ -29,7 +41,7 @@
 
 .box-texto p {
     font-size: 20px;
-    font-weight: 200;
+    font-weight: 200;  
 }
 
 .botao {
@@ -75,11 +87,12 @@
     transform: translateY(-290%);
 }
 
-/* Div que contém o card Conscious Score */
 .box-card {
     display: flex;
     flex-direction: column;
-    background-color: #2e2419;
+    background-color: #241c14c0;
+    backdrop-filter: blur(5px);
+    border: 1px solid #8f5f169f;
     padding: 25px;
     margin-top: 10px;
     border-radius: 10px;
@@ -99,7 +112,6 @@
     font-weight: 300;
 }
 
-/* Páragrafo que contém a média do Conscious Score */
 #p-especial {
     color: #fff0dd;
     font-size: 18px;
@@ -117,7 +129,6 @@
     font-size: 14px;
 }
 
-/* Div que contém a média em uma forma de "input" */
 .score-bar {
     width: 100%;
     height: 13px;
@@ -134,7 +145,6 @@
     border-radius: 10px;
 }
 
-/* Div com os atributos e a nota */
 .texto {
     display: flex;
     justify-content: space-between;
@@ -147,12 +157,28 @@
     color: white;
 }
 
+.project {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
 @media (max-width: 768px) {
+    .hero {
+        height: auto;
+        min-height: 100vh;
+        padding-top: 60px;
+    }
+
     .container {
         flex-direction: column;
         align-items: center;
         height: auto;
-        padding: 20px;
+        padding: 40px 20px;
     }
 
     .box-texto {
