@@ -41,6 +41,62 @@ describe('DocumentationAnalyzer', () => {
     );
   });
 
+  it('returns an installation finding when only installation is missing', () => {
+    const result = analyzer.analyze([
+      {
+        path: 'README.md',
+        content: `
+          # Project Conscious
+
+          ## Descrição
+          Plataforma para análise de software.
+
+          ## Como executar
+          npm run start
+        `,
+      },
+    ]);
+
+    expect(result.score).toBe(70);
+    expect(result.findings).toEqual([
+      {
+        category: 'DOCUMENTATION',
+        severity: 'MEDIUM',
+        message: 'README não possui instruções de instalação.',
+        file: 'README.md',
+        line: null,
+      },
+    ]);
+  });
+
+  it('returns an execution finding when only execution is missing', () => {
+    const result = analyzer.analyze([
+      {
+        path: 'README.md',
+        content: `
+          # Project Conscious
+
+          ## Descrição
+          Plataforma para análise de software.
+
+          ## Instalação
+          npm install
+        `,
+      },
+    ]);
+
+    expect(result.score).toBe(70);
+    expect(result.findings).toEqual([
+      {
+        category: 'DOCUMENTATION',
+        severity: 'MEDIUM',
+        message: 'README não possui instruções de execução.',
+        file: 'README.md',
+        line: null,
+      },
+    ]);
+  });
+
   it('returns a high severity finding when README does not exist', () => {
     const result = analyzer.analyze([
       {
