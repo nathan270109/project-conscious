@@ -7,7 +7,7 @@
     display: flex;
     justify-content: center;
     gap: 0px;
-    height: 100vh;
+    margin: var(--margin);
     padding: 50px;
 }
 
