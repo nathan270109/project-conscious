@@ -1,134 +1,128 @@
-/* Container pai relativo para alinhar os elementos superiores */
 .header-container {
-    position: relative;
-    width: 100%;
-    padding-top: 20px;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #00000000;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: transparent;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
 }
 
-/* 1. Elementos Fixos nas Pontas (Logo e Botão) */
 .fixed-left,
 .fixed-right {
-    position: fixed;
-    top: 15px;
-    z-index: 1000;
+  position: fixed;
+  top: 15px;
+  z-index: 1000;
 }
 
 .fixed-left {
-    left: 20px;
+  left: 20px;
 }
 
 .fixed-right {
-    right: 20px;
-    top: 20px;
+  right: 20px;
+  top: 20px;
 }
 
-/* Estilo da Logo */
 .logo-link {
-    display: block;
-    text-decoration: none;
+  display: block;
+  text-decoration: none;
 }
 
 .logo {
-    width: 3em;
-    display: block;
+  width: 3em;
+  display: block;
 }
 
-/* 2. Menu Central que ROLA junto com a página */
 .scrolling-nav {
-    display: flex;
-    justify-content: center;
-    width: 100%;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .nav {
-    display: flex;
-    gap: 24px;
-    background-color: #00000000;
+  padding-top: 20px;
+  display: flex;
+  gap: 24px;
+  background-color: transparent;
 }
 
 .nav a {
-    position: relative;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: #000000;
-    font-size: 16px;
-    font-weight: 500;
-    padding: 4px 0;
-    cursor: pointer;
+  position: relative;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #000000;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 4px 0;
+  cursor: pointer;
 }
 
 .nav a::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0%;
-    height: 2px;
-    background-color: #000000;
-    transition: width 0.3s ease-in-out;
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background-color: #000000;
+  transition: width 0.3s ease-in-out;
 }
 
 .nav a:hover::after {
-    width: 100%;
+  width: 100%;
 }
 
-/* 3. Estilo do Botão */
-
 .container-right {
-    display: flex;
-    justify-content: end;
-    margin-top: -35px;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -35px;
 }
 
 .scrolling-button {
-    margin-right: 60px;
-    margin-top: 0px;
+  margin-right: 60px;
+  margin-top: 0px;
 }
 
 .botao a {
-    text-decoration: none;
-    color: #ffffff;
-    background: #000000;
-    border-radius: 999px;
-    padding: 10px 16px;
-    font-weight: bold;
-    overflow: hidden;
-    display: inline-block;
-    position: relative;
-    line-height: 1.2;
+  text-decoration: none;
+  color: #ffffff;
+  background: #000000;
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: bold;
+  overflow: hidden;
+  display: inline-block;
+  position: relative;
+  line-height: 1.2;
 }
 
 .botao span {
-    position: relative;
-    display: block;
-    transition: transform 0.3s ease;
+  position: relative;
+  display: block;
+  transition: transform 0.3s ease;
 }
 
 .botao span::before {
-    content: attr(data-hover);
-    position: absolute;
-    top: 200%;
-    left: 50%;
-    border-radius: 999px;
-    transform: translateX(-50%);
-    width: 120px;
-    height: 50px;
-    background: #97720b;
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  content: attr(data-hover);
+  position: absolute;
+  top: 200%;
+  left: 50%;
+  border-radius: 999px;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 50px;
+  background: #97720b;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .botao a:hover span {
-    transform: translateY(-290%);
+  transform: translateY(-290%);
 }
 
-/* bar(menu) */
-
-/* Overlay escuro de fundo */
 .overlay {
   position: fixed;
   top: 0;
@@ -139,7 +133,7 @@
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
-  z-index: 998;
+  z-index: 1001;
 }
 
 .overlay.open {
@@ -147,27 +141,25 @@
   visibility: visible;
 }
 
-/* Painel do Menu Lateral */
 .sidebar-menu {
   position: fixed;
   top: 0;
-  right: 0; /* Aparece vindo da direita */
+  right: 0;
   width: 280px;
   height: 100vh;
   background-color: #111;
   color: #fff;
-  z-index: 999;
+  z-index: 1002;
   padding: 20px;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
-  transform: translateX(100%); /* Esconde fora da tela à direita */
+  transform: translateX(100%);
   transition: transform 0.3s ease-in-out;
 }
 
 .sidebar-menu.open {
-  transform: translateX(0); /* Desliza para dentro da tela */
+  transform: translateX(0);
 }
 
-/* Botão de fechar (X) */
 .sidebar-header {
   display: flex;
   justify-content: flex-end;
@@ -182,7 +174,6 @@
   cursor: pointer;
 }
 
-/* Links no Menu Lateral */
 .sidebar-links {
   list-style: none;
   padding: 0;
@@ -203,6 +194,3 @@
 .sidebar-links a:hover {
   opacity: 0.8;
 }
-
-
-
