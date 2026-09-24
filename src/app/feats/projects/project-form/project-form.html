@@ -4,74 +4,51 @@
     <h1>Analise a saúde do seu software.</h1>
     <p class="project-form__intro">Informe os dados do repositório para iniciar uma análise.</p>
     <!-- novalidate desativa a validação nativa para que o Angular controle as mensagens. -->
-    <form
-      #projectForm="ngForm"
-      class="project-form__form"
-      novalidate 
-      (ngSubmit)="onSubmit(projectForm)"
-    >
+    <form #projectForm="ngForm" class="project-form__form" novalidate (ngSubmit)="onSubmit(projectForm)">
 
       <div class="project-form__field">
-        <label for="project-name">Nome do projeto <span class="project-form__required" aria-hidden="true">*</span></label>
+        <label for="project-name">Nome do projeto <span class="project-form__required"
+            aria-hidden="true">*</span></label>
 
         <!-- ngModel mantém o campo sincronizado com project.name; a referência expõe seu estado. -->
-        <input
-          id="project-name"
-          name="projectName"
-          type="text"
-          minlength="3"
-          required
-          [(ngModel)]="project.name"
-          #projectName="ngModel" 
-          placeholder="Ex.: Plataforma de vendas"
-        />
+        <input id="project-name" name="projectName" type="text" minlength="3" required [(ngModel)]="project.name"
+          #projectName="ngModel" placeholder="Ex.: Plataforma de vendas" />
         <!-- Exibe o erro após interação com o campo ou tentativa de envio. -->
         @if (projectName.invalid && (projectName.touched || submitted)) {
-          <small class="project-form__error"> Informe um nome com pelo menos 3 caracteres. </small>
+        <small class="project-form__error"> Informe um nome com pelo menos 3 caracteres. </small>
         }
       </div>
 
       <div class="project-form__field">
-        <label for="repository-url">URL do repositório GitHub <span class="project-form__required" aria-hidden="true">*</span></label>
+        <label for="repository-url">URL do repositório GitHub <span class="project-form__required"
+            aria-hidden="true">*</span></label>
 
-        <input
-          id="repository-url"
-          name="repositoryUrl"
-          type="url"
-          required
-          [(ngModel)]="project.repositoryUrl"
-          #repositoryUrl="ngModel"
-          placeholder="Ex.:https://github.com/usuario/projeto"
-        />
+        <input id="repository-url" name="repositoryUrl" type="url" required [(ngModel)]="project.repositoryUrl"
+          #repositoryUrl="ngModel" placeholder="Ex.:https://github.com/usuario/projeto" />
 
         @if (repositoryUrl.invalid && (repositoryUrl.touched || submitted)) {
-          <small class="project-form__error"> Informe uma URL válida do repositório GitHub. </small>
+        <small class="project-form__error"> Informe uma URL válida do repositório GitHub. </small>
         }
       </div>
 
       <div class="project-form__field">
         <label for="project-description">Descrição<span>(opcional)</span></label>
 
-        <textarea
-          id="project-description"
-          name="description"
-          rows="4"
-          [(ngModel)]="project.description"
-          placeholder="Ex.: Este projeto é uma plataforma de vendas online."
-        ></textarea>
+        <textarea id="project-description" name="description" rows="4" [(ngModel)]="project.description"
+          placeholder="Ex.: Este projeto é uma plataforma de vendas online."></textarea>
       </div>
 
       <button type="submit">Continuar para a análise</button>
     </form>
 
     @if (submitted && projectForm.valid) {
-      <div class="project-form_sucess">
-        <p>Projeto pronto para a análise:</p>
+    <div class="project-form_sucess">
+      <p>Projeto pronto para a análise:</p>
 
-        <strong>{{ project.name }}</strong>
+      <strong>{{ project.name }}</strong>
 
-        <span>{{ project.repositoryUrl }}</span>
-      </div>
+      <span>{{ project.repositoryUrl }}</span>
+    </div>
     }
   </div>
 </section>
