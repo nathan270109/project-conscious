@@ -1,8 +1,7 @@
 /* Div 'container' que engloba tudo */
 .container {
-    background-color: #EFEFEF;
-    margin: 5px 45px 80px;
-    padding: 30px;
+    margin: var(--margin);
+    padding: 50px;
     font-family: var(--fonte);
     border-radius: 10px;
 }
