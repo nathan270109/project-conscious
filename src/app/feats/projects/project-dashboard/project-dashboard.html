@@ -1,35 +1,107 @@
 <main class="dashboard">
 
-  <header class="dashboard__header">
-    <div>
-      <p class="dashboard__eyebrow">Project Conscious</p>
+    <header class="dashboard__header">
+        <div>
+            <p class="dashboard__eyebrow">Project Conscious</p>
 
-      <h1>Dashboard do projeto</h1>
+            <h1>Dashboard do projeto</h1>
 
-      <p>Projeto {{ projectId }}</p>
-    </div>
+            <p>Projeto {{ projectId }}</p>
+        </div>
 
-    @if (result?.demoMode) {
-      <span class="dashboard__demo">
-        Modo demonstração
-      </span>
-    }
-  </header>
+        @if (result?.demoMode) {
+        <span class="dashboard__demo">
+            Modo demonstração
+        </span>
+        }
+    </header>
 
-  <section class="dashboard__section" aria-labelledby="score-title">
-    <h2 id="score-title">Conscious Score</h2>
-  </section>
+    <section class="dashboard__section" aria-labelledby="score-title">
+        <h2 id="score-title">Conscious Score</h2>
 
-  <section class="dashboard__section" aria-labelledby="dimensions-title">
-    <h2 id="dimensions-title">Dimensões da análise</h2>
-  </section>
+        @if (result) {
+        <strong class="dashboard__score">
+            {{ result.score }}/100
+        </strong>
+        }
+    </section>
 
-  <section class="dashboard__section" aria-labelledby="risks-title">
-    <h2 id="risks-title">Risk Radar</h2>
-  </section>
+    <section class="dashboard__section" aria-labelledby="dimensions-title">
+        <h2 id="dimensions-title">Dimensões da análise</h2>
 
-  <section class="dashboard__section" aria-labelledby="insight-title">
-    <h2 id="insight-title">Conscious Insight</h2>
-  </section>
+        @if (result) {
+        <div class="dimensions-grid">
+
+            <article class="dimension-card">
+                <div class="dimension-card__header">
+                    <span>Documentação</span>
+                    <strong>{{ result.dimensions.documentation }}</strong>
+                </div>
+
+                <div class="dimension-progress" role="progressbar" aria-label="Nota de Documentação" aria-valuemin="0"
+                    aria-valuemax="100" [attr.aria-valuenow]="result.dimensions.documentation">
+                    <div class="dimension-progress__fill" [style.width.%]="result.dimensions.documentation"></div>
+                </div>
+            </article>
+
+            <article class="dimension-card">
+                <div class="dimension-card__header">
+                    <span>Testes</span>
+                    <strong>{{ result.dimensions.tests }}</strong>
+                </div>
+
+                <div class="dimension-progress" role="progressbar" aria-label="Nota de Testes" aria-valuemin="0"
+                    aria-valuemax="100" [attr.aria-valuenow]="result.dimensions.tests">
+                    <div class="dimension-progress__fill" [style.width.%]="result.dimensions.tests"></div>
+                </div>
+            </article>
+
+            <article class="dimension-card">
+                <div class="dimension-card__header">
+                    <span>Acessibilidade</span>
+                    <strong>{{ result.dimensions.accessibility }}</strong>
+                </div>
+
+                <div class="dimension-progress" role="progressbar" aria-label="Nota de Acessibilidade" aria-valuemin="0"
+                    aria-valuemax="100" [attr.aria-valuenow]="result.dimensions.accessibility">
+                    <div class="dimension-progress__fill" [style.width.%]="result.dimensions.accessibility"></div>
+                </div>
+            </article>
+
+            <article class="dimension-card">
+                <div class="dimension-card__header">
+                    <span>Organização</span>
+                    <strong>{{ result.dimensions.organization }}</strong>
+                </div>
+
+                <div class="dimension-progress" role="progressbar" aria-label="Nota de Organização" aria-valuemin="0"
+                    aria-valuemax="100" [attr.aria-valuenow]="result.dimensions.organization">
+                    <div class="dimension-progress__fill" [style.width.%]="result.dimensions.organization"></div>
+                </div>
+            </article>
+
+            <article class="dimension-card">
+                <div class="dimension-card__header">
+                    <span>Manutenibilidade</span>
+                    <strong>{{ result.dimensions.maintainability }}</strong>
+                </div>
+
+                <div class="dimension-progress" role="progressbar" aria-label="Nota de Manutenibilidade"
+                    aria-valuemin="0" aria-valuemax="100" [attr.aria-valuenow]="result.dimensions.maintainability">
+                    <div class="dimension-progress__fill" [style.width.%]="result.dimensions.maintainability"></div>
+                </div>
+            </article>
+
+        </div>
+        }
+    </section>
+
+    <section class="dashboard__section" aria-labelledby="risks-title">
+        <h2 id="risks-title">Risk Radar</h2>
+    </section>
+
+    <section class="dashboard__section" aria-labelledby="insight-title">
+        <h2 id="insight-title">Conscious Insight</h2>
+    </section>
 
 </main>
