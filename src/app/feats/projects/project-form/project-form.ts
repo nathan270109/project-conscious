@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms'; 
+import { FormsModule } from '@angular/forms';
 import { NgForm } from '@angular/forms';
 
 type ProjectDraft = {
@@ -23,14 +23,14 @@ export class ProjectForm {
 
   submitted = false;
 
-// onSubmit: função que será chamada quando o formulário for enviado.
+  // onSubmit: função que será chamada quando o formulário for enviado.
   onSubmit(form: NgForm): void {
     this.submitted = true;
-// submitted: informa se a pessoa tentou enviar o formulário.
+    // submitted: informa se a pessoa tentou enviar o formulário.
 
     if (form.invalid) {
       return;
     }
-// form.invalid: impede o próximo passo enquanto campos obrigatórios estiverem inválidos.
+    // form.invalid: impede o próximo passo enquanto campos obrigatórios estiverem inválidos.
   }
 }
