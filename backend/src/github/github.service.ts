@@ -125,9 +125,11 @@ export class GithubService {
   private isRelevantPath(path: string): boolean {
     const normalizedPath = path.toLowerCase();
 
+    const fileName = normalizedPath.split('/').pop() ?? '';
+
     const isReadme =
-      normalizedPath === 'readme.md' ||
-      normalizedPath.startsWith('readme.');
+      fileName === 'readme' ||
+      fileName.startsWith('readme.');
 
     const isHtmlTemplate = /\.html?$/.test(normalizedPath);
     const isTypeScriptOrJavaScript = /\.[jt]sx?$/.test(normalizedPath);
