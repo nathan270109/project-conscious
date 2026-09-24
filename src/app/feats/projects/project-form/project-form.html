@@ -1,77 +1,62 @@
-<section class="project-form">
-  <div class="project-form_content">
-    <p class="project-form__eyebrow">NOVO PROJETO</p>
-    <h1>Analise a saúde do seu software.</h1>
-    <p class="project-form__intro">Informe os dados do repositório para iniciar uma análise.</p>
-    <!-- novalidate desativa a validação nativa para que o Angular controle as mensagens. -->
-    <form
-      #projectForm="ngForm"
-      class="project-form__form"
-      novalidate 
-      (ngSubmit)="onSubmit(projectForm)"
-    >
 
-      <div class="project-form__field">
-        <label for="project-name">Nome do projeto <span class="project-form__required" aria-hidden="true">*</span></label>
 
-        <!-- ngModel mantém o campo sincronizado com project.name; a referência expõe seu estado. -->
-        <input
-          id="project-name"
-          name="projectName"
-          type="text"
-          minlength="3"
-          required
-          [(ngModel)]="project.name"
-          #projectName="ngModel" 
-          placeholder="Ex.: Plataforma de vendas"
-        />
-        <!-- Exibe o erro após interação com o campo ou tentativa de envio. -->
+<div class="form-container">
+
+  
+
+  <div class="form-container__content">
+    <div class="form-container__header">
+      <p class="form-container__eyebrow">NOVO PROJETO</p>
+      <h1 class="form-container__title">Analise a saúde do seu software.</h1>
+      <p class="form-container__intro">Informe os dados do repositório para iniciar uma análise.</p>
+    </div>
+
+    <form #projectForm="ngForm" class="form" novalidate (ngSubmit)="onSubmit(projectForm)">
+
+      <div class="form__group">
+        <label for="project-name" class="form__label">
+          Nome do projeto <span class="form__required" aria-hidden="true">*</span>
+        </label>
+
+        <input id="project-name" name="projectName" type="text" minlength="3" required [(ngModel)]="project.name"
+          #projectName="ngModel" placeholder="Ex.: Plataforma de vendas" class="form__input" />
+
         @if (projectName.invalid && (projectName.touched || submitted)) {
-          <small class="project-form__error"> Informe um nome com pelo menos 3 caracteres. </small>
+        <small class="form__error"> Informe um nome com pelo menos 3 caracteres. </small>
         }
       </div>
 
-      <div class="project-form__field">
-        <label for="repository-url">URL do repositório GitHub <span class="project-form__required" aria-hidden="true">*</span></label>
+      <div class="form__group">
+        <label for="repository-url" class="form__label">
+          URL do repositório GitHub <span class="form__required" aria-hidden="true">*</span>
+        </label>
 
-        <input
-          id="repository-url"
-          name="repositoryUrl"
-          type="url"
-          required
-          [(ngModel)]="project.repositoryUrl"
-          #repositoryUrl="ngModel"
-          placeholder="Ex.:https://github.com/usuario/projeto"
-        />
+        <input id="repository-url" name="repositoryUrl" type="url" required [(ngModel)]="project.repositoryUrl"
+          #repositoryUrl="ngModel" placeholder="Ex.:https://github.com/usuario/projeto" class="form__input" />
 
         @if (repositoryUrl.invalid && (repositoryUrl.touched || submitted)) {
-          <small class="project-form__error"> Informe uma URL válida do repositório GitHub. </small>
+        <small class="form__error"> Informe uma URL válida do repositório GitHub. </small>
         }
       </div>
 
-      <div class="project-form__field">
-        <label for="project-description">Descrição<span>(opcional)</span></label>
+      <div class="form__group">
+        <label for="project-description" class="form__label">
+          Descrição<span class="form__optional">(opcional)</span>
+        </label>
 
-        <textarea
-          id="project-description"
-          name="description"
-          rows="4"
-          [(ngModel)]="project.description"
-          placeholder="Ex.: Este projeto é uma plataforma de vendas online."
-        ></textarea>
+        <textarea id="project-description" name="description" rows="4" [(ngModel)]="project.description"
+          placeholder="Ex.: Este projeto é uma plataforma de vendas online." class="form__textarea"></textarea>
       </div>
 
-      <button type="submit">Continuar para a análise</button>
+      <button type="submit" class="form__button">Continuar para a análise</button>
     </form>
 
     @if (submitted && projectForm.valid) {
-      <div class="project-form_sucess">
-        <p>Projeto pronto para a análise:</p>
-
-        <strong>{{ project.name }}</strong>
-
-        <span>{{ project.repositoryUrl }}</span>
-      </div>
+    <div class="form-success">
+      <p class="form-success__text">Projeto pronto para a análise:</p>
+      <strong class="form-success__title">{{ project.name }}</strong>
+      <span class="form-success__url">{{ project.repositoryUrl }}</span>
+    </div>
     }
   </div>
-</section>
+</div>
