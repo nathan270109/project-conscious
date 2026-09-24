@@ -231,3 +231,15 @@ O quadro utiliza a chave `CONSCIOUS`. Ao concluir uma entrega:
 1. Atualize o status da subtarefa correspondente.
 2. Registre uma observação curta sobre o que foi feito e testado.
 3. Inclua o link da Pull Request quando ela existir.
+
+### Testes
+
+O `TestsAnalyzer` procura arquivos `.spec.ts`, `.test.ts`, `.spec.js` e `.test.js`.
+
+Sem arquivos de teste, retorna nota `0` e finding `HIGH`. A primeira versão não calcula cobertura.
+
+### Acessibilidade
+
+O `AccessibilityAnalyzer` analisa apenas arquivos HTML.
+
+Ele identifica imagens sem `alt`, inputs sem label associada e botões sem texto ou `aria-label`. Cada ocorrência gera um finding com arquivo e linha.
