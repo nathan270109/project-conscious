@@ -1,44 +1,54 @@
-/* Adicionado padding no body para compensar a altura do header fixo */
-
-
-.header {
-    display: flex;
-    background-color: #fcfbfbd3;
-    backdrop-filter: blur(8px);
-    height: 80px;
-    align-items: center;
-    justify-content: space-between;
+/* Container pai relativo para alinhar os elementos superiores */
+.header-container {
+    position: relative;
     width: 100%;
-    padding-top: 10px;
-    gap: 20px;
+    padding-top: 20px;
     font-family: Arial, Helvetica, sans-serif;
+    background-color: #00000000;
+}
+
+/* 1. Elementos Fixos nas Pontas (Logo e Botão) */
+.fixed-left,
+.fixed-right {
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 15px;
     z-index: 1000;
 }
 
-/*////////////////////*/
-
-.logo {
-    cursor: pointer;
-    width: 3em;
-    margin-left: 10px;
+.fixed-left {
+    left: 20px;
 }
 
-/*////////////////////*/
+.fixed-right {
+    right: 20px;
+    top: 20px;
+}
 
+/* Estilo da Logo */
+.logo-link {
+    display: block;
+    text-decoration: none;
+}
+
+.logo {
+    width: 3em;
+    display: block;
+}
+
+/* 2. Menu Central que ROLA junto com a página */
+.scrolling-nav {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
 
 .nav {
     display: flex;
-    align-items: center;
-    padding: 0 0 0 80px;
     gap: 24px;
-    background-color: transparent;
+    background-color: #00000000;
 }
 
 .nav a {
-
     position: relative;
     text-transform: uppercase;
     text-decoration: none;
@@ -64,12 +74,17 @@
     width: 100%;
 }
 
+/* 3. Estilo do Botão */
 
-/*////////////////////*/
+.container-right {
+    display: flex;
+    justify-content: end;
+    margin-top: -35px;
+}
 
-.botao {
-    margin-right: 15px;
-    padding: 5px 0;
+.scrolling-button {
+    margin-right: 60px;
+    margin-top: 0px;
 }
 
 .botao a {
@@ -110,3 +125,84 @@
 .botao a:hover span {
     transform: translateY(-290%);
 }
+
+/* bar(menu) */
+
+/* Overlay escuro de fundo */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(10, 10, 10, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 998;
+}
+
+.overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Painel do Menu Lateral */
+.sidebar-menu {
+  position: fixed;
+  top: 0;
+  right: 0; /* Aparece vindo da direita */
+  width: 280px;
+  height: 100vh;
+  background-color: #111;
+  color: #fff;
+  z-index: 999;
+  padding: 20px;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+  transform: translateX(100%); /* Esconde fora da tela à direita */
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-menu.open {
+  transform: translateX(0); /* Desliza para dentro da tela */
+}
+
+/* Botão de fechar (X) */
+.sidebar-header {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  padding-top: 20px;
+  font-size: 40px;
+  cursor: pointer;
+}
+
+/* Links no Menu Lateral */
+.sidebar-links {
+  list-style: none;
+  padding: 0;
+  margin-top: 40px;
+}
+
+.sidebar-links li {
+  margin-bottom: 20px;
+}
+
+.sidebar-links a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  display: block;
+}
+
+.sidebar-links a:hover {
+  opacity: 0.8;
+}
+
+
+

@@ -1,15 +1,44 @@
-<div class="header">
-    <div class="logo">
-        <img routerLink="/home" class="logo" src="/assets/logo-black.png" alt="logo">
-    </div>
-    
-    <div class="nav">
-        <a routerLink="/home">Início</a>
-        <a routerLink="/" >Sobre</a>
-        <a routerLink="/" >Contato</a>
+<div class="header-container">
+
+    <div class="fixed-left">
+        <a routerLink="/home" class="logo-link">
+            <img class="logo" src="/assets/logo-black.png" alt="logo">
+        </a>
     </div>
 
-    <div class="botao">
-        <a routerLink="/"><span data-hover="Contact us">Contact us </span></a>
+    <div class="scrolling-nav">
+        <nav class="nav">
+            <a routerLink="/home">Início</a>
+            <a routerLink="/">Sobre</a>
+            <a routerLink="/">Contato</a>
+        </nav>
+    </div>
+
+    <div class="container-right">
+        <div class="scrolling-button">
+            <div class="botao">
+                <a routerLink="/"><span data-hover="Contact us">Contact us</span></a>
+            </div>
+        </div>
+
+        <div class="fixed-right" (click)="toggleMenu()" style="cursor: pointer;">
+            <i class="fa-solid fa-bars fa-xl"></i>
+        </div>
+
+
+    </div>
+
+    <div class="overlay" [class.open]="isMenuOpen()" (click)="closeMenu()"></div>
+
+    <div class="sidebar-menu" [class.open]="isMenuOpen()">
+        <div class="sidebar-header">
+            <button class="close-btn" (click)="closeMenu()">&times;</button>
+        </div>
+        
+        <ul class="sidebar-links">
+            <li><a routerLink="/home" (click)="closeMenu()">Início</a></li>
+            <li><a routerLink="/" (click)="closeMenu()">Sobre</a></li>
+            <li><a routerLink="/" (click)="closeMenu()">Contato</a></li>
+        </ul>
     </div>
 </div>
