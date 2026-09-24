@@ -1,0 +1,76 @@
+.dashboard {
+    width: min(1200px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 48px 0 80px;
+    color: #0f2747;
+}
+
+.dashboard__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 32px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #dbe3ec;
+}
+
+.dashboard__eyebrow {
+    margin: 0 0 8px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #2563eb;
+}
+
+.dashboard__header h1 {
+    margin: 0 0 8px;
+    font-size: 2.5rem;
+    line-height: 1.1;
+}
+
+.dashboard__header p {
+    margin: 0;
+}
+
+.dashboard__demo {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background-color: #eaf2ff;
+    color: #1d4ed8;
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.dashboard__section {
+    padding: 40px 0;
+    border-bottom: 1px solid #e5eaf0;
+}
+
+.dashboard__section h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    line-height: 1.3;
+}
+
+@media (max-width: 700px) {
+    .dashboard {
+        width: min(100% - 32px, 1200px);
+        padding-top: 32px;
+    }
+
+    .dashboard__header {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .dashboard__header h1 {
+        font-size: 2rem;
+    }
+
+    .dashboard__section {
+        padding: 32px 0;
+    }
+}
