@@ -1,0 +1,35 @@
+<main class="dashboard">
+
+  <header class="dashboard__header">
+    <div>
+      <p class="dashboard__eyebrow">Project Conscious</p>
+
+      <h1>Dashboard do projeto</h1>
+
+      <p>Projeto {{ projectId }}</p>
+    </div>
+
+    @if (result?.demoMode) {
+      <span class="dashboard__demo">
+        Modo demonstração
+      </span>
+    }
+  </header>
+
+  <section class="dashboard__section" aria-labelledby="score-title">
+    <h2 id="score-title">Conscious Score</h2>
+  </section>
+
+  <section class="dashboard__section" aria-labelledby="dimensions-title">
+    <h2 id="dimensions-title">Dimensões da análise</h2>
+  </section>
+
+  <section class="dashboard__section" aria-labelledby="risks-title">
+    <h2 id="risks-title">Risk Radar</h2>
+  </section>
+
+  <section class="dashboard__section" aria-labelledby="insight-title">
+    <h2 id="insight-title">Conscious Insight</h2>
+  </section>
+
+</main>
