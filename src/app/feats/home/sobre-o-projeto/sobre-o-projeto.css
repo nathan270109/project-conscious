@@ -37,11 +37,12 @@
     display: flex;
     justify-content: center;
     gap: 5px;
+    flex-wrap: wrap;
 }
 
 /* Div 'box' que toma conta dos cards */
 .box {
-    width: 100%;
+    width: 365px;
     margin: 25px 0 0 0;
     padding: 25px 20px;
     background-color: rgb(46, 36, 25);
