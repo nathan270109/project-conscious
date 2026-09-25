@@ -5,20 +5,21 @@
 /* Div 'container' que engloba tudo */
 .container {
     margin: var(--margin);
-    padding: 50px;
+    padding: var(--padding-divs);
     font-family: var(--fonte);
 }
 
 /* Textos da div 'textos' */
 .textos h3 {
-    color: rgb(197, 150, 20);
+    font-size: var(--tamanho-h3-secoes-home);
+    color: var(--cor-destaque);
+    font-weight: var(--font-weight-h3);
     margin-bottom: 5px;
-    font-size: 20px;
 }
 
 .textos h2 {
-    color: rgb(0, 0, 0);
-    font-weight: 500;
+    color: var(--cor-textos);
+    font-weight: var(--font-weight-h2);
     font-size: var(--tamanho-h2-secoes-home);
 }
 
