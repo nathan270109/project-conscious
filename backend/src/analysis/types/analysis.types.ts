@@ -1,9 +1,9 @@
 export type AnalysisCategory =
-| 'DOCUMENTATION'
-| 'TESTS'
-| 'ACCESSIBILITY'
-| 'ORGANIZATION'
-| 'MAINTAINABILITY'
+  | 'DOCUMENTATION'
+  | 'TESTS'
+  | 'ACCESSIBILITY'
+  | 'ORGANIZATION'
+  | 'MAINTAINABILITY'
 
 export type Severity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 
@@ -19,4 +19,9 @@ export interface AnalyzerResult {
   category: AnalysisCategory;
   score: number;
   findings: Finding[];
+}
+
+export interface DimensionScore {
+  category: AnalysisCategory;
+  score: number;
 }
