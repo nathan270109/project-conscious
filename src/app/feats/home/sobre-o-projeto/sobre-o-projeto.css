@@ -5,7 +5,7 @@
 /* Div 'container' que engloba tudo */
 .container {
     margin: var(--margin);
-    padding: 50px;
+    padding: var(--padding-divs);
     font-family: var(--fonte);
 }
 

@@ -5,7 +5,7 @@
 }
 
 .box {
-    padding: 50px;
+    padding: var(--padding-divs);
     display: flex;
     flex-direction: column;
     gap: 20px;
