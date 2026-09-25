@@ -55,6 +55,8 @@
     line-height: 1.3;
 }
 
+/* CONSCIOUS SCORE */
+
 .dashboard__score {
     display: inline-block;
     font-size: 4.5rem;
@@ -62,6 +64,8 @@
     font-weight: 700;
     color: #0f2747;
 }
+
+/* DIMENSÕES */
 
 .dimensions-grid {
     display: grid;
@@ -108,6 +112,86 @@
     background-color: #2563eb;
 }
 
+/* RISK RADAR */
+
+.risk-list {
+    display: grid;
+    gap: 16px;
+}
+
+.risk-card {
+    padding: 20px;
+    border: 1px solid #dbe3ec;
+    border-radius: 16px;
+    background-color: #ffffff;
+}
+
+.risk-card__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.risk-card__severity {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+
+.risk-card__severity--critical {
+    background-color: #fee2e2;
+    color: #7f1d1d;
+}
+
+.risk-card__severity--high {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.risk-card__severity--medium {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.risk-card__severity--low {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.risk-card__category {
+    font-weight: 600;
+    color: #0f2747;
+}
+
+.risk-card__message {
+    margin: 0 0 12px;
+    line-height: 1.5;
+}
+
+.risk-card__file {
+    display: inline-block;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background-color: #f3f6f9;
+    color: #334155;
+    font-size: 0.875rem;
+}
+
+.risk-empty {
+    margin: 0;
+    padding: 20px;
+    border: 1px solid #dbe3ec;
+    border-radius: 16px;
+    background-color: #f8fafc;
+    color: #475569;
+}
+
+/* RESPONSIVIDADE */
+
 @media (max-width: 700px) {
     .dashboard {
         width: min(100% - 32px, 1200px);
@@ -133,5 +217,10 @@
 
     .dimensions-grid {
         grid-template-columns: 1fr;
+    }
+
+    .risk-card__header {
+        align-items: flex-start;
+        flex-direction: column;
     }
 }

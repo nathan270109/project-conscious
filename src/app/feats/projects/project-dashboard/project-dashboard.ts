@@ -19,4 +19,52 @@ export class ProjectDashboard {
   result: AnalysisResult | undefined =
     this.analysisService.getByProjectId(this.projectId);
 
+  constructor() {
+    this.orderFindingsBySeverity();
+  }
+
+  private orderFindingsBySeverity(): void {
+    if (!this.result) {
+      return;
+    }
+
+    const severityOrder: Record<string, number> = {
+      CRITICAL: 0,
+      HIGH: 1,
+      MEDIUM: 2,
+      LOW: 3,
+    };
+
+    this.result = {
+      ...this.result,
+      findings: [...this.result.findings].sort(
+        (a, b) =>
+          severityOrder[a.severity] - severityOrder[b.severity]
+      )
+    };
+  }
+
+  getSeverityLabel(severity: string): string {
+    const labels: Record<string, string> = {
+      CRITICAL: 'Crítica',
+      HIGH: 'Alta',
+      MEDIUM: 'Média',
+      LOW: 'Baixa'
+    };
+
+    return labels[severity] ?? severity;
+  }
+
+  getCategoryLabel(category: string): string {
+    const labels: Record<string, string> = {
+      DOCUMENTATION: 'Documentação',
+      TESTS: 'Testes',
+      ACCESSIBILITY: 'Acessibilidade',
+      ORGANIZATION: 'Organização',
+      MAINTAINABILITY: 'Manutenibilidade'
+    };
+
+    return labels[category] ?? category;
+  }
+
 }

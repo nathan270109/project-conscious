@@ -98,6 +98,54 @@
 
     <section class="dashboard__section" aria-labelledby="risks-title">
         <h2 id="risks-title">Risk Radar</h2>
+
+        @if (result) {
+
+        @if (result.findings.length > 0) {
+        <div class="risk-list">
+
+            @for (finding of result.findings; track $index) {
+            <article class="risk-card">
+
+                <div class="risk-card__header">
+                    <span class="risk-card__severity"
+                        [class.risk-card__severity--critical]="finding.severity === 'CRITICAL'"
+                        [class.risk-card__severity--high]="finding.severity === 'HIGH'"
+                        [class.risk-card__severity--medium]="finding.severity === 'MEDIUM'"
+                        [class.risk-card__severity--low]="finding.severity === 'LOW'">
+                        {{ getSeverityLabel(finding.severity) }}
+                    </span>
+
+                    <span class="risk-card__category">
+                        {{ getCategoryLabel(finding.category) }}
+                    </span>
+                </div>
+
+                <p class="risk-card__message">
+                    {{ finding.message }}
+                </p>
+
+                @if (finding.file) {
+                <code class="risk-card__file">
+                                    {{ finding.file }}
+
+                                    @if (finding.line) {
+                                        :{{ finding.line }}
+                                    }
+                                </code>
+                }
+
+            </article>
+            }
+
+        </div>
+        } @else {
+        <p class="risk-empty">
+            Nenhum risco foi encontrado nesta análise.
+        </p>
+        }
+
+        }
     </section>
 
     <section class="dashboard__section" aria-labelledby="insight-title">
