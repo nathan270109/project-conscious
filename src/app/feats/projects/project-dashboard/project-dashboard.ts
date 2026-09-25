@@ -29,9 +29,10 @@ export class ProjectDashboard {
     }
 
     const severityOrder: Record<string, number> = {
+      CRITICAL: 0,
       HIGH: 1,
       MEDIUM: 2,
-      LOW: 3
+      LOW: 3,
     };
 
     this.result = {
@@ -45,6 +46,7 @@ export class ProjectDashboard {
 
   getSeverityLabel(severity: string): string {
     const labels: Record<string, string> = {
+      CRITICAL: 'Crítica',
       HIGH: 'Alta',
       MEDIUM: 'Média',
       LOW: 'Baixa'

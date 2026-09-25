@@ -141,6 +141,12 @@
     font-weight: 700;
 }
 
+
+.risk-card__severity--critical {
+    background-color: #fee2e2;
+    color: #7f1d1d;
+}
+
 .risk-card__severity--high {
     background-color: #fee2e2;
     color: #991b1b;

@@ -108,7 +108,9 @@
             <article class="risk-card">
 
                 <div class="risk-card__header">
-                    <span class="risk-card__severity" [class.risk-card__severity--high]="finding.severity === 'HIGH'"
+                    <span class="risk-card__severity"
+                        [class.risk-card__severity--critical]="finding.severity === 'CRITICAL'"
+                        [class.risk-card__severity--high]="finding.severity === 'HIGH'"
                         [class.risk-card__severity--medium]="finding.severity === 'MEDIUM'"
                         [class.risk-card__severity--low]="finding.severity === 'LOW'">
                         {{ getSeverityLabel(finding.severity) }}
