@@ -26,8 +26,6 @@
     padding: 0px 25px;
     width: 450px;
     color: rgb(0, 0, 0);
-
-    
 }
 
 .box-texto h2 {
@@ -90,7 +88,7 @@
 .box-card {
     display: flex;
     flex-direction: column;
-    background-color: #241c14c0;
+    background-color: rgb(46, 36, 25);
     backdrop-filter: blur(5px);
     border: 1px solid #8f5f169f;
     padding: 25px;
