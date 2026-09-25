@@ -39,6 +39,12 @@
     flex-direction: column;
     gap: 15px;
     margin-bottom: 10px;
+    transition:.25s ease;
+}
+
+.card:hover {
+    transform:translateY(-4px);
+    box-shadow:var(--sombra);
 }
 
 .numero {
@@ -82,4 +88,126 @@
     font-size: 14px;
     color: rgb(121, 121, 121);
     font-weight: 400;
+}
+
+/* Tablet */
+@media (max-width:1024px){
+
+    .box{
+        padding:40px 30px;
+    }
+
+    .cards{
+        gap:20px;
+    }
+
+    .card{
+        width:320px;
+    }
+
+    .numero{
+        width:48px;
+        height:48px;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        padding:0;
+    }
+}
+
+/* Celular */
+@media (max-width:768px){
+
+    .container{
+        margin:30px 15px;
+    }
+
+    .box{
+        padding:0;
+        gap:30px;
+    }
+
+    .textos h2{
+        font-size:clamp(1.8rem, 6vw, 2.4rem);
+        line-height:1.15;
+    }
+
+    .textos h3{
+        font-size:18px;
+    }
+
+    .cards{
+        flex-direction:column;
+        gap:18px;
+    }
+
+    .card{
+        width:100%;
+        padding:22px;
+        box-sizing:border-box;
+    }
+
+    .numero{
+        width:46px;
+        height:46px;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        padding:0;
+        font-size:18px;
+    }
+
+    .paragrafo{
+        font-size:18px;
+    }
+
+    .paragrafo-texto{
+        font-size:15px;
+        line-height:1.6;
+    }
+
+    .passo{
+        width:max-content;
+        min-width:90px;
+        margin-top:auto;
+    }
+
+    .mensagem-final p{
+        font-size:15px;
+        line-height:1.6;
+    }
+}
+
+/* Celulares pequenos */
+@media (max-width:480px){
+
+    .textos h2{
+        font-size:30px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .numero{
+        width:42px;
+        height:42px;
+        font-size:16px;
+    }
+
+    .paragrafo{
+        font-size:17px;
+    }
+
+    .paragrafo-texto{
+        font-size:14px;
+    }
+
+    .passo p{
+        font-size:13px;
+    }
+
+    .mensagem-final p{
+        font-size:14px;
+    }
 }
