@@ -1,5 +1,39 @@
 <main class="dashboard">
 
+    @if (loading) {
+
+    <section class="dashboard-state" aria-live="polite">
+        <p>Carregando análise…</p>
+    </section>
+
+    } @else if (errorMessage) {
+
+    <section class="dashboard-state dashboard-state--error" role="alert">
+        <h1>Não foi possível carregar a análise</h1>
+
+        <p>{{ errorMessage }}</p>
+
+        <a class="dashboard-state__action" routerLink="/projects/new">
+            Voltar ao formulário
+        </a>
+    </section>
+
+    } @else if (!result) {
+
+    <section class="dashboard-state dashboard-state--empty">
+        <h1>Análise não encontrada</h1>
+
+        <p>
+            Não encontramos um resultado de análise para este projeto.
+        </p>
+
+        <a class="dashboard-state__action" routerLink="/projects/new">
+            Voltar ao formulário
+        </a>
+    </section>
+
+    } @else {
+
     <header class="dashboard__header">
         <div>
             <p class="dashboard__eyebrow">Project Conscious</p>
@@ -9,7 +43,7 @@
             <p>Projeto {{ projectId }}</p>
         </div>
 
-        @if (result?.demoMode) {
+        @if (result.demoMode) {
         <span class="dashboard__demo">
             Modo demonstração
         </span>
@@ -19,17 +53,14 @@
     <section class="dashboard__section" aria-labelledby="score-title">
         <h2 id="score-title">Conscious Score</h2>
 
-        @if (result) {
         <strong class="dashboard__score">
             {{ result.score }}/100
         </strong>
-        }
     </section>
 
     <section class="dashboard__section" aria-labelledby="dimensions-title">
         <h2 id="dimensions-title">Dimensões da análise</h2>
 
-        @if (result) {
         <div class="dimensions-grid">
 
             <article class="dimension-card">
@@ -93,15 +124,68 @@
             </article>
 
         </div>
-        }
     </section>
 
     <section class="dashboard__section" aria-labelledby="risks-title">
         <h2 id="risks-title">Risk Radar</h2>
+
+        @if (result.findings.length > 0) {
+
+        <div class="risk-list">
+
+            @for (finding of result.findings; track $index) {
+
+            <article class="risk-card">
+
+                <div class="risk-card__header">
+
+                    <span class="risk-card__severity" [class.risk-card__severity--high]="finding.severity === 'HIGH'"
+                        [class.risk-card__severity--medium]="finding.severity === 'MEDIUM'"
+                        [class.risk-card__severity--low]="finding.severity === 'LOW'">
+                        {{ getSeverityLabel(finding.severity) }}
+                    </span>
+
+                    <span class="risk-card__category">
+                        {{ getCategoryLabel(finding.category) }}
+                    </span>
+
+                </div>
+
+                <p class="risk-card__message">
+                    {{ finding.message }}
+                </p>
+
+                @if (finding.file) {
+
+                <code class="risk-card__file">
+                                    {{ finding.file }}
+
+                                    @if (finding.line) {
+                                        :{{ finding.line }}
+                                    }
+                                </code>
+
+                }
+
+            </article>
+
+            }
+
+        </div>
+
+        } @else {
+
+        <p class="risk-empty">
+            Nenhum risco foi encontrado nesta análise.
+        </p>
+
+        }
     </section>
 
     <section class="dashboard__section" aria-labelledby="insight-title">
         <h2 id="insight-title">Conscious Insight</h2>
     </section>
+
+    }
 
 </main>
