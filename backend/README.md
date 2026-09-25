@@ -251,3 +251,26 @@ O quadro utiliza a chave `CONSCIOUS`. Ao concluir uma entrega:
 1. Atualize o status da subtarefa correspondente.
 2. Registre uma observação curta sobre o que foi feito e testado.
 3. Inclua o link da Pull Request quando ela existir.
+
+### Pontuação e Conscious Score
+
+Cada dimensão começa com nota `100`.
+
+Os findings reduzem a nota conforme a severidade:
+
+| Severidade | Desconto |
+| --- | ---: |
+| `CRITICAL` | 40 |
+| `HIGH` | 25 |
+| `MEDIUM` | 10 |
+| `LOW` | 5 |
+
+A nota de uma dimensão nunca fica abaixo de `0`.
+
+O Conscious Score é a média arredondada das cinco dimensões:
+
+- Documentação;
+- Testes;
+- Acessibilidade;
+- Organização;
+- Manutenibilidade.
