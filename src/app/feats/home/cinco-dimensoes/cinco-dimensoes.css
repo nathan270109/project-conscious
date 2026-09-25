@@ -24,7 +24,7 @@
 .textos h2 {
     font-size: var(--tamanho-h2-secoes-home);
     color: var(--cor-textos);
-    font-weight: 300;
+    font-weight: var(--font-weight-h2);
 }
 
 #subtitulo {

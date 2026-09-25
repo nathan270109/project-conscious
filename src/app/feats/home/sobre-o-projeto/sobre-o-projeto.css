@@ -17,8 +17,8 @@
 }
 
 .textos h2 {
-    color: rgb(0, 0, 0);
-    font-weight: 500;
+    color: var(--cor-textos);
+    font-weight: var(--font-weight-h2);
     font-size: var(--tamanho-h2-secoes-home);
 }
 
