@@ -3,6 +3,8 @@ import { ANALYSIS_ENGINE } from '../analysis/analysis-engine.interface.js';
 import type { AnalysisEngine } from '../analysis/analysis-engine.interface.js';
 import type { CompletedAnalysisResult } from '../analysis/types/analysis.types.js';
 import { ProjectsService } from './projects.service.js';
+import { validateAnalysisResult } from '../analysis/analysis-result.validator.js';
+
 @Injectable()
 export class ProjectAnalysisService {
   constructor(
@@ -14,6 +16,8 @@ export class ProjectAnalysisService {
   async analyze(projectId: string): Promise<CompletedAnalysisResult> {
     const files = await this.projectsService.getProjectFiles(projectId);
     const result = await this.analysisEngine.analyze(files);
+
+    validateAnalysisResult(result);
 
     return {
       projectId,

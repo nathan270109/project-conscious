@@ -1,7 +1,4 @@
-import {
-  NotFoundException,
-  ServiceUnavailableException,
-} from '@nestjs/common';
+import { NotFoundException, ServiceUnavailableException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ANALYSIS_ENGINE } from '../analysis/analysis-engine.interface.js';
@@ -15,14 +12,11 @@ import { ProjectsService } from './projects.service.js';
 describe('ProjectAnalysisService', () => {
   let service: ProjectAnalysisService;
 
-  const getProjectFiles =
-    vi.fn<ProjectsService['getProjectFiles']>();
+  const getProjectFiles = vi.fn<ProjectsService['getProjectFiles']>();
   const analyze = vi.fn<AnalysisEngine['analyze']>();
 
   const projectId = 'a5f68a91-2ff2-4928-a7b8-ef26e2bc37ad';
-  const files = [
-    { path: 'README.md', content: '# Projeto de teste' },
-  ];
+  const files = [{ path: 'README.md', content: '# Projeto de teste' }];
 
   const engineResult: AnalysisEngineOutput = {
     score: 95,
@@ -105,9 +99,7 @@ describe('ProjectAnalysisService', () => {
   });
 
   it('preserva a falha do GitHub sem chamar o motor', async () => {
-    const error = new ServiceUnavailableException(
-      'GitHub indisponível.',
-    );
+    const error = new ServiceUnavailableException('GitHub indisponível.');
     getProjectFiles.mockRejectedValue(error);
 
     await expect(service.analyze(projectId)).rejects.toBe(error);
@@ -122,4 +114,66 @@ describe('ProjectAnalysisService', () => {
 
     await expect(service.analyze(projectId)).rejects.toBe(error);
   });
+
+  it('rejeita resultado com uma dimensão ausente', async () => {
+  getProjectFiles.mockResolvedValue(files);
+  analyze.mockResolvedValue({
+    ...engineResult,
+    dimensions: engineResult.dimensions.filter(
+      (dimension) => dimension.category !== 'TESTS',
+    ),
+  });
+
+  await expect(service.analyze(projectId)).rejects.toThrow(
+    'O motor retornou um resultado de análise inválido.',
+  );
+});
+
+it('rejeita categorias repetidas mesmo com cinco dimensões', async () => {
+  getProjectFiles.mockResolvedValue(files);
+  analyze.mockResolvedValue({
+    ...engineResult,
+    dimensions: engineResult.dimensions.map((dimension) => ({
+      ...dimension,
+      category: 'DOCUMENTATION' as const,
+    })),
+  });
+
+  await expect(service.analyze(projectId)).rejects.toThrow(
+    'O motor retornou um resultado de análise inválido.',
+  );
+});
+
+it.each([-1, 101, NaN, Infinity])(
+  'rejeita score geral inválido: %s',
+  async (score) => {
+    getProjectFiles.mockResolvedValue(files);
+    analyze.mockResolvedValue({
+      ...engineResult,
+      score,
+    });
+
+    await expect(service.analyze(projectId)).rejects.toThrow(
+      'O motor retornou um resultado de análise inválido.',
+    );
+  },
+);
+
+it.each([-1, 101, NaN, Infinity])(
+  'rejeita nota inválida de uma dimensão: %s',
+  async (score) => {
+    getProjectFiles.mockResolvedValue(files);
+    analyze.mockResolvedValue({
+      ...engineResult,
+      dimensions: engineResult.dimensions.map((dimension) => ({
+        ...dimension,
+        score,
+      })),
+    });
+
+    await expect(service.analyze(projectId)).rejects.toThrow(
+      'O motor retornou um resultado de análise inválido.',
+    );
+  },
+);
 });
