@@ -5,6 +5,8 @@ import {
   Insight,
 } from './types/analysis.types.js';
 
+export const ANALYSIS_ENGINE = Symbol('ANALYSIS_ENGINE');
+
 export interface AnalysisEngineOutput {
   score: number;
   dimensions: DimensionScore[];
