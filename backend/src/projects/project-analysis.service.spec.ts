@@ -12,11 +12,29 @@ import { ProjectsService } from './projects.service.js';
 describe('ProjectAnalysisService', () => {
   let service: ProjectAnalysisService;
 
+  const findById = vi.fn<ProjectsService['findById']>();
+
   const getProjectFiles = vi.fn<ProjectsService['getProjectFiles']>();
   const analyze = vi.fn<AnalysisEngine['analyze']>();
 
   const projectId = 'a5f68a91-2ff2-4928-a7b8-ef26e2bc37ad';
   const files = [{ path: 'README.md', content: '# Projeto de teste' }];
+
+  const failedResult = {
+    projectId,
+    status: 'FAILED',
+    analyzedAt: expect.any(String),
+    demoMode: false,
+    score: null,
+    dimensions: [],
+    findings: [],
+    insight: null,
+    error: {
+      code: 'ANALYSIS_FAILED',
+      message:
+        'Não foi possível concluir a análise. Tente novamente mais tarde.',
+    },
+  };
 
   const engineResult: AnalysisEngineOutput = {
     score: 95,
@@ -44,6 +62,13 @@ describe('ProjectAnalysisService', () => {
   };
 
   beforeEach(async () => {
+    findById.mockReset();
+    findById.mockReturnValue({
+      id: projectId,
+      name: 'Projeto de teste',
+      repositoryUrl: 'https://github.com/octocat/Hello-World',
+      createdAt: '2026-09-27T12:00:00.000Z',
+    });
     getProjectFiles.mockReset();
     analyze.mockReset();
 
@@ -52,7 +77,7 @@ describe('ProjectAnalysisService', () => {
         ProjectAnalysisService,
         {
           provide: ProjectsService,
-          useValue: { getProjectFiles },
+          useValue: { findById, getProjectFiles },
         },
         {
           provide: ANALYSIS_ENGINE,
@@ -91,89 +116,104 @@ describe('ProjectAnalysisService', () => {
 
   it('preserva o erro de projeto inexistente sem chamar o motor', async () => {
     const error = new NotFoundException('Projeto não encontrado.');
-    getProjectFiles.mockRejectedValue(error);
+    findById.mockImplementation(() => {
+      throw error;
+    });
 
     await expect(service.analyze(projectId)).rejects.toBe(error);
 
+    expect(getProjectFiles).not.toHaveBeenCalled();
     expect(analyze).not.toHaveBeenCalled();
   });
 
-  it('preserva a falha do GitHub sem chamar o motor', async () => {
+  it('retorna FAILED para falha do GitHub sem chamar o motor', async () => {
     const error = new ServiceUnavailableException('GitHub indisponível.');
     getProjectFiles.mockRejectedValue(error);
 
-    await expect(service.analyze(projectId)).rejects.toBe(error);
+    await expect(service.analyze(projectId)).resolves.toEqual(failedResult);
 
     expect(analyze).not.toHaveBeenCalled();
   });
 
-  it('propaga falha do motor sem devolver resultado concluído', async () => {
+  it('retorna FAILED sem expor detalhes da falha do motor', async () => {
     getProjectFiles.mockResolvedValue(files);
     const error = new Error('Falha interna do motor.');
     analyze.mockRejectedValue(error);
 
-    await expect(service.analyze(projectId)).rejects.toBe(error);
+    await expect(service.analyze(projectId)).resolves.toEqual(failedResult);
+  });
+
+  it('identifica repositório inexistente sem chamar o motor', async () => {
+    getProjectFiles.mockRejectedValue(new NotFoundException('Detalhe interno'));
+
+    await expect(service.analyze(projectId)).resolves.toEqual({
+      ...failedResult,
+      error: {
+        code: 'REPOSITORY_NOT_FOUND',
+        message: 'Não foi possível encontrar o repositório público informado.',
+      },
+    });
+    expect(analyze).not.toHaveBeenCalled();
+  });
+
+  it('não confunde NotFoundException do motor com repositório inexistente', async () => {
+    getProjectFiles.mockResolvedValue(files);
+    analyze.mockRejectedValue(new NotFoundException('Recurso interno ausente'));
+
+    await expect(service.analyze(projectId)).resolves.toEqual(failedResult);
   });
 
   it('rejeita resultado com uma dimensão ausente', async () => {
-  getProjectFiles.mockResolvedValue(files);
-  analyze.mockResolvedValue({
-    ...engineResult,
-    dimensions: engineResult.dimensions.filter(
-      (dimension) => dimension.category !== 'TESTS',
-    ),
-  });
-
-  await expect(service.analyze(projectId)).rejects.toThrow(
-    'O motor retornou um resultado de análise inválido.',
-  );
-});
-
-it('rejeita categorias repetidas mesmo com cinco dimensões', async () => {
-  getProjectFiles.mockResolvedValue(files);
-  analyze.mockResolvedValue({
-    ...engineResult,
-    dimensions: engineResult.dimensions.map((dimension) => ({
-      ...dimension,
-      category: 'DOCUMENTATION' as const,
-    })),
-  });
-
-  await expect(service.analyze(projectId)).rejects.toThrow(
-    'O motor retornou um resultado de análise inválido.',
-  );
-});
-
-it.each([-1, 101, NaN, Infinity])(
-  'rejeita score geral inválido: %s',
-  async (score) => {
     getProjectFiles.mockResolvedValue(files);
     analyze.mockResolvedValue({
       ...engineResult,
-      score,
+      dimensions: engineResult.dimensions.filter(
+        (dimension) => dimension.category !== 'TESTS',
+      ),
     });
 
-    await expect(service.analyze(projectId)).rejects.toThrow(
-      'O motor retornou um resultado de análise inválido.',
-    );
-  },
-);
+    await expect(service.analyze(projectId)).resolves.toEqual(failedResult);
+  });
 
-it.each([-1, 101, NaN, Infinity])(
-  'rejeita nota inválida de uma dimensão: %s',
-  async (score) => {
+  it('rejeita categorias repetidas mesmo com cinco dimensões', async () => {
     getProjectFiles.mockResolvedValue(files);
     analyze.mockResolvedValue({
       ...engineResult,
       dimensions: engineResult.dimensions.map((dimension) => ({
         ...dimension,
-        score,
+        category: 'DOCUMENTATION' as const,
       })),
     });
 
-    await expect(service.analyze(projectId)).rejects.toThrow(
-      'O motor retornou um resultado de análise inválido.',
-    );
-  },
-);
+    await expect(service.analyze(projectId)).resolves.toEqual(failedResult);
+  });
+
+  it.each([-1, 101, NaN, Infinity])(
+    'rejeita score geral inválido: %s',
+    async (score) => {
+      getProjectFiles.mockResolvedValue(files);
+      analyze.mockResolvedValue({
+        ...engineResult,
+        score,
+      });
+
+      await expect(service.analyze(projectId)).resolves.toEqual(failedResult);
+    },
+  );
+
+  it.each([-1, 101, NaN, Infinity])(
+    'rejeita nota inválida de uma dimensão: %s',
+    async (score) => {
+      getProjectFiles.mockResolvedValue(files);
+      analyze.mockResolvedValue({
+        ...engineResult,
+        dimensions: engineResult.dimensions.map((dimension) => ({
+          ...dimension,
+          score,
+        })),
+      });
+
+      await expect(service.analyze(projectId)).resolves.toEqual(failedResult);
+    },
+  );
 });
