@@ -9,13 +9,13 @@ export class AnalysisService {
     private readonly mockResult: AnalysisResult = {
         projectId: '1',
         status: 'COMPLETED',
-        score: 70,
+        score: 80,
         dimensions: {
-            documentation: 54,
-            tests: 61,
-            accessibility: 72,
-            organization: 88,
-            maintainability: 76
+            documentation: 65,
+            tests: 95,
+            accessibility: 60,
+            organization: 100,
+            maintainability: 80
         },
         findings: [
             {
