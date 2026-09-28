@@ -205,6 +205,98 @@ O analisador reconhece arquivos como `README`, `README.md` e `docs/README.md`.
 
 Cada finding informa categoria, severidade, mensagem, arquivo e linha quando disponível. Os resultados são reproduzíveis: os mesmos arquivos sempre geram a mesma nota e os mesmos findings.
 
+## Conscious Insight — CONSCIOUS-45
+
+O serviço `src/insights/insights.service.ts` reutiliza o tipo compartilhado
+`Insight` de `src/analysis/types/analysis.types.ts` e retorna somente `category`,
+`title` e `message`, conforme `../docs/api-contract.md`.
+
+### Convenções adotadas nesta integração
+
+- `generate(findings)` recebe uma lista já ordenada e utiliza o primeiro finding.
+- Não ordena riscos, não recalcula scores, não modifica a entrada e não faz
+  chamadas externas. A mesma entrada produz a mesma saída.
+- A mensagem preserva o apontamento e inclui o arquivo e, quando disponível,
+  a linha. Os dados vêm dos findings recebidos; o serviço não cria evidências.
+- Sem findings, retorna `DOCUMENTATION`, título `Nenhum risco identificado` e
+  mensagem `As regras executadas não identificaram findings nesta análise.`.
+  Essa categoria é uma convenção de apresentação, não uma deficiência detectada
+  nem indicação da pior dimensão. Ausência de findings não garante ausência de
+  problemas no projeto.
+
+As convenções acima foram aprovadas por Katheriny para esta implementação:
+prioridade pelo primeiro finding já ordenado e categoria convencional
+`DOCUMENTATION` quando não houver findings. O serviço não seleciona a pior
+dimensão. Essas escolhas preservam o formato do contrato, que não define o
+algoritmo de prioridade.
+
+Isso não representa aprovação dos demais integrantes nem atualização do Jira.
+Ainda é necessário comunicar a decisão à equipe e harmonizar a referência à
+"pior dimensão" na descrição da CONSCIOUS-45. No dashboard, a categoria do caso
+sem findings não deve ser apresentada como deficiência detectada. Mudanças
+futuras nessas regras devem atualizar serviço, testes e documentação juntos.
+
+Exemplo ilustrativo (não é evidência de execução em um repositório real):
+
+```json
+{
+  "category": "DOCUMENTATION",
+  "title": "Comece pela documentação",
+  "message": "README não possui instruções de instalação. Revise esse apontamento no arquivo README.md:12."
+}
+```
+
+### Integração e validação
+
+`src/insights/insights.module.ts` exporta `InsightsService`. O módulo consumidor
+deverá importar `InsightsModule`; essa conexão fica para a CONSCIOUS-49.
+Esta entrega não registra outro endpoint nem altera a orquestração existente.
+O serviço gera apenas o insight de uma análise concluída; na resposta `FAILED`,
+a orquestração mantém `insight: null`, conforme o contrato.
+
+Integração local em 2026-09-28: os cinco analisadores estão registrados e
+exportados pelo `AnalysisModule`. Testes e acessibilidade foram incorporados
+seletivamente da entrega `b6fccb7a056b4379163945b2bd7c9957e0695272` da branch
+`origin/feat/tests-accessibility-analyzers`, preservando organização,
+manutenibilidade e os tipos existentes. A integração corrige o escape de IDs
+HTML na expressão regular de associação de labels e adiciona testes de regressão.
+
+Ainda falta a ordenação de riscos da CONSCIOUS-44, não localizada nas referências
+remotas atualizadas nesta revisão. A branch `feat/risk-radar` contém a interface,
+não o serviço de ordenação do backend. Não ativar o motor nem gerar um demo
+completo antes de integrar essa dependência real.
+O scoring retorna cinco dimensões mesmo com findings parciais; portanto, sua
+saída sozinha não comprova que todas as categorias foram analisadas.
+
+Os testes estão em `src/insights/insights.service.spec.ts`. Dentro de `backend/`:
+
+```bash
+npm test -- insights.service.spec.ts
+npm test
+npm run test:e2e
+npm run build
+git diff --check
+```
+
+A evidência de demonstração real ainda depende da integração: registrar o
+repositório, a revisão analisada e a saída obtida, alinhando com CONSCIOUS-39 e
+CONSCIOUS-47. Não apresentar o exemplo ilustrativo acima como análise real.
+
+### Regras de testes e acessibilidade integradas
+
+O `TestsAnalyzer` procura `.spec.ts`, `.test.ts`, `.spec.js` e `.test.js`.
+Sem esses arquivos, retorna nota individual `0` e finding `HIGH`; ele não executa
+testes nem mede cobertura. Não detecta testes de todas as linguagens/frameworks.
+
+O `AccessibilityAnalyzer` aplica heurísticas em arquivos `.html` e `.htm`:
+imagens sem `alt`, inputs sem associação explícita `id`/`label for` e botões
+vazios sem `aria-label`. Registra arquivo e linha; não é uma auditoria completa
+de acessibilidade. Labels envolvendo inputs e outras formas de nome acessível
+não são reconhecidos por essa primeira versão, podendo gerar falsos positivos.
+
+As notas individuais dos analisadores não substituem o score agregado:
+a integração deve usar `ScoringService.calculate(findings)` conforme o plano.
+
 ## Contribuição
 
 1. Atualize sua cópia da `main` antes de iniciar uma entrega.
