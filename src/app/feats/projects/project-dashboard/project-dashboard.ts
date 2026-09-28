@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AnalysisResult } from '../../../core/models/analysis-result.model';
 import { AnalysisService } from '../../../core/services/analysis.service';
 
 @Component({
-  imports: [],
+  imports: [RouterLink],
   selector: 'app-project-dashboard',
   styleUrl: './project-dashboard.css',
   templateUrl: './project-dashboard.html',
@@ -16,11 +16,24 @@ export class ProjectDashboard {
 
   projectId = this.route.snapshot.paramMap.get('id') ?? '';
 
-  result: AnalysisResult | undefined =
-    this.analysisService.getByProjectId(this.projectId);
+  loading = true;
+  errorMessage = '';
+  result: AnalysisResult | undefined;
 
   constructor() {
-    this.orderFindingsBySeverity();
+    this.loadAnalysis();
+  }
+
+  private loadAnalysis(): void {
+    try {
+      this.result = this.analysisService.getByProjectId(this.projectId);
+
+      this.orderFindingsBySeverity();
+    } catch {
+      this.errorMessage = 'Não foi possível carregar a análise.';
+    } finally {
+      this.loading = false;
+    }
   }
 
   private orderFindingsBySeverity(): void {
@@ -66,5 +79,4 @@ export class ProjectDashboard {
 
     return labels[category] ?? category;
   }
-
 }
