@@ -2,236 +2,174 @@
 
     @if (loading) {
 
-        <section class="dashboard-state" aria-live="polite">
-            <p>Carregando análise…</p>
-        </section>
+    <section class="dashboard-state" aria-live="polite">
+        <p>Carregando análise…</p>
+    </section>
 
     } @else if (errorMessage) {
 
-        <section class="dashboard-state dashboard-state--error" role="alert">
-            <h1>Não foi possível carregar a análise</h1>
+    <section class="dashboard-state dashboard-state--error" role="alert">
+        <h1>Não foi possível carregar a análise</h1>
 
-            <p>{{ errorMessage }}</p>
+        <p>{{ errorMessage }}</p>
 
-            <a
-                class="dashboard-state__action"
-                routerLink="/projects/new"
-            >
-                Voltar ao formulário
-            </a>
-        </section>
+        <a class="dashboard-state__action" routerLink="/projects/new">
+            Voltar ao formulário
+        </a>
+    </section>
 
     } @else if (!result) {
 
-        <section class="dashboard-state dashboard-state--empty">
-            <h1>Análise não encontrada</h1>
+    <section class="dashboard-state dashboard-state--empty">
+        <h1>Análise não encontrada</h1>
 
-            <p>
-                Não encontramos um resultado de análise para este projeto.
-            </p>
+        <p>
+            Não encontramos um resultado de análise para este projeto.
+        </p>
 
-            <a
-                class="dashboard-state__action"
-                routerLink="/projects/new"
-            >
-                Voltar ao formulário
-            </a>
-        </section>
+        <a class="dashboard-state__action" routerLink="/projects/new">
+            Voltar ao formulário
+        </a>
+    </section>
 
     } @else {
 
-        <header class="dashboard__header">
-            <div>
-                <p class="dashboard__eyebrow">Project Conscious</p>
+    <header class="dashboard__header">
+        <div>
+            <p class="dashboard__eyebrow">Project Conscious</p>
 
-                <h1>Dashboard do projeto</h1>
+            <h1>Dashboard do projeto</h1>
 
-                <p>Projeto {{ projectId }}</p>
-            </div>
+            <p>Projeto {{ projectId }}</p>
+        </div>
 
-            @if (result.demoMode) {
-                <span class="dashboard__demo">
-                    Modo demonstração
-                </span>
-            }
-        </header>
+        @if (result.demoMode) {
+        <span class="dashboard__demo">
+            Modo demonstração
+        </span>
+        }
+    </header>
 
-        <section
-            class="dashboard__section"
-            aria-labelledby="score-title"
-        >
-            <h2 id="score-title">Conscious Score</h2>
+    <section class="dashboard__section" aria-labelledby="score-title">
+        <h2 id="score-title">Conscious Score</h2>
 
-            <strong class="dashboard__score">
-                {{ result.score }}/100
-            </strong>
-        </section>
+        <strong class="dashboard__score">
+            {{ result.score }}/100
+        </strong>
+    </section>
 
-        <section
-            class="dashboard__section"
-            aria-labelledby="dimensions-title"
-        >
-            <h2 id="dimensions-title">Dimensões da análise</h2>
+    <section class="dashboard__section" aria-labelledby="dimensions-title">
+        <h2 id="dimensions-title">Dimensões da análise</h2>
 
-            <div class="dimensions-grid">
+        <div class="dimensions-grid">
 
-                <article class="dimension-card">
-                    <div class="dimension-card__header">
-                        <span>Documentação</span>
-                        <strong>
-                            {{ result.dimensions.documentation }}
-                        </strong>
-                    </div>
+            <article class="dimension-card">
+                <div class="dimension-card__header">
+                    <span>Documentação</span>
+                    <strong>
+                        {{ result.dimensions.documentation }}
+                    </strong>
+                </div>
 
-                    <div
-                        class="dimension-progress"
-                        role="progressbar"
-                        aria-label="Nota de Documentação"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        [attr.aria-valuenow]="result.dimensions.documentation"
-                    >
-                        <div
-                            class="dimension-progress__fill"
-                            [style.width.%]="result.dimensions.documentation"
-                        ></div>
-                    </div>
-                </article>
+                <div class="dimension-progress" role="progressbar" aria-label="Nota de Documentação" aria-valuemin="0"
+                    aria-valuemax="100" [attr.aria-valuenow]="result.dimensions.documentation">
+                    <div class="dimension-progress__fill" [style.width.%]="result.dimensions.documentation"></div>
+                </div>
+            </article>
 
-                <article class="dimension-card">
-                    <div class="dimension-card__header">
-                        <span>Testes</span>
-                        <strong>
-                            {{ result.dimensions.tests }}
-                        </strong>
-                    </div>
+            <article class="dimension-card">
+                <div class="dimension-card__header">
+                    <span>Testes</span>
+                    <strong>
+                        {{ result.dimensions.tests }}
+                    </strong>
+                </div>
 
-                    <div
-                        class="dimension-progress"
-                        role="progressbar"
-                        aria-label="Nota de Testes"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        [attr.aria-valuenow]="result.dimensions.tests"
-                    >
-                        <div
-                            class="dimension-progress__fill"
-                            [style.width.%]="result.dimensions.tests"
-                        ></div>
-                    </div>
-                </article>
+                <div class="dimension-progress" role="progressbar" aria-label="Nota de Testes" aria-valuemin="0"
+                    aria-valuemax="100" [attr.aria-valuenow]="result.dimensions.tests">
+                    <div class="dimension-progress__fill" [style.width.%]="result.dimensions.tests"></div>
+                </div>
+            </article>
 
-                <article class="dimension-card">
-                    <div class="dimension-card__header">
-                        <span>Acessibilidade</span>
-                        <strong>
-                            {{ result.dimensions.accessibility }}
-                        </strong>
-                    </div>
+            <article class="dimension-card">
+                <div class="dimension-card__header">
+                    <span>Acessibilidade</span>
+                    <strong>
+                        {{ result.dimensions.accessibility }}
+                    </strong>
+                </div>
 
-                    <div
-                        class="dimension-progress"
-                        role="progressbar"
-                        aria-label="Nota de Acessibilidade"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        [attr.aria-valuenow]="result.dimensions.accessibility"
-                    >
-                        <div
-                            class="dimension-progress__fill"
-                            [style.width.%]="result.dimensions.accessibility"
-                        ></div>
-                    </div>
-                </article>
+                <div class="dimension-progress" role="progressbar" aria-label="Nota de Acessibilidade" aria-valuemin="0"
+                    aria-valuemax="100" [attr.aria-valuenow]="result.dimensions.accessibility">
+                    <div class="dimension-progress__fill" [style.width.%]="result.dimensions.accessibility"></div>
+                </div>
+            </article>
 
-                <article class="dimension-card">
-                    <div class="dimension-card__header">
-                        <span>Organização</span>
-                        <strong>
-                            {{ result.dimensions.organization }}
-                        </strong>
-                    </div>
+            <article class="dimension-card">
+                <div class="dimension-card__header">
+                    <span>Organização</span>
+                    <strong>
+                        {{ result.dimensions.organization }}
+                    </strong>
+                </div>
 
-                    <div
-                        class="dimension-progress"
-                        role="progressbar"
-                        aria-label="Nota de Organização"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        [attr.aria-valuenow]="result.dimensions.organization"
-                    >
-                        <div
-                            class="dimension-progress__fill"
-                            [style.width.%]="result.dimensions.organization"
-                        ></div>
-                    </div>
-                </article>
+                <div class="dimension-progress" role="progressbar" aria-label="Nota de Organização" aria-valuemin="0"
+                    aria-valuemax="100" [attr.aria-valuenow]="result.dimensions.organization">
+                    <div class="dimension-progress__fill" [style.width.%]="result.dimensions.organization"></div>
+                </div>
+            </article>
 
-                <article class="dimension-card">
-                    <div class="dimension-card__header">
-                        <span>Manutenibilidade</span>
-                        <strong>
-                            {{ result.dimensions.maintainability }}
-                        </strong>
-                    </div>
+            <article class="dimension-card">
+                <div class="dimension-card__header">
+                    <span>Manutenibilidade</span>
+                    <strong>
+                        {{ result.dimensions.maintainability }}
+                    </strong>
+                </div>
 
-                    <div
-                        class="dimension-progress"
-                        role="progressbar"
-                        aria-label="Nota de Manutenibilidade"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        [attr.aria-valuenow]="result.dimensions.maintainability"
-                    >
-                        <div
-                            class="dimension-progress__fill"
-                            [style.width.%]="result.dimensions.maintainability"
-                        ></div>
-                    </div>
-                </article>
+                <div class="dimension-progress" role="progressbar" aria-label="Nota de Manutenibilidade"
+                    aria-valuemin="0" aria-valuemax="100" [attr.aria-valuenow]="result.dimensions.maintainability">
+                    <div class="dimension-progress__fill" [style.width.%]="result.dimensions.maintainability"></div>
+                </div>
+            </article>
 
-            </div>
-        </section>
+        </div>
+    </section>
 
-        <section
-            class="dashboard__section"
-            aria-labelledby="risks-title"
-        >
-            <h2 id="risks-title">Risk Radar</h2>
+    <section class="dashboard__section" aria-labelledby="risks-title">
+        <h2 id="risks-title">Risk Radar</h2>
 
-            @if (result.findings.length > 0) {
+        @if (result.findings.length > 0) {
 
-                <div class="risk-list">
+        <div class="risk-list">
 
-                    @for (finding of result.findings; track $index) {
+            @for (finding of result.findings; track $index) {
 
-                        <article class="risk-card">
+            <article class="risk-card">
 
-                            <div class="risk-card__header">
+                <div class="risk-card__header">
 
-                                <span
-                                    class="risk-card__severity"
-                                    [class.risk-card__severity--critical]="finding.severity === 'CRITICAL'"
-                                    [class.risk-card__severity--high]="finding.severity === 'HIGH'"
-                                    [class.risk-card__severity--medium]="finding.severity === 'MEDIUM'"
-                                    [class.risk-card__severity--low]="finding.severity === 'LOW'"
-                                >
-                                    {{ getSeverityLabel(finding.severity) }}
-                                </span>
+                    <span class="risk-card__severity"
+                        [class.risk-card__severity--critical]="finding.severity === 'CRITICAL'"
+                        [class.risk-card__severity--high]="finding.severity === 'HIGH'"
+                        [class.risk-card__severity--medium]="finding.severity === 'MEDIUM'"
+                        [class.risk-card__severity--low]="finding.severity === 'LOW'">
+                        {{ getSeverityLabel(finding.severity) }}
+                    </span>
 
-                                <span class="risk-card__category">
-                                    {{ getCategoryLabel(finding.category) }}
-                                </span>
+                    <span class="risk-card__category">
+                        {{ getCategoryLabel(finding.category) }}
+                    </span>
 
-                            </div>
+                </div>
 
-                            <p class="risk-card__message">
-                                {{ finding.message }}
-                            </p>
+                <p class="risk-card__message">
+                    {{ finding.message }}
+                </p>
 
-                            @if (finding.file) {
+                @if (finding.file) {
 
-                                <code class="risk-card__file">
+                <code class="risk-card__file">
                                     {{ finding.file }}
 
                                     @if (finding.line) {
@@ -239,31 +177,42 @@
                                     }
                                 </code>
 
-                            }
+                }
 
-                        </article>
-
-                    }
-
-                </div>
-
-            } @else {
-
-                <p class="risk-empty">
-                    Nenhum risco foi encontrado nesta análise.
-                </p>
+            </article>
 
             }
-        </section>
 
-        <section
-            class="dashboard__section"
-            aria-labelledby="insight-title"
-        >
-            <h2 id="insight-title">
-                Conscious Insight
-            </h2>
-        </section>
+        </div>
+
+        } @else {
+
+        <p class="risk-empty">
+            Nenhum risco foi encontrado nesta análise.
+        </p>
+
+        }
+    </section>
+
+    <section class="dashboard__section" aria-labelledby="insight-title">
+        <h2 id="insight-title">
+            Conscious Insight
+        </h2>
+
+        <p class="insight__context">
+            Recomendação baseada nas métricas e evidências identificadas na análise.
+        </p>
+
+        @if (result.insight) {
+        <p class="insight__text">
+            {{ result.insight }}
+        </p>
+        } @else {
+        <p class="insight__empty">
+            A análise não retornou uma prioridade.
+        </p>
+        }
+    </section>
 
     }
 
