@@ -13,7 +13,9 @@ Responsável: Katheriny Kamili, integrante 4.
 - Serviço de orquestração, tratamento seguro de falhas e validação de categorias/notas implementados.
 - Controller de `POST /projects/:id/analyze` criado e testado em aplicação isolada.
 - Controller e serviço ainda não registrados no `ProjectsModule`; a rota não está ativa na aplicação principal.
-- Última verificação: 65 testes unitários, 7 testes HTTP, build e lint do backend passaram.
+- Última verificação: 118 testes unitários, 7 testes HTTP, build e lint do backend passaram, incluindo menor dimensão, empates e ação prioritária no insight.
+- Etapa A implementada: contrato e README documentam a rota isolada, IDs, exemplos e erros HTTP.
+- Etapa C implementada: validação runtime de estrutura, findings e insight, com testes de rejeição e conversão para FAILED seguro.
 - Os cinco analisadores estão registrados e exportados pelo `AnalysisModule`, com teste de injeção em módulo consumidor.
 - Testes/acessibilidade foram incorporados seletivamente da entrega do Matheus `b6fccb7a056b4379163945b2bd7c9957e0695272`, com correção e testes para IDs HTML com caracteres especiais.
 - `InsightsService` e `InsightsModule` implementados e testados; ainda não conectados ao motor.
@@ -30,13 +32,23 @@ Responsável: Katheriny Kamili, integrante 4.
 | Organização/manutenibilidade — CONSCIOUS-42 | Matheus | Disponíveis na master |
 | Score — CONSCIOUS-43 | Matheus | Disponível na master |
 | Ordenação dos riscos — CONSCIOUS-44 | Matheus | A fazer |
-| Insight e resultado demonstrativo — CONSCIOUS-45 | Matheus; implementação local de apoio por Katheriny | Serviço e testes implementados nesta branch; alinhamento da equipe e demo real pendentes |
+| Insight e resultado demonstrativo — CONSCIOUS-45 | Katheriny (atribuição atual consultada no Jira) | Fazendo; serviço e testes implementados; alinhamento da regra e demo real pendentes |
 | Cadastro e scanning — CONSCIOUS-23 a 27 | Integrante 2 | Pendentes no Jira |
 | Dashboard e consumo do resultado | Letícia, integrante 3 | Interface existente com mock; precisa alinhar contrato e consumo |
 
-Katheriny conecta as entregas do motor. Regras de score, ordenação e insight devem ser reutilizadas dos serviços do Matheus. A tarefa 45 produz o resultado demonstrativo; a 39 o disponibiliza como contingência.
+Katheriny conecta as entregas do motor. Regras de score e ordenação devem ser reutilizadas dos serviços do Matheus. A tarefa 45, agora atribuída a Katheriny no Jira, produz insight e resultado demonstrativo; a 39 o disponibiliza como contingência.
 
-Os estados do Jira acima são referências da revisão anterior, não atualizações feitas por este documento. A CONSCIOUS-44 permanece com Matheus, conforme confirmado por Katheriny. Não foi encontrado serviço de ordenação nas branches remotas atualizadas; a branch `feat/risk-radar` entrega a interface visual.
+Consulta ao Jira em 28/09/2026: nenhuma transição foi realizada nesta revisão. A CONSCIOUS-44 permanece com Matheus em A fazer; 45 e 49 estão Fazendo; 39 e 47 estão A fazer. Não foi encontrado serviço de ordenação na revisão das branches; `feat/risk-radar` entrega a interface visual.
+
+### O que pode ser encerrado no Jira
+
+- As tarefas de Katheriny 34, 35, 36, 37, 38, 40, 46 e 48 já constam como Feito. Isso registra o estado do Jira, não uma nova auditoria manual do repositório-demo da 38.
+- Nenhuma outra tarefa pendente desta integração está integralmente pronta para Feito.
+- CONSCIOUS-45: regra local ajustada para menor nota como contexto e primeiro finding ordenado como ação, com empates determinísticos. Faltam comunicar a assinatura/interpretação aos consumidores e produzir o resultado demonstrativo real; não encerrar ainda.
+- CONSCIOUS-39: falta JSON real, serviço de contingência e validação offline com dashboard.
+- CONSCIOUS-47: o frontend ainda diverge do contrato, e o JSON real não está disponível.
+- CONSCIOUS-49: faltam motor conectado, rota ativa, configuração/consumo frontend e validação real.
+- Manter CONSCIOUS-13 aberta enquanto suas subtarefas 47/49 permanecerem pendentes; a entrega básica de cadastro/leitura não conclui essas integrações.
 
 ## 3. Etapa A — documentar o comportamento HTTP
 
@@ -94,7 +106,7 @@ Pode começar agora. Relacionada à [CONSCIOUS-47](https://katherinykc13.atlassi
 3. Combinar com Letícia a adaptação do modelo, mock e template do dashboard. Alterar o tipo sem adaptar os consumidores pode quebrar o build ou a renderização.
 4. Comunicar a Matheus o formato já implementado de `Insight`: `category/title/message`. Conferir se o comentário da CONSCIOUS-45 foi corrigido; não usar `description/action/severity`.
 5. Usar o contrato publicado como referência até uma mudança conjunta ser explicitamente acordada e documentada.
-6. Comunicar as convenções aprovadas por Katheriny para esta implementação: primeiro finding já ordenado; sem findings, categoria convencional `DOCUMENTATION` e mensagem neutra. Confirmar o entendimento com Matheus e Letícia, sem apresentar essa categoria como deficiência nem confundir primeiro risco com pior dimensão.
+6. Comunicar as convenções aprovadas por Katheriny: menor nota como contexto, todos os empates em ordem fixa, primeiro finding ordenado como ação e categoria do insight. Sem findings, categoria convencional `DOCUMENTATION` e mensagem neutra. Confirmar o entendimento com Matheus e Letícia, sem apresentar essa categoria como deficiência.
 7. Conferir o mock atualizado e, quando disponível, o JSON demonstrativo usando as mesmas regras.
 
 Aceite parcial: todos concordam com o formato e os consumidores estão identificados. Aceite final da 47: mock, resposta real e JSON demo compatíveis; a comparação do demo permanece pendente enquanto o arquivo não existir.
@@ -120,7 +132,7 @@ Aceite: resultados incompatíveis com o contrato não recebem `COMPLETED`. Valid
 Depende da integração das entregas do Matheus.
 
 1. Testes/acessibilidade já foram revisados e integrados seletivamente nesta branch, preservando os cinco analisadores. Confirmar posteriormente o merge da entrega original na master; não reaplicar seus arquivos por cima das correções locais.
-2. Aguardar o serviço de ordenação da CONSCIOUS-44 e conferir sua assinatura real. O insight já está disponível como `InsightsService.generate(findings: readonly Finding[]): Insight`.
+2. Aguardar o serviço de ordenação da CONSCIOUS-44 e conferir sua assinatura real. O insight está disponível como `InsightsService.generate(dimensions: readonly DimensionScore[], orderedFindings: readonly Finding[]): Insight`. Passar as dimensões do ScoringService e a lista ordenada, sem misturar as notas individuais dos analisadores.
 3. Preservar seu trabalho com commits antes de atualizar a base.
 4. Executar estes comandos **na raiz do repositório**, com árvore limpa:
 
@@ -223,9 +235,9 @@ Aceite: cadastrar um projeto leva ao resultado desse mesmo projeto, e falhas nã
 
 ## Checklist de acompanhamento
 
-- [ ] A — Comportamento HTTP documentado.
+- [x] A — Comportamento HTTP documentado, mantendo aviso de rota ainda não ativa.
 - [ ] B — Contrato alinhado com frontend e motor.
-- [ ] C — Validação de estrutura, findings e insight testada.
+- [x] C — Validação de estrutura, findings e insight testada.
 - [ ] D — Dependências integradas à base de trabalho.
 - [ ] E — Motor concreto implementado usando os serviços existentes.
 - [ ] F — Rota registrada e aplicação iniciando normalmente.
@@ -233,4 +245,5 @@ Aceite: cadastrar um projeto leva ao resultado desse mesmo projeto, e falhas nã
 - [ ] H — Consumo pelo frontend validado com os responsáveis.
 - [ ] I — Contingência coordenada, documentação e revisão concluídas.
 
-Próxima ação recomendada: publicar uma PR em rascunho para revisão de Matheus e Letícia, sem ativar o motor. Executar A e iniciar B; C pode avançar enquanto a CONSCIOUS-44 finaliza D. Não marcar a integração completa nem o demo como concluídos.
+A PR em rascunho já existe: https://github.com/nathan270109/project-conscious/pull/44.
+Próxima ação: concluir B com Matheus e Letícia e receber a CONSCIOUS-44 para finalizar D. A e C foram implementadas localmente nesta revisão. Não ativar o motor nem marcar integração/demo como concluídos antes dessas dependências e dos testes das etapas E a I.

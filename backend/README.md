@@ -157,6 +157,21 @@ Execute os comandos dentro de `backend/`.
 
 ### Respostas esperadas
 
+#### Análise — `POST /projects/:id/analyze` (ainda não ativa)
+
+O controller existe e tem testes HTTP isolados, mas não está registrado no
+`ProjectsModule`. Falta conectar o motor real antes de disponibilizar a rota.
+Depois da ativação, usar o UUID v4 retornado por `POST /projects`, sem corpo na
+requisição de análise. Os projetos ficam em memória e não sobrevivem a reinícios.
+
+Respostas previstas pelo controller: 200 com `COMPLETED`; 400 para UUID inválido;
+404 padrão para projeto inexistente; 404 com `FAILED/REPOSITORY_NOT_FOUND` para
+repositório inexistente; 500 com `FAILED/ANALYSIS_FAILED` para demais falhas.
+O consumidor deve inspecionar o corpo do erro, pois nem todo erro é AnalysisResult.
+Exemplos completos e comandos estão em [contrato da API](../docs/api-contract.md).
+O 503 da leitura direta de arquivos descrito abaixo não é o status exposto pela
+orquestração de análise, que converte essas falhas para 500 seguro.
+
 #### Cadastro de projeto — `POST /projects`
 
 | Situação | Status | Resposta esperada |
@@ -213,7 +228,12 @@ O serviço `src/insights/insights.service.ts` reutiliza o tipo compartilhado
 
 ### Convenções adotadas nesta integração
 
-- `generate(findings)` recebe uma lista já ordenada e utiliza o primeiro finding.
+- `generate(dimensions, orderedFindings)` recebe as cinco notas do ScoringService
+  e os findings já ordenados pela CONSCIOUS-44. A menor nota dá contexto à mensagem;
+  o primeiro finding define a ação, o título e a categoria do insight.
+- Empates mencionam todas as dimensões empatadas na ordem: documentação, testes,
+  acessibilidade, organização e manutenibilidade, independentemente da entrada.
+- Entradas malformadas são rejeitadas antes da geração, inclusive sem findings.
 - Não ordena riscos, não recalcula scores, não modifica a entrada e não faz
   chamadas externas. A mesma entrada produz a mesma saída.
 - A mensagem preserva o apontamento e inclui o arquivo e, quando disponível,
@@ -225,14 +245,14 @@ O serviço `src/insights/insights.service.ts` reutiliza o tipo compartilhado
   problemas no projeto.
 
 As convenções acima foram aprovadas por Katheriny para esta implementação:
-prioridade pelo primeiro finding já ordenado e categoria convencional
-`DOCUMENTATION` quando não houver findings. O serviço não seleciona a pior
-dimensão. Essas escolhas preservam o formato do contrato, que não define o
-algoritmo de prioridade.
+menor nota como contexto e primeiro finding já ordenado como ação. Se as categorias
+forem diferentes, ambas aparecem explicitamente na mensagem. Sem findings, não
+se escolhe pior dimensão e a categoria convencional continua `DOCUMENTATION`.
+Essas escolhas preservam o formato do contrato, sem recalcular notas ou riscos.
 
 Isso não representa aprovação dos demais integrantes nem atualização do Jira.
-Ainda é necessário comunicar a decisão à equipe e harmonizar a referência à
-"pior dimensão" na descrição da CONSCIOUS-45. No dashboard, a categoria do caso
+Ainda é necessário comunicar a assinatura e a interpretação à equipe. A regra
+agora considera pior dimensão e finding prioritário da CONSCIOUS-45. No dashboard, a categoria do caso
 sem findings não deve ser apresentada como deficiência detectada. Mudanças
 futuras nessas regras devem atualizar serviço, testes e documentação juntos.
 
@@ -242,7 +262,7 @@ Exemplo ilustrativo (não é evidência de execução em um repositório real):
 {
   "category": "DOCUMENTATION",
   "title": "Comece pela documentação",
-  "message": "README não possui instruções de instalação. Revise esse apontamento no arquivo README.md:12."
+  "message": "Documentação apresentou a menor nota: 60/100. Como primeira ação, revise o apontamento de documentação: README não possui instruções de instalação. Revise esse apontamento no arquivo README.md:12."
 }
 ```
 

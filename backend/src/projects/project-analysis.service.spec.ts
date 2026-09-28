@@ -89,6 +89,23 @@ describe('ProjectAnalysisService', () => {
     service = module.get(ProjectAnalysisService);
   });
 
+  it.each([
+    undefined,
+    { score: 100 },
+    { ...engineResult, insight: null },
+    {
+      ...engineResult,
+      findings: [{ ...engineResult.findings[0], severity: 'UNKNOWN' }],
+    },
+  ])(
+    'converte saída malformada em FAILED sem expor conteúdo interno',
+    async (result) => {
+      getProjectFiles.mockResolvedValue(files);
+      analyze.mockResolvedValue(result as unknown as AnalysisEngineOutput);
+      await expect(service.analyze(projectId)).resolves.toEqual(failedResult);
+    },
+  );
+
   it('analisa os arquivos do projeto e monta o resultado', async () => {
     getProjectFiles.mockResolvedValue(files);
     analyze.mockResolvedValue(engineResult);
