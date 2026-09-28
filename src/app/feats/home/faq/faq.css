@@ -1,0 +1,122 @@
+.container {
+    display: flex;
+    justify-content: center;
+    margin: var(--margin);
+}
+
+.box {
+    padding: var(--padding-divs);
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    width: 100%;
+}
+
+.textos {
+    width: 100%;
+}
+
+.textos h3 {
+    font-size: var(--tamanho-h3-secoes-home);
+    color: var(--cor-destaque);
+    font-weight: var(--font-weight-h3);
+    margin-bottom: 5px;
+}
+
+.textos h2 {
+    font-size: var(--tamanho-h2-secoes-home);
+    color: var(--cor-textos);
+    font-weight: var(--font-weight-h2);
+}
+
+#subtitulo {
+    margin-bottom: 15px;
+}
+
+.textos p {
+    font-size: 17px;
+    font-weight: 200;
+    color: rgb(63, 63, 63);
+    margin-bottom: 30px;
+}
+
+#link {
+    border: 0px solid;
+    text-decoration: none;
+    background-color: var(--cor-destaque);
+    padding: 14px 16px;
+    border-radius: 999px;
+    color: rgb(255, 255, 255);
+    font-weight: 700;
+    font-family: var(--fonte);
+    font-size: var(--tamanho-base-fonte);
+    box-shadow: var(--sombra);
+    transition: .4s;
+}
+
+#link:hover {
+    transform: scale(1.03);
+}
+
+.perguntas-frequentes {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.card {
+    border: 1px solid var(--cinza-borda);
+    border-radius: 15px;
+    overflow: hidden;
+    background: rgb(255, 255, 255);
+    transition: .3s;
+}
+
+.card:hover {
+    box-shadow: var(--sombra);
+}
+
+.card summary {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Remove a seta padrão */
+.card summary::-webkit-details-marker {
+    display: none;
+}
+
+.card summary span {
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.card summary i {
+    transition: .35s ease;
+}
+
+.resposta {
+    padding: 15px 20px;
+    color: var(--cinza-texto);
+    font-size: 15px;
+    line-height: 1.6;
+    border-top: 1px solid rgba(0,0,0,.06);
+    animation: abrir .3s ease;
+}
+
+@keyframes abrir{
+    from {
+        opacity:0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity:1;
+        transform: translateY(0);
+    }
+}
