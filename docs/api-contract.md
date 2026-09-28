@@ -39,6 +39,43 @@ Exemplo:
 }
 ```
 
+## Rota de análise — ainda não ativada
+
+`POST /projects/:id/analyze` está implementada e testada em controller isolado,
+mas ainda não registrada no `ProjectsModule`. Os comandos abaixo são para uso
+após a integração do motor; não indicam disponibilidade atual na aplicação.
+
+- `id`: UUID v4 retornado pelo cadastro `POST /projects`.
+- Corpo da requisição de análise: não é necessário.
+- Projetos são armazenados em memória; reiniciar o backend invalida os IDs.
+
+| Caso | HTTP | Corpo |
+| --- | --- | --- |
+| Análise concluída | 200 | `AnalysisResult`, `status: COMPLETED` |
+| ID inválido | 400 | Erro de validação padrão do NestJS |
+| Projeto inexistente | 404 | Erro padrão com mensagem `Projeto não encontrado.` |
+| Repositório inexistente | 404 | `AnalysisResult`, `FAILED`, código `REPOSITORY_NOT_FOUND` |
+| Outras falhas externas ou do motor | 500 | `AnalysisResult`, `FAILED`, código `ANALYSIS_FAILED` |
+
+O frontend deve ler o corpo das respostas HTTP de erro: nem todo erro tem formato
+`AnalysisResult`. As respostas completas de sucesso e falha são exemplificadas
+abaixo; são ilustrativas, não evidências reais de demonstração. A análise normal
+usa `demoMode: false`; o exemplo salvo demonstra o formato com `demoMode: true`.
+
+```bash
+curl -X POST http://localhost:3000/projects \
+  -H 'Content-Type: application/json' \
+  -d '{"name":"Projeto exemplo","repositoryUrl":"https://github.com/octocat/Hello-World"}'
+
+# Após ativar a rota: substitua UUID_RETORNADO pelo id do cadastro.
+curl -i -X POST http://localhost:3000/projects/UUID_RETORNADO/analyze
+```
+
+Na análise, erros de rede/acesso/limite do GitHub são convertidos para a resposta
+segura `ANALYSIS_FAILED` (500); isso é diferente do 503 exposto pela leitura direta
+de arquivos. Tokens, mensagens internas e stack traces não são enviados no corpo
+de `FAILED`.
+
 ## Tipos do resultado
 
 ```ts
@@ -98,6 +135,18 @@ type AnalysisResult = {
 | `FAILED` | `null` | arrays vazios | `null` | obrigatório |
 
 Em uma análise concluída, cada categoria deve aparecer exatamente uma vez em `dimensions`.
+
+### Interpretação do insight na integração em desenvolvimento
+
+Sem alterar os campos publicados, o backend usa a menor nota de `dimensions`
+como contexto de `message` e o primeiro finding já ordenado como ação prioritária.
+`insight.category` representa a categoria dessa ação, não necessariamente a pior
+dimensão. Empates de menor nota são mencionados em ordem fixa das cinco categorias.
+Sem findings, a mensagem é neutra e `DOCUMENTATION` é apenas uma categoria
+convencional, nunca indicação de deficiência. Essa interpretação foi aprovada
+por Katheriny para a implementação; o alinhamento dos consumidores com a equipe
+ainda está pendente. Os exemplos abaixo ilustram o formato, não textos fixos
+nem resultados reais do novo gerador.
 
 ## Exemplo: análise concluída
 
