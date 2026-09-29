@@ -1,0 +1,140 @@
+.container {
+    display: flex;
+    justify-content: center;
+    margin: var(--margin);
+}
+
+.box {
+    padding: var(--padding-divs);
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    width: 100%;
+}
+
+.textos {
+    width: 30%;
+}
+
+.textos h3 {
+    font-size: var(--tamanho-h3-secoes-home);
+    color: var(--cor-destaque);
+    font-weight: var(--font-weight-h3);
+    margin-bottom: 5px;
+}
+
+.textos h2 {
+    font-size: var(--tamanho-h2-secoes-home);
+    color: var(--cor-textos);
+    font-weight: var(--font-weight-h2);
+}
+
+#subtitulo {
+    margin-bottom: 15px;
+}
+
+.textos p {
+    font-size: 17px;
+    font-weight: 200;
+    color: rgb(63, 63, 63);
+    margin-bottom: 50px;
+}
+
+#link {
+    display: inline-flex;
+    border: 0px solid;
+    text-decoration: none;
+    background-color: var(--cor-destaque);
+    padding: 14px 16px;
+    border-radius: 999px;
+    color: rgb(255, 255, 255);
+    font-weight: 700;
+    font-family: var(--fonte);
+    font-size: var(--tamanho-base-fonte);
+    box-shadow: var(--sombra);
+    transition: .4s;
+}
+
+#link:hover {
+    transform: scale(1.03);
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    width: 100%;
+}
+
+.card {
+    width: 32%;
+    border-radius: 15px;
+    overflow: hidden;
+    background: rgb(255, 255, 255);
+    transition: .3s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--sombra);
+}
+
+#card-azul {
+    border: 1px solid rgb(73, 123, 218, 0.5);
+}
+
+#card-vermelho {
+    border: 1px solid rgb(255, 0, 0, 0.5);
+}
+
+#card-verde {
+    border: 1px solid rgb(17, 158, 36, 0.5);
+}
+
+.texto {
+    display: flex;
+    justify-content: space-between;
+    padding: 18px 20px;
+}
+
+#azul {
+    background-color: rgb(73, 123, 218, 0.2);
+}
+
+#vermelho {
+    background-color: rgb(255, 0, 0, 0.2);
+}
+
+#verde {
+    background-color: rgba(34, 197, 94, .18);
+}
+
+.texto-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 18px 20px;
+}
+
+.paragrafo-subtitulo {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.paragrafo {
+    font-size: 15px;
+    font-weight: 200;
+    color: rgb(63, 63, 63);
+}
+
+.linha {
+    border: 0.5px solid var(--cinza-borda);
+}
+
+.lista {
+    font-size: 15px;
+    font-weight: 200;
+    color: rgb(63, 63, 63);
+    margin: 0 0 0 20px;
+}

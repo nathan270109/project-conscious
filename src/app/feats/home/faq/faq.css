@@ -40,24 +40,6 @@
     margin-bottom: 50px;
 }
 
-#link {
-    border: 0px solid;
-    text-decoration: none;
-    background-color: var(--cor-destaque);
-    padding: 14px 16px;
-    border-radius: 999px;
-    color: rgb(255, 255, 255);
-    font-weight: 700;
-    font-family: var(--fonte);
-    font-size: var(--tamanho-base-fonte);
-    box-shadow: var(--sombra);
-    transition: .4s;
-}
-
-#link:hover {
-    transform: scale(1.03);
-}
-
 .perguntas-frequentes {
     display: flex;
     flex-direction: column;
@@ -130,8 +112,7 @@
         align-items:flex-start;
     }
 
-    .textos,
-    .perguntas-frequentes{
+    .textos, .perguntas-frequentes{
         width:100%;
     }
 
@@ -173,14 +154,6 @@
     .textos p{
         font-size:16px;
         line-height:1.6;
-    }
-
-    #link{
-        display:inline-flex;
-        justify-content:center;
-        align-items:center;
-        width:100%;
-        box-sizing:border-box;
     }
 
     .perguntas-frequentes{
@@ -236,10 +209,5 @@
 
     .resposta{
         font-size:13px;
-    }
-
-    #link{
-        padding:13px 15px;
-        font-size:15px;
     }
 }
