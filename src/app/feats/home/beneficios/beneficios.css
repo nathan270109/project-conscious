@@ -138,3 +138,154 @@
     color: rgb(63, 63, 63);
     margin: 0 0 0 20px;
 }
+
+/* Tablet */
+@media (max-width: 1024px) {
+
+    .box {
+        gap: 35px;
+        padding: 40px 30px;
+        align-items: flex-start;
+    }
+
+    .textos {
+        width: 35%;
+    }
+
+    .cards {
+        gap: 18px;
+    }
+
+    .card {
+        width: calc(50% - 9px);
+    }
+
+    .texto {
+        padding: 16px 18px;
+    }
+
+    .texto-cards {
+        padding: 16px 18px;
+    }
+
+}
+
+/* Celular */
+@media (max-width: 768px) {
+
+    .container {
+        margin: 80px 70px;
+    }
+
+    .box {
+        flex-direction: column;
+        gap: 35px;
+        padding: 0;
+    }
+
+    .textos {
+        width: 100%;
+    }
+
+    .textos h3 {
+        font-size: 18px;
+    }
+
+    .textos h2 {
+        font-size: clamp(1.8rem, 6vw, 2.4rem);
+        line-height: 1.15;
+    }
+
+    .textos p {
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    #link {
+        width: 100%;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+
+    .cards {
+        gap: 18px;
+    }
+
+    .card {
+        width: 100%;
+    }
+
+    .texto {
+        padding: 18px;
+        align-items: center;
+    }
+
+    .texto h3 {
+        font-size: 20px;
+    }
+
+    .texto i {
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+    .texto-cards {
+        padding: 18px;
+        gap: 14px;
+    }
+
+    .paragrafo-subtitulo {
+        font-size: 17px;
+        line-height: 1.5;
+    }
+
+    .paragrafo {
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    .lista {
+        font-size: 14px;
+        line-height: 1.6;
+        margin-left: 18px;
+    }
+
+}
+
+/* Celulares pequenos */
+@media (max-width: 480px) {
+
+    .textos h2 {
+        font-size: 30px;
+    }
+
+    .textos h3 {
+        font-size: 17px;
+    }
+
+    .card {
+        border-radius: 12px;
+    }
+
+    .texto {
+        padding: 16px;
+    }
+
+    .texto h3 {
+        font-size: 18px;
+    }
+
+    .texto-cards {
+        padding: 16px;
+    }
+
+    .paragrafo-subtitulo {
+        font-size: 16px;
+    }
+
+    .paragrafo, .lista{
+        font-size: 14px;
+    }
+
+}
