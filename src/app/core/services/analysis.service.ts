@@ -6,6 +6,8 @@ import { AnalysisResult } from '../models/analysis-result.model';
 })
 export class AnalysisService {
 
+    // Fixture ilustrativa da interface, não uma análise real do repositório-demo.
+    // A integração completa dos demais campos do contrato pertence à CONSCIOUS-47.
     private readonly mockResult: AnalysisResult = {
         projectId: '1',
         status: 'COMPLETED',
@@ -45,7 +47,15 @@ export class AnalysisService {
                 line: 18
             }
         ],
-        insight: 'A documentação é a dimensão com maior necessidade de atenção. Priorize instruções claras de instalação e execução do projeto.',
+        insight: {
+            category: 'DOCUMENTATION',
+            title: 'Comece pela documentação',
+            message:
+                'Acessibilidade apresentou a menor nota: 60/100. ' +
+                'Como primeira ação, revise o apontamento de documentação: ' +
+                'README sem instruções de execução. ' +
+                'Revise esse apontamento no arquivo README.md.'
+        },
         demoMode: true
     };
 
