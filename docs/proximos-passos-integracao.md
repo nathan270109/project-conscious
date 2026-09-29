@@ -2,6 +2,24 @@
 
 Referência: 28/09/2026. Este guia registra o estado verificado nessa data; confirme novas entregas antes de integrar código.
 
+### Atualização — CONSCIOUS-47, 29/09/2026
+
+Implementação local na branch `fix/frontend-analysis-contract`, baseada na master após o merge da PR #48:
+
+- Modelo do frontend alinhado aos estados COMPLETED/FAILED do backend: data obrigatória, dimensões em lista, finding com arquivo/linha e insight estruturado.
+- Mock ilustrativo atualizado; os consumidores recebem cópias independentes. Não é evidência do repositório-demo nem resultado do motor real.
+- Dashboard adaptado para cinco dimensões em lista, título/mensagem do insight e estado FAILED sem score ou mensagem de ausência de riscos.
+- Dashboard preserva a ordem recebida. A ordenação definitiva por severidade/impacto continua pertencendo à CONSCIOUS-44; a ordem da fixture não implementa essa regra.
+- Testes de contrato do mock e renderização adicionados/atualizados.
+
+Validação desta etapa: build Angular passou; 13 testes específicos do serviço/dashboard passaram; `git diff --check` passou. A suíte completa ainda apresenta sete falhas por ausência de provider de `ActivatedRoute` nos testes de App, Header, Footer, Home, FAQ e Hero. As mesmas sete falhas foram reproduzidas em uma cópia temporária do commit-base `b36e5fc`, sem estas alterações. A suíte global não está verde; esses testes não foram modificados nesta entrega.
+
+Coordenação: a PR #46 da Letícia ainda estava aberta na consulta. Esta branch altera o mesmo template por necessidade de compatibilidade; revisar as duas entregas juntas, preservando os estilos/textos dela e a renderização de `insight.title`/`insight.message`, sem duplicar a seção.
+
+Pendências: API real (49), resultado real do demo (45/39) e comparação final desse JSON (47). A 45 consta como Feito no Jira, mas o JSON exigido por sua descrição não foi encontrado na master. Não encerrar a 47 com esta entrega parcial.
+
+As seções abaixo preservam o plano original. Onde mencionam `feat/analysis-api-integration`, usar uma nova branch baseada na master atual: aquela entrega já foi integrada. A tabela da etapa B descreve as divergências anteriores a este alinhamento.
+
 Tarefa principal: [CONSCIOUS-49 — Integrar motor de análise e expor resultado pela API](https://katherinykc13.atlassian.net/browse/CONSCIOUS-49).
 
 Responsável: Katheriny Kamili, integrante 4.

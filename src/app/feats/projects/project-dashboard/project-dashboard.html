@@ -38,6 +38,14 @@
             </a>
         </section>
 
+    } @else if (result.status === 'FAILED') {
+
+        <section class="dashboard-state dashboard-state--error" role="alert">
+            <h1>Não foi possível concluir a análise</h1>
+            <p>{{ result.error.message }}</p>
+            <a class="dashboard-state__action" routerLink="/projects/new">Voltar ao formulário</a>
+        </section>
+
     } @else {
 
         <header class="dashboard__header">
@@ -74,122 +82,20 @@
             <h2 id="dimensions-title">Dimensões da análise</h2>
 
             <div class="dimensions-grid">
-
-                <article class="dimension-card">
-                    <div class="dimension-card__header">
-                        <span>Documentação</span>
-                        <strong>
-                            {{ result.dimensions.documentation }}
-                        </strong>
-                    </div>
-
-                    <div
-                        class="dimension-progress"
-                        role="progressbar"
-                        aria-label="Nota de Documentação"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        [attr.aria-valuenow]="result.dimensions.documentation"
-                    >
-                        <div
-                            class="dimension-progress__fill"
-                            [style.width.%]="result.dimensions.documentation"
-                        ></div>
-                    </div>
-                </article>
-
-                <article class="dimension-card">
-                    <div class="dimension-card__header">
-                        <span>Testes</span>
-                        <strong>
-                            {{ result.dimensions.tests }}
-                        </strong>
-                    </div>
-
-                    <div
-                        class="dimension-progress"
-                        role="progressbar"
-                        aria-label="Nota de Testes"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        [attr.aria-valuenow]="result.dimensions.tests"
-                    >
-                        <div
-                            class="dimension-progress__fill"
-                            [style.width.%]="result.dimensions.tests"
-                        ></div>
-                    </div>
-                </article>
-
-                <article class="dimension-card">
-                    <div class="dimension-card__header">
-                        <span>Acessibilidade</span>
-                        <strong>
-                            {{ result.dimensions.accessibility }}
-                        </strong>
-                    </div>
-
-                    <div
-                        class="dimension-progress"
-                        role="progressbar"
-                        aria-label="Nota de Acessibilidade"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        [attr.aria-valuenow]="result.dimensions.accessibility"
-                    >
-                        <div
-                            class="dimension-progress__fill"
-                            [style.width.%]="result.dimensions.accessibility"
-                        ></div>
-                    </div>
-                </article>
-
-                <article class="dimension-card">
-                    <div class="dimension-card__header">
-                        <span>Organização</span>
-                        <strong>
-                            {{ result.dimensions.organization }}
-                        </strong>
-                    </div>
-
-                    <div
-                        class="dimension-progress"
-                        role="progressbar"
-                        aria-label="Nota de Organização"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        [attr.aria-valuenow]="result.dimensions.organization"
-                    >
-                        <div
-                            class="dimension-progress__fill"
-                            [style.width.%]="result.dimensions.organization"
-                        ></div>
-                    </div>
-                </article>
-
-                <article class="dimension-card">
-                    <div class="dimension-card__header">
-                        <span>Manutenibilidade</span>
-                        <strong>
-                            {{ result.dimensions.maintainability }}
-                        </strong>
-                    </div>
-
-                    <div
-                        class="dimension-progress"
-                        role="progressbar"
-                        aria-label="Nota de Manutenibilidade"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        [attr.aria-valuenow]="result.dimensions.maintainability"
-                    >
-                        <div
-                            class="dimension-progress__fill"
-                            [style.width.%]="result.dimensions.maintainability"
-                        ></div>
-                    </div>
-                </article>
-
+                @for (dimension of result.dimensions; track dimension.category) {
+                    <article class="dimension-card">
+                        <div class="dimension-card__header">
+                            <span>{{ getCategoryLabel(dimension.category) }}</span>
+                            <strong>{{ dimension.score }}</strong>
+                        </div>
+                        <div class="dimension-progress" role="progressbar"
+                            [attr.aria-label]="'Nota de ' + getCategoryLabel(dimension.category)"
+                            aria-valuemin="0" aria-valuemax="100"
+                            [attr.aria-valuenow]="dimension.score">
+                            <div class="dimension-progress__fill" [style.width.%]="dimension.score"></div>
+                        </div>
+                    </article>
+                }
             </div>
         </section>
 
@@ -234,7 +140,7 @@
                                 <code class="risk-card__file">
                                     {{ finding.file }}
 
-                                    @if (finding.line) {
+                                    @if (finding.line !== null) {
                                         :{{ finding.line }}
                                     }
                                 </code>
@@ -263,6 +169,8 @@
             <h2 id="insight-title">
                 Conscious Insight
             </h2>
+            <h3>{{ result.insight.title }}</h3>
+            <p>{{ result.insight.message }}</p>
         </section>
 
     }

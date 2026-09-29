@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AnalysisResult } from '../models/analysis-result.model';
+import type { AnalysisResult, CompletedAnalysisResult } from '../models/analysis-result.model';
 
 @Injectable({
     providedIn: 'root'
@@ -7,30 +7,26 @@ import { AnalysisResult } from '../models/analysis-result.model';
 export class AnalysisService {
 
     // Fixture ilustrativa da interface, não uma análise real do repositório-demo.
-    // A integração completa dos demais campos do contrato pertence à CONSCIOUS-47.
-    private readonly mockResult: AnalysisResult = {
+    // A comparação com o demo real permanece pendente na CONSCIOUS-47.
+    private readonly mockResult: CompletedAnalysisResult = {
         projectId: '1',
         status: 'COMPLETED',
+        analyzedAt: '2026-09-29T12:00:00.000Z',
         score: 80,
-        dimensions: {
-            documentation: 65,
-            tests: 95,
-            accessibility: 60,
-            organization: 100,
-            maintainability: 80
-        },
+        dimensions: [
+            { category: 'DOCUMENTATION', score: 65 },
+            { category: 'TESTS', score: 95 },
+            { category: 'ACCESSIBILITY', score: 60 },
+            { category: 'ORGANIZATION', score: 100 },
+            { category: 'MAINTAINABILITY', score: 80 }
+        ],
         findings: [
             {
                 category: 'DOCUMENTATION',
                 severity: 'HIGH',
                 message: 'README sem instruções de execução',
-                file: 'README.md'
-            },
-            {
-                category: 'TESTS',
-                severity: 'MEDIUM',
-                message: 'Área importante do projeto sem arquivo de teste',
-                file: 'src/app/feats/home/home.ts'
+                file: 'README.md',
+                line: null
             },
             {
                 category: 'ACCESSIBILITY',
@@ -38,6 +34,13 @@ export class AnalysisService {
                 message: 'Imagem sem atributo alt',
                 file: 'src/app/feats/home/home.html',
                 line: 34
+            },
+            {
+                category: 'TESTS',
+                severity: 'MEDIUM',
+                message: 'Área importante do projeto sem arquivo de teste',
+                file: 'src/app/feats/home/home.ts',
+                line: null
             },
             {
                 category: 'MAINTAINABILITY',
@@ -61,7 +64,7 @@ export class AnalysisService {
 
     getByProjectId(id: string): AnalysisResult | undefined {
         if (this.mockResult.projectId === id) {
-            return this.mockResult;
+            return structuredClone(this.mockResult);
         }
 
         return undefined;
