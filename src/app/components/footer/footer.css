@@ -1,9 +1,10 @@
 :host {
     display: block;
+    --branco: #ffffff;
 
-    --ft-bg: #0e1a2b;
+    --ft-bg: #000000;
     --ft-line: #263a56;
-    --ft-fg: #eaf1fa;
+    --ft-fg:  rgb(201, 159, 46);
     --ft-muted: #a9b8cc;
     --ft-accent: #8cc2ff;
     --ft-accent-hover: #a8d2ff;
@@ -13,9 +14,9 @@
 
 .site-footer {
     container-type: inline-size;
-    border-top: 1px solid var(--ft-line);
+    border-top: 1px solid var(--branco);
     background: var(--ft-bg);
-    color: var(--ft-fg);
+    color:  var(--branco);
     font-family: var(--ft-font);
     font-size: 0.95rem;
     line-height: 1.55;
@@ -46,7 +47,7 @@
     align-items: flex-start;
     gap: 1.5rem;
     padding-bottom: clamp(2rem, 5vw, 3.5rem);
-    border-bottom: 1px solid var(--ft-line);
+    border-bottom: 1px solid var(--branco);
 
     h2 {
         margin: 0;
@@ -154,7 +155,7 @@
     flex-direction: column;
     gap: 0.6rem;
     padding-top: 1.25rem;
-    border-top: 1px solid var(--ft-line);
+    border-top: 1px solid var(--branco);
     color: var(--ft-muted);
     font-size: 0.85rem;
 
