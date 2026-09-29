@@ -13,6 +13,12 @@ export interface Finding {
     line?: number;
 }
 
+export interface Insight {
+    category: FindingCategory;
+    title: string;
+    message: string;
+}
+
 export interface AnalysisResult {
     projectId: string;
     status: string;
@@ -25,6 +31,6 @@ export interface AnalysisResult {
         maintainability: number;
     };
     findings: Finding[];
-    insight: string;
+    insight: Insight | null;
     demoMode?: boolean;
 }
