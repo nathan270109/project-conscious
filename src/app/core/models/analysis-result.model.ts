@@ -36,13 +36,5 @@ export interface AnalysisResult {
 
 }
 
-export interface Project {
-  id: string;
-  name: string;
-  repositoryUrl: string;
-  description: string;
-  createdAt: Date;
-}
 
-export type ProjectDraft = Pick<Project, 'name' | 'repositoryUrl' | 'description'>;
 
