@@ -247,8 +247,12 @@
         gap: 35px;
     }
 
-    .caixa, .mapa {
-        width: 100%;
+    .caixa {
+        width: 70%;
+    }
+
+    .mapa {
+        width: 95%;
     }
 
     .textos, .dimensoes {
@@ -287,7 +291,7 @@
 
     .mapa-meio {
         grid-template-columns: 1fr 55px 70px 40px;
-        margin: 0 15px;
+        margin: 0 30px 0 15px;
     }
 
     .area-dimensao {
