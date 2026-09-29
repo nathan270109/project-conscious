@@ -33,4 +33,16 @@ export interface AnalysisResult {
     findings: Finding[];
     insight: Insight | null;
     demoMode?: boolean;
+
 }
+
+export interface Project {
+  id: string;
+  name: string;
+  repositoryUrl: string;
+  description: string;
+  createdAt: Date;
+}
+
+export type ProjectDraft = Pick<Project, 'name' | 'repositoryUrl' | 'description'>;
+
