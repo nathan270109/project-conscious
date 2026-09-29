@@ -104,110 +104,110 @@
 }
 
 /* Tablet */
-@media (max-width:1024px){
+@media (max-width: 1024px) {
 
-    .box{
-        gap:35px;
-        padding:40px 30px;
-        align-items:flex-start;
+    .box {
+        gap: 35px;
+        padding: 40px 30px;
+        align-items: flex-start;
     }
 
-    .textos, .perguntas-frequentes{
-        width:100%;
+    .textos, .perguntas-frequentes {
+        width: 100%;
     }
 
-    .card summary{
-        padding:16px 18px;
+    .card summary {
+        padding: 16px 18px;
     }
 
-    .resposta{
-        padding:14px 18px;
+    .resposta {
+        padding: 14px 18px;
     }
 }
 
 /* Celular */
-@media (max-width:768px){
+@media (max-width: 768px) {
 
-    .container{
-        margin:30px 15px;
+    .container {
+        margin: 80px 70px;
     }
 
-    .box{
-        flex-direction:column;
-        gap:35px;
-        padding:0;
+    .box {
+        flex-direction: column;
+        gap: 15px;
+        padding: 0;
     }
 
-    .textos{
-        width:100%;
+    .textos {
+        width: 100%;
     }
 
-    .textos h3{
-        font-size:18px;
+    .textos h3 {
+        font-size: 18px;
     }
 
-    .textos h2{
-        font-size:clamp(1.8rem, 6vw, 2.4rem);
-        line-height:1.15;
+    .textos h2 {
+        font-size: clamp(1.8rem, 6vw, 2.4rem);
+        line-height: 1.15;
     }
 
-    .textos p{
-        font-size:16px;
-        line-height:1.6;
+    .textos p {
+        font-size: 16px;
+        line-height: 1.6;
     }
 
-    .perguntas-frequentes{
-        width:100%;
-        gap:14px;
+    .perguntas-frequentes {
+        width: 100%;
+        gap: 14px;
     }
 
-    .card summary{
-        padding:16px;
-        gap:15px;
-        align-items:flex-start;
+    .card summary {
+        padding: 16px;
+        gap: 15px;
+        align-items: flex-start;
     }
 
-    .card summary span{
-        font-size:15px;
-        line-height:1.5;
+    .card summary span {
+        font-size: 15px;
+        line-height: 1.5;
     }
 
-    .card summary i{
-        flex-shrink:0;
-        margin-top:2px;
+    .card summary i {
+        flex-shrink: 0;
+        margin-top: 2px;
     }
 
-    .resposta{
-        padding:14px 16px;
-        font-size:14px;
-        line-height:1.6;
+    .resposta {
+        padding: 14px 16px;
+        font-size: 14px;
+        line-height: 1.6;
     }
 }
 
 /* Celulares pequenos */
-@media (max-width:480px){
+@media (max-width: 480px) {
 
-    .textos h2{
-        font-size:30px;
+    .textos h2 {
+        font-size: 30px;
     }
 
-    .textos h3{
-        font-size:17px;
+    .textos h3 {
+        font-size: 17px;
     }
 
-    .card{
-        border-radius:12px;
+    .card {
+        border-radius: 12px;
     }
 
-    .card summary{
-        padding:15px;
+    .card summary {
+        padding: 15px;
     }
 
-    .card summary span{
-        font-size:14px;
+    .card summary span {
+        font-size: 14px;
     }
 
-    .resposta{
-        font-size:13px;
+    .resposta {
+        font-size: 13px;
     }
 }
