@@ -177,22 +177,18 @@
 }
 
 .back-to-top {
-    align-self: flex-start;
-    padding: 0;
-    border: 0;
-    background: none;
-    color: var(--ft-muted);
-    font: inherit;
-    cursor: pointer;
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    text-underline-offset: 0.25rem;
-    transition: color 0.15s ease, text-decoration-color 0.15s ease;
+    color: var(--ft-fg);
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: color 0.15s ease, background-size 0.2s ease;
 
-    &:hover {
-        color: var(--ft-fg);
-        text-decoration-color: currentColor;
-    }
+}
+
+.back-to-top:hover {
+  color: var(--ft-fg);
+  background-size: 100% 1px;
 }
 
 /* Responsividade Avançada via Container Queries */
