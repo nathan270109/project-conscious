@@ -203,15 +203,17 @@
             Recomendação baseada nas métricas e evidências identificadas na análise.
         </p>
 
-        @if (result.insight) {
-        <p class="insight__text">
-            {{ result.insight }}
-        </p>
-        } @else {
-        <p class="insight__empty">
-            A análise não retornou uma prioridade.
-        </p>
-        }
+@if (result.insight; as insight) {
+<div class="insight__text">
+    <h3>{{ insight.title }}</h3>
+    <p>{{ insight.message }}</p>
+</div>
+} @else {
+<p class="insight__empty">
+     A análise foi concluída, mas a recomendação não foi recebida.
+    Tente executar a análise novamente.
+</p>
+}
     </section>
 
     }
