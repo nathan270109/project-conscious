@@ -23,9 +23,10 @@ describe('Footer', () => {
 
   it('renderiza marca e links de navegação', () => {
     const element = fixture.nativeElement as HTMLElement;
-    const brand = element.querySelector('.brand-logo');
+    const brand = element.querySelector('.footer-brand');
     expect(brand?.textContent).toContain('Project Conscious');
-    expect(brand?.getAttribute('href')).toBe('/');
+    expect(brand?.querySelector('a')?.getAttribute('href')).toBe('/home');
+    expect(brand?.querySelector('img')?.getAttribute('src')).toBe('/assets/logo-white.png');
     const links = element.querySelectorAll('nav[aria-label="Navegação principal"] a');
     expect(Array.from(links).map(link => link.getAttribute('href'))).toEqual(['/home', '/home']);
   });

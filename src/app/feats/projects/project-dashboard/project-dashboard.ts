@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { AnalysisResult } from '../../../core/models/analysis-result.model';
+import type { AnalysisResult } from '../../../core/models/analysis-result.model';
 import { AnalysisService } from '../../../core/services/analysis.service';
 
 @Component({
@@ -28,33 +28,12 @@ export class ProjectDashboard {
     try {
       this.result = this.analysisService.getByProjectId(this.projectId);
 
-      this.orderFindingsBySeverity();
+      // A fonte fornece a ordem de prioridade; o dashboard não recalcula riscos.
     } catch {
       this.errorMessage = 'Não foi possível carregar a análise.';
     } finally {
       this.loading = false;
     }
-  }
-
-  private orderFindingsBySeverity(): void {
-    if (!this.result) {
-      return;
-    }
-
-    const severityOrder: Record<string, number> = {
-      CRITICAL: 0,
-      HIGH: 1,
-      MEDIUM: 2,
-      LOW: 3,
-    };
-
-    this.result = {
-      ...this.result,
-      findings: [...this.result.findings].sort(
-        (a, b) =>
-          severityOrder[a.severity] - severityOrder[b.severity]
-      )
-    };
   }
 
   getSeverityLabel(severity: string): string {

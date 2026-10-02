@@ -2,6 +2,36 @@
 
 Referência: 28/09/2026. Este guia registra o estado verificado nessa data; confirme novas entregas antes de integrar código.
 
+### Conciliação da PR #49 — 02/10/2026
+
+- Master incorporada localmente à branch do contrato; resolução preparada para commit, ainda sem publicação.
+- Preservados `Project` e `ProjectDraft` da PR #52, com `createdAt: string` (ISO da API) e `description` opcional conforme o backend.
+- Preservados textos, classes e fallback do insight da PR #46, já integrada, junto às dimensões em lista e ao tratamento de FAILED. Há apenas uma seção de insight.
+- Corrigidos os testes de Footer e FAQ para os templates atuais; configurado o roteador no teste de Benefícios. Removido o import sem uso de RouterLink na FAQ, cujo botão foi removido pela entrega anterior.
+- Validação final: 33 testes passaram em 14 arquivos; build Angular passou sem o aviso da FAQ; diff em relação à master sem erros de whitespace.
+- Resolução disponível na pasta original `project-conscious`, branch `fix/frontend-analysis-contract`, pronta para commit.
+- Antes do merge no GitHub: commitar e publicar a resolução, revisar o diff e as verificações remotas. A CONSCIOUS-47 permanece parcial até a comparação com o demo real.
+
+Os registros abaixo são históricos e não substituem esta atualização.
+
+### Atualização — CONSCIOUS-47, 29/09/2026
+
+Implementação local na branch `fix/frontend-analysis-contract`, baseada na master após o merge da PR #48:
+
+- Modelo do frontend alinhado aos estados COMPLETED/FAILED do backend: data obrigatória, dimensões em lista, finding com arquivo/linha e insight estruturado.
+- Mock ilustrativo atualizado; os consumidores recebem cópias independentes. Não é evidência do repositório-demo nem resultado do motor real.
+- Dashboard adaptado para cinco dimensões em lista, título/mensagem do insight e estado FAILED sem score ou mensagem de ausência de riscos.
+- Dashboard preserva a ordem recebida. A ordenação definitiva por severidade/impacto continua pertencendo à CONSCIOUS-44; a ordem da fixture não implementa essa regra.
+- Testes de contrato do mock e renderização adicionados/atualizados.
+
+Validação desta etapa: build Angular passou; 13 testes específicos do serviço/dashboard passaram; `git diff --check` passou. A suíte completa ainda apresenta sete falhas por ausência de provider de `ActivatedRoute` nos testes de App, Header, Footer, Home, FAQ e Hero. As mesmas sete falhas foram reproduzidas em uma cópia temporária do commit-base `b36e5fc`, sem estas alterações. A suíte global não está verde; esses testes não foram modificados nesta entrega.
+
+Coordenação: a PR #46 da Letícia ainda estava aberta na consulta. Esta branch altera o mesmo template por necessidade de compatibilidade; revisar as duas entregas juntas, preservando os estilos/textos dela e a renderização de `insight.title`/`insight.message`, sem duplicar a seção.
+
+Pendências: API real (49), resultado real do demo (45/39) e comparação final desse JSON (47). A 45 consta como Feito no Jira, mas o JSON exigido por sua descrição não foi encontrado na master. Não encerrar a 47 com esta entrega parcial.
+
+As seções abaixo preservam o plano original. Onde mencionam `feat/analysis-api-integration`, usar uma nova branch baseada na master atual: aquela entrega já foi integrada. A tabela da etapa B descreve as divergências anteriores a este alinhamento.
+
 Tarefa principal: [CONSCIOUS-49 — Integrar motor de análise e expor resultado pela API](https://katherinykc13.atlassian.net/browse/CONSCIOUS-49).
 
 Responsável: Katheriny Kamili, integrante 4.

@@ -5,12 +5,19 @@ export type FindingCategory =
     | 'ORGANIZATION'
     | 'MAINTAINABILITY';
 
+export type Severity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+
+export interface DimensionScore {
+    category: FindingCategory;
+    score: number;
+}
+
 export interface Finding {
     category: FindingCategory;
-    severity: string;
+    severity: Severity;
     message: string;
-    file?: string;
-    line?: number;
+    file: string;
+    line: number | null;
 }
 
 export interface Insight {
@@ -19,30 +26,44 @@ export interface Insight {
     message: string;
 }
 
-export interface AnalysisResult {
-    projectId: string;
-    status: string;
-    score: number;
-    dimensions: {
-        documentation: number;
-        tests: number;
-        accessibility: number;
-        organization: number;
-        maintainability: number;
-    };
-    findings: Finding[];
-    insight: Insight | null;
-    demoMode?: boolean;
-
+export interface AnalysisError {
+    code: string;
+    message: string;
 }
+
+interface AnalysisResultBase {
+    projectId: string;
+    analyzedAt: string;
+    demoMode?: boolean;
+}
+
+export interface CompletedAnalysisResult extends AnalysisResultBase {
+    status: 'COMPLETED';
+    score: number;
+    dimensions: DimensionScore[];
+    findings: Finding[];
+    insight: Insight;
+    error?: never;
+}
+
+export interface FailedAnalysisResult extends AnalysisResultBase {
+    status: 'FAILED';
+    score: null;
+    dimensions: [];
+    findings: [];
+    insight: null;
+    error: AnalysisError;
+}
+
+export type AnalysisResult = CompletedAnalysisResult | FailedAnalysisResult;
 
 export interface Project {
   id: string;
   name: string;
   repositoryUrl: string;
-  description: string;
-  createdAt: Date;
+  description?: string;
+  // Data ISO recebida pela API, sem conversão automática para Date.
+  createdAt: string;
 }
 
 export type ProjectDraft = Pick<Project, 'name' | 'repositoryUrl' | 'description'>;
-
