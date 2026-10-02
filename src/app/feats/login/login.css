@@ -1,0 +1,327 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    margin: 150px 100px;
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 30px 45px;
+    border-radius: 30px;
+    background-color: rgb(240, 233, 233);
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid var(--cinza-borda);
+    box-shadow: var(--sombra);
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+}
+
+.logo img {
+    width: 100px;
+    height: 100px;
+}
+
+.login-titulo h2 {
+    text-align: center;
+    font-size: 35px;
+    font-weight: 500;
+    color: var(--cor-destaque);
+}
+
+.login-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.formulario-container {
+    margin: 0 0 15px 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.formulario label {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.formulario input {
+    font-family: var(--fonte);
+    font-size: 16px;
+    width: 100%;
+    padding: 18px;
+    border-radius: 10px;
+    border: 1px solid var(--cinza-borda);
+    transition: .4s ease;
+}
+
+.formulario input:hover {
+    transform: scale(1.01);
+    box-shadow: var(--sombra);
+}
+
+.formulario input:focus {
+    outline: none;
+    border: 1px solid rgb(192, 192, 192);
+    box-shadow: var(--sombra);
+}
+
+.formulario input::placeholder {
+    font-family: var(--fonte);
+    color: var(--cinza-texto);
+    font-size: 16px;
+}
+
+.login-cadastro {
+    margin: -15px 0 15px 0;
+}
+
+.clique-aqui {
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: rgb(8, 80, 138);
+    font-weight: 600;
+}
+
+form button {
+    width: 100%;
+    padding: 15px;
+    border-radius: 30px;
+    border: none;
+    background-color: var(--cor-destaque);
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    font-family: var(--fonte);
+    font-weight: 700;
+    cursor: pointer;
+    transition: .4s ease;
+}
+
+form button:hover {
+    transform: scale(1.02);
+    box-shadow: var(--sombra);
+}
+
+.login-ou {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 10px 0;
+}
+
+.linha {
+    width: 100%;
+    height: 2px;
+    background-color: var(--cinza-borda);
+}
+
+.login-ou span {
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--cinza-texto);
+}
+
+.formulario-box {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.conectar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 55px;
+    height: 55px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    border: 1px solid var(--cinza-borda);
+    cursor: pointer;
+    transition: .4s ease;
+}
+
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: var(--sombra);
+}
+
+.card img {
+    width: 30px;
+    height: 30px;
+}
+
+.formulario-texto {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.formulario-texto p {
+    font-size: 17px;
+    color: var(--cor-textos);
+}
+
+.formulario-texto a {
+    text-decoration: none;
+    font-size: 17px;
+    color: var(--cinza-texto);
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+
+    .login-container {
+        padding: 100px 40px;
+    }
+
+    .login {
+        max-width: 550px;
+        padding: 30px 40px;
+    }
+
+    .login-titulo h2 {
+        font-size: 32px;
+    }
+
+}
+
+/* Celular */
+@media (max-width: 768px) {
+
+    .login-container {
+        padding: 60px 20px;
+    }
+
+    .login {
+        max-width: 520px;
+        padding: 28px 30px;
+        border-radius: 25px;
+    }
+
+    .logo img {
+        width: 90px;
+        height: 90px;
+    }
+
+    .login-titulo h2 {
+        font-size: 30px;
+    }
+
+    .formulario label {
+        font-size: 16px;
+    }
+
+    .formulario input {
+        padding: 16px;
+        font-size: 15px;
+    }
+
+    .formulario input::placeholder {
+        font-size: 15px;
+    }
+
+    .formulario-texto p, .formulario-texto a {
+        font-size: 16px;
+    }
+
+}
+
+/* Celulares pequenos */
+@media (max-width: 480px) {
+
+    .login-container {
+        padding: 30px 12px;
+    }
+
+    .login {
+        gap: 18px;
+        padding: 24px 18px;
+        border-radius: 20px;
+    }
+
+    .logo img {
+        width: 75px;
+        height: 75px;
+    }
+
+    .login-titulo h2 {
+        font-size: 27px;
+    }
+
+    form {
+        gap: 18px;
+    }
+
+    .formulario label {
+        font-size: 15px;
+    }
+
+    .formulario input {
+        padding: 14px;
+        font-size: 14px;
+    }
+
+    .formulario input::placeholder {
+        font-size: 14px;
+    }
+
+    form button {
+        padding: 14px;
+        font-size: 15px;
+    }
+
+    .login-ou {
+        gap: 10px;
+    }
+
+    .login-ou span {
+        font-size: 15px;
+    }
+
+    .conectar {
+        gap: 18px;
+    }
+
+    .card {
+        width: 50px;
+        height: 50px;
+    }
+
+    .card img {
+        width: 27px;
+        height: 27px;
+    }
+
+    .formulario-texto p, .formulario-texto a {
+        font-size: 14px;
+    }
+
+}
