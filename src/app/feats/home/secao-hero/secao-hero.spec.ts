@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { SecaoHero } from './secao-hero';
 
 describe('SecaoHero', () => {
@@ -8,6 +9,7 @@ describe('SecaoHero', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SecaoHero],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SecaoHero);
@@ -17,5 +19,13 @@ describe('SecaoHero', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('apresenta a proposta do projeto e o link para analisar repositório', () => {
+    const element = fixture.nativeElement as HTMLElement;
+    expect(element.querySelector('h2')?.textContent).toContain('Seu software funciona.');
+    const link = element.querySelector('a#repositorio');
+    expect(link?.textContent).toContain('Analisar repositório');
+    expect(link?.getAttribute('href')).toBe('/projects/new');
   });
 });

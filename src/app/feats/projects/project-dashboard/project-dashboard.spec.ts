@@ -39,6 +39,10 @@ describe('ProjectDashboard — contrato de análise', () => {
     expect(element.querySelector('.dashboard__score')?.textContent).toContain('80/100');
     expect(element.textContent).toContain(result.insight.title);
     expect(element.textContent).toContain(result.insight.message);
+    expect(element.querySelectorAll('#insight-title').length).toBe(1);
+    expect(element.querySelector('.insight__text h3')?.textContent).toContain(result.insight.title);
+    expect(element.querySelector('.insight__text p')?.textContent).toContain(result.insight.message);
+    expect(element.querySelector('.insight__context')?.textContent).toContain('métricas e evidências');
     expect(element.textContent).not.toContain('[object Object]');
     expect(element.textContent).toContain('Modo demonstração');
   });

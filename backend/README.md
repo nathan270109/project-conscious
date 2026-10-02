@@ -386,3 +386,14 @@ O Conscious Score é a média arredondada das cinco dimensões:
 - Acessibilidade;
 - Organização;
 - Manutenibilidade.
+
+### Priorização de riscos
+
+O `RisksService` ordena findings para o Risk Radar:
+
+1. `CRITICAL`
+2. `HIGH`
+3. `MEDIUM`
+4. `LOW`
+
+Em caso de empate, a ordenação usa categoria, arquivo e linha. O serviço cria uma cópia antes de ordenar e não altera a lista original de findings.

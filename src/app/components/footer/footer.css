@@ -1,9 +1,10 @@
 :host {
     display: block;
+    --branco: #ffffff;
 
-    --ft-bg: #0e1a2b;
+    --ft-bg: #000000;
     --ft-line: #263a56;
-    --ft-fg: #eaf1fa;
+    --ft-fg:  rgb(201, 159, 46);
     --ft-muted: #a9b8cc;
     --ft-accent: #8cc2ff;
     --ft-accent-hover: #a8d2ff;
@@ -13,11 +14,11 @@
 
 .site-footer {
     container-type: inline-size;
-    border-top: 1px solid var(--ft-line);
-    background: var(--ft-bg);
-    color: var(--ft-fg);
-    font-family: var(--ft-font);
-    font-size: 0.95rem;
+    border-top: 1px solid var(--branco);
+    background: rgb(46, 36, 25);
+    color:  var(--branco);
+    font-family: var(--fonte);
+    font-size: 0.90rem;
     line-height: 1.55;
 
     a {
@@ -46,7 +47,7 @@
     align-items: flex-start;
     gap: 1.5rem;
     padding-bottom: clamp(2rem, 5vw, 3.5rem);
-    border-bottom: 1px solid var(--ft-line);
+    border-bottom: 1px solid var(--branco);
 
     h2 {
         margin: 0;
@@ -71,7 +72,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 0.5rem;
 
     p {
         margin: 0;
@@ -96,6 +97,18 @@
     span {
         color: var(--ft-fg);
     }
+}
+
+.div-logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#paragrafo {
+    font-size: 17px;
+    color: var(--cor-destaque);
+    font-weight: 700;
 }
 
 .github-link {
@@ -154,7 +167,7 @@
     flex-direction: column;
     gap: 0.6rem;
     padding-top: 1.25rem;
-    border-top: 1px solid var(--ft-line);
+    border-top: 1px solid var(--branco);
     color: var(--ft-muted);
     font-size: 0.85rem;
 
@@ -164,22 +177,18 @@
 }
 
 .back-to-top {
-    align-self: flex-start;
-    padding: 0;
-    border: 0;
-    background: none;
-    color: var(--ft-muted);
-    font: inherit;
-    cursor: pointer;
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    text-underline-offset: 0.25rem;
-    transition: color 0.15s ease, text-decoration-color 0.15s ease;
+    color: var(--ft-fg);
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: color 0.15s ease, background-size 0.2s ease;
 
-    &:hover {
-        color: var(--ft-fg);
-        text-decoration-color: currentColor;
-    }
+}
+
+.back-to-top:hover {
+  color: var(--ft-fg);
+  background-size: 100% 1px;
 }
 
 /* Responsividade Avançada via Container Queries */

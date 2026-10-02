@@ -56,3 +56,14 @@ export interface FailedAnalysisResult extends AnalysisResultBase {
 }
 
 export type AnalysisResult = CompletedAnalysisResult | FailedAnalysisResult;
+
+export interface Project {
+  id: string;
+  name: string;
+  repositoryUrl: string;
+  description?: string;
+  // Data ISO recebida pela API, sem conversão automática para Date.
+  createdAt: string;
+}
+
+export type ProjectDraft = Pick<Project, 'name' | 'repositoryUrl' | 'description'>;
