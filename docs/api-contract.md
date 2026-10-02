@@ -9,7 +9,7 @@ Este documento é a fonte única de verdade para a troca de dados entre o backen
 - O Integrante 3 deve criar o mock e renderizar o dashboard com estas mesmas chaves.
 - O modo demonstração deve reutilizar `AnalysisResult` com `demoMode: true`.
 
-> Este contrato descreve o resultado da análise. A rota definitiva de análise ainda será conectada; hoje, `POST /projects` cadastra somente o projeto validado.
+> Este contrato descreve o resultado da análise. `POST /projects` cadastra o projeto; `POST /projects/:id/analyze` executa o motor real com o UUID retornado. Rota ativada nesta implementação; consumo Angular e demo offline ainda pendentes.
 
 ## Convenções
 
@@ -39,11 +39,12 @@ Exemplo:
 }
 ```
 
-## Rota de análise — ainda não ativada
+## Rota de análise
 
-`POST /projects/:id/analyze` está implementada e testada em controller isolado,
-mas ainda não registrada no `ProjectsModule`. Os comandos abaixo são para uso
-após a integração do motor; não indicam disponibilidade atual na aplicação.
+`POST /projects/:id/analyze` está registrada no `ProjectsModule`. O motor executa
+os cinco analisadores, calcula as notas pelo ScoringService, ordena os findings
+pelo RisksService e gera o insight. Os testes do AppModule mantêm esses serviços
+reais e simulam apenas a consulta ao GitHub nos cenários normais.
 
 - `id`: UUID v4 retornado pelo cadastro `POST /projects`.
 - Corpo da requisição de análise: não é necessário.
@@ -67,7 +68,7 @@ curl -X POST http://localhost:3000/projects \
   -H 'Content-Type: application/json' \
   -d '{"name":"Projeto exemplo","repositoryUrl":"https://github.com/octocat/Hello-World"}'
 
-# Após ativar a rota: substitua UUID_RETORNADO pelo id do cadastro.
+# Substitua UUID_RETORNADO pelo id do cadastro.
 curl -i -X POST http://localhost:3000/projects/UUID_RETORNADO/analyze
 ```
 

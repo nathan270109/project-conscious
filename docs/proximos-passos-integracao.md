@@ -2,6 +2,30 @@
 
 Referência: 28/09/2026. Este guia registra o estado verificado nessa data; confirme novas entregas antes de integrar código.
 
+### Motor conectado — 02/10/2026
+
+Implementação na branch `feat/analysis-engine-integration`, criada sobre `0a343f8`
+da PR #49. Essa resolução está publicada, mas ainda não estava na master ao
+iniciar esta etapa. A PR do motor deve considerar essa dependência para não
+misturar a revisão do frontend com a integração do backend.
+
+- Motor concreto executa os cinco analisadores e reutiliza scoring, riscos e insight.
+- Token ANALYSIS_ENGINE exportado; controller e serviço registrados no ProjectsModule.
+- Rota POST /projects/:id/analyze disponível nesta versão da aplicação.
+- Validação: 124 testes unitários e 13 E2E passaram; build e lint do backend passaram.
+- Fluxo real com octocat/Hello-World em 02/10/2026: cadastro 201 e análise 200/COMPLETED, score 89, cinco dimensões, demoMode false.
+- Pior dimensão: DOCUMENTATION (70); primeira ação: TESTS (finding HIGH). A diferença está corretamente refletida no insight.
+- Esse teste acessou o GitHub real, mas não fixou a revisão do repositório e não é a evidência do repositório-demo da equipe. Nenhum JSON de contingência foi criado.
+
+Próximo trabalho: coordenar CORS/proxy e consumo Angular, produzir o demo real
+e validar sua contingência. Não encerrar CONSCIOUS-49/47/39 apenas com esta etapa.
+As notas 100 das categorias sem findings representam as heurísticas executadas,
+não certificação de qualidade ou cobertura completa do repositório.
+
+As etapas históricas E/F e a validação do fluxo G descritas abaixo foram
+implementadas nesta branch; não as repetir nem usar as antigas instruções de
+rota inativa como estado atual.
+
 ### Conciliação da PR #49 — 02/10/2026
 
 - Master incorporada localmente à branch do contrato; resolução preparada para commit, ainda sem publicação.

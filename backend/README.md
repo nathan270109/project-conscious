@@ -157,11 +157,11 @@ Execute os comandos dentro de `backend/`.
 
 ### Respostas esperadas
 
-#### Análise — `POST /projects/:id/analyze` (ainda não ativa)
+#### Análise — `POST /projects/:id/analyze`
 
-O controller existe e tem testes HTTP isolados, mas não está registrado no
-`ProjectsModule`. Falta conectar o motor real antes de disponibilizar a rota.
-Depois da ativação, usar o UUID v4 retornado por `POST /projects`, sem corpo na
+O controller e o serviço estão registrados no `ProjectsModule`, com motor real
+vinculado ao token `ANALYSIS_ENGINE` pelo `AnalysisModule`.
+Usar o UUID v4 retornado por `POST /projects`, sem corpo na
 requisição de análise. Os projetos ficam em memória e não sobrevivem a reinícios.
 
 Respostas previstas pelo controller: 200 com `COMPLETED`; 400 para UUID inválido;
@@ -281,10 +281,12 @@ seletivamente da entrega `b6fccb7a056b4379163945b2bd7c9957e0695272` da branch
 manutenibilidade e os tipos existentes. A integração corrige o escape de IDs
 HTML na expressão regular de associação de labels e adiciona testes de regressão.
 
-Ainda falta a ordenação de riscos da CONSCIOUS-44, não localizada nas referências
-remotas atualizadas nesta revisão. A branch `feat/risk-radar` contém a interface,
-não o serviço de ordenação do backend. Não ativar o motor nem gerar um demo
-completo antes de integrar essa dependência real.
+Atualização de 02/10/2026: a ordenação da CONSCIOUS-44 foi integrada.
+`RepositoryAnalysisEngine` executa os cinco analisadores, reúne os findings,
+usa `ScoringService.calculate`, `RisksService.sortByPriority` e
+`InsightsService.generate`. As notas individuais dos analisadores não são usadas
+como notas finais. Uma falha interrompe a análise e é convertida em FAILED seguro.
+O teste `test/analysis-flow.e2e-spec.ts` verifica a rota pelo AppModule real.
 O scoring retorna cinco dimensões mesmo com findings parciais; portanto, sua
 saída sozinha não comprova que todas as categorias foram analisadas.
 
@@ -298,7 +300,7 @@ npm run build
 git diff --check
 ```
 
-A evidência de demonstração real ainda depende da integração: registrar o
+A evidência do repositório-demo ainda precisa ser produzida: registrar o
 repositório, a revisão analisada e a saída obtida, alinhando com CONSCIOUS-39 e
 CONSCIOUS-47. Não apresentar o exemplo ilustrativo acima como análise real.
 
