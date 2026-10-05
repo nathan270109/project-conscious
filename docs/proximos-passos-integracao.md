@@ -2,6 +2,26 @@
 
 Referência: 28/09/2026. Este guia registra o estado verificado nessa data; confirme novas entregas antes de integrar código.
 
+### Consumo Angular — 05/10/2026
+
+Branch `feat/frontend-api-integration`, baseada na master após PRs #49 e #58.
+
+- Formulário usa cadastro HTTP seguido da análise com o UUID retornado, mantendo o layout existente e mostrando progresso no próprio formulário (sem criar outra rota de scanning).
+- Resultado real validado estruturalmente, guardado em memória e exibido pelo dashboard; preserva a ordem dos findings. Mock removido do fluxo de produção e mantido como fixture de testes.
+- FAILED de HTTP 404/500 é distinguido do erro padrão NestJS. Cadastro inválido, rede, timeout e respostas incompatíveis não são tratados como sucesso.
+- Proxy local `/api/**` documentado no README. Produção exige encaminhamento equivalente no servidor.
+- Recarregamento/aba nova apresenta mensagem explícita de resultado ausente, sem inventar GET de resultado nem análise salva.
+- Teste no navegador em 05/10/2026, via proxy e GitHub real: octocat/Hello-World abriu dashboard com UUID recebido, score 89, cinco dimensões e insight baseado em TESTS; menor nota DOCUMENTATION (70). Não é o demo da equipe nem uma análise de revisão Git fixada.
+- Validação final: 49 testes Angular passaram em 15 arquivos, build passou e diff sem erros de whitespace. Repositório inexistente foi verificado no navegador com mensagem FAILED segura, sem score fictício. O estado de resultado ausente após recarga também foi observado.
+- Revisar com responsáveis pelo cadastro e dashboard antes do merge; não houve mudança de status no Jira.
+
+Próximo trabalho: gerar JSON real e rastreável do repositório-demo, implementar
+contingência offline (39) e comparar fixture/resultado real/JSON (47). A revisão
+final dos critérios da 49 deve considerar esta integração, não apenas o motor.
+
+Os registros abaixo são históricos; os itens de consumo Angular da etapa H foram
+implementados nesta branch, com as limitações de memória e produção acima.
+
 ### Motor conectado — 02/10/2026
 
 Implementação na branch `feat/analysis-engine-integration`, criada sobre `0a343f8`
