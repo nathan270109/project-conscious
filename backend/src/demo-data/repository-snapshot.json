@@ -1,0 +1,32 @@
+{
+  "repositoryUrl": "https://github.com/katherinykamili/project-conscious-demo",
+  "revision": "2770289e71c3ea7ef0e89ba056f67ba99f4110ee",
+  "engineRevision": "e8074871191d907769016e52833f4f109f61878a",
+  "files": [
+    {
+      "path": "README.md",
+      "sha": "7903d689527b6a2bf54af7d7a5358ed317bee2c2",
+      "content": "# Project Conscious Demo\n\nProjeto de demonstração."
+    },
+    {
+      "path": "misc/data.ts",
+      "sha": "9ef8a71b1f24954bf332999ebb919e0083f01d5d",
+      "content": "export const demoData = {\n  project: 'Project Conscious Demo',\n};"
+    },
+    {
+      "path": "src/Utils.ts",
+      "sha": "3739f03b426e829b7e6e5c98f7162ef86e0132ac",
+      "content": "export function formatName(name: string): string {\n  return name.trim().toUpperCase();\n}"
+    },
+    {
+      "path": "src/app.html",
+      "sha": "aeed4224bfd61ab7560ab552ec4d5042e957b0a4",
+      "content": "<main>\n  <h1>Project Conscious Demo</h1>\n\n  <img src=\"dashboard.png\">\n\n  <input type=\"email\" placeholder=\"Digite seu e-mail\">\n\n  <button></button>\n</main>"
+    },
+    {
+      "path": "src/app.ts",
+      "sha": "f89f65957c753fe0afc15612a693843997d8b751",
+      "content": "console.log('Aplicação iniciada');\n\n// TODO: organizar as regras de negócio.\n\nexport function calculateScore(value: number): number {\n  if (value < 0) {\n    return 0;\n  }\n\n  return value * 10;\n}"
+    }
+  ]
+}

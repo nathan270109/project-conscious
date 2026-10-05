@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import type { AnalysisResult } from '../../../core/models/analysis-result.model';
 import { AnalysisService } from '../../../core/services/analysis.service';
+import { DEMO_PROJECT_ID, DEMO_REPOSITORY_URL, DEMO_REVISION } from '../../../core/models/demo-analysis';
 
 @Component({
   imports: [RouterLink],
@@ -10,6 +11,9 @@ import { AnalysisService } from '../../../core/services/analysis.service';
   templateUrl: './project-dashboard.html',
 })
 export class ProjectDashboard {
+  readonly demoProjectId = DEMO_PROJECT_ID;
+  readonly demoRepositoryUrl = DEMO_REPOSITORY_URL;
+  readonly demoRevision = DEMO_REVISION;
 
   private readonly route = inject(ActivatedRoute);
   private readonly analysisService = inject(AnalysisService);

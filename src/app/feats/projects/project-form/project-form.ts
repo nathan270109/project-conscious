@@ -1,5 +1,6 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { DEMO_PROJECT_ID } from '../../../core/models/demo-analysis';
 import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize, switchMap, TimeoutError } from 'rxjs';
@@ -9,12 +10,13 @@ import { FormsModule } from '@angular/forms';
 import { NgForm } from '@angular/forms';
 
 @Component({
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   selector: 'app-project-form',
   styleUrl: './project-form.css',
   templateUrl: './project-form.html',
 })
 export class ProjectForm {
+  readonly demoProjectId = DEMO_PROJECT_ID;
   private readonly analysis = inject(AnalysisService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);

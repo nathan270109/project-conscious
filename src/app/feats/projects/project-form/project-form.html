@@ -49,6 +49,15 @@
       </button>
     </form>
 
+    @if (!busy()) {
+      <section class="demo-choice" aria-labelledby="demo-title">
+        <h2 id="demo-title">Explore a demonstração</h2>
+        <p>Abra a análise salva do Project Conscious Demo.
+          Ela não corresponde ao repositório informado acima.</p>
+        <a class="demo-choice__action" [routerLink]="['/projects', demoProjectId, 'dashboard']">Abrir demonstração salva</a>
+      </section>
+    }
+
     @if (busy()) {
       <p role="status" aria-live="polite">{{ progress() }}</p>
     }

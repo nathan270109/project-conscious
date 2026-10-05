@@ -38,9 +38,20 @@
       </div>
 
       @if (result.demoMode) {
-        <span class="dashboard__demo"> Modo demonstração </span>
+        <span class="dashboard__demo">Modo demonstração: análise salva</span>
       }
     </header>
+
+    @if (result.demoMode) {
+      <section class="dashboard__section" aria-label="Origem da demonstração">
+        <p>Este resultado é uma análise salva, não uma análise atual do seu projeto.</p>
+        @if (projectId === demoProjectId) {
+          <p>Repositório: <a [href]="demoRepositoryUrl">Project Conscious Demo</a></p>
+          <p>Revisão: <code>{{ demoRevision }}</code></p>
+        }
+        <p>Data da análise (UTC): {{ result.analyzedAt }}</p>
+      </section>
+    }
 
     <section class="dashboard__section" aria-labelledby="score-title">
       <h2 id="score-title">Conscious Score</h2>

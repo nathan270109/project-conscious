@@ -9,7 +9,7 @@ Este documento é a fonte única de verdade para a troca de dados entre o backen
 - O Integrante 3 deve criar o mock e renderizar o dashboard com estas mesmas chaves.
 - O modo demonstração deve reutilizar `AnalysisResult` com `demoMode: true`.
 
-> Este contrato descreve o resultado da análise. `POST /projects` cadastra o projeto; `POST /projects/:id/analyze` executa o motor real com o UUID retornado. Rota ativada nesta implementação; consumo Angular e demo offline ainda pendentes.
+> Este contrato descreve o resultado da análise. `POST /projects` cadastra o projeto; `POST /projects/:id/analyze` executa o motor real com o UUID retornado. O Angular consome essas rotas. `GET /demo/analysis` fornece a análise demonstrativa salva; o Angular também inclui esse mesmo JSON para uso local sem API.
 
 ## Convenções
 
@@ -78,6 +78,24 @@ de arquivos. Tokens, mensagens internas e stack traces não são enviados no cor
 de `FAILED`.
 
 ## Tipos do resultado
+
+### Resultado demonstrativo salvo
+
+`GET /demo/analysis` retorna HTTP 200 e um `CompletedAnalysisResult` com
+`demoMode: true`, sem consultar o GitHub. Fonte única do resultado:
+`backend/src/demo-data/analysis-result.json`. A origem e a revisão dos arquivos
+analisados ficam no snapshot separado; não são adicionadas chaves ao contrato.
+
+- Repositório: `https://github.com/katherinykamili/project-conscious-demo`.
+- Revisão: `2770289e71c3ea7ef0e89ba056f67ba99f4110ee`.
+- UUID exclusivo do demo: `8e5ab4e0-42c9-4d06-a917-6639d1dfe038`.
+- `analyzedAt` é a data salva da geração, não o horário de abertura do dashboard.
+- A interface identifica “Modo demonstração: análise salva” e sua origem.
+- A seleção é explícita; falhas em projetos reais não mudam sua identidade
+  nem retornam dados do demo no lugar do resultado daquele projeto.
+
+Os exemplos abaixo permanecem ilustrativos. O JSON versionado contém a saída
+do motor real sobre os arquivos da revisão indicada.
 
 ```ts
 type AnalysisStatus = 'COMPLETED' | 'FAILED';
@@ -204,10 +222,10 @@ nem resultados reais do novo gerador.
 
 Antes de integrar uma nova frente, confirme:
 
-- [ ] O mock do dashboard possui as mesmas chaves de `AnalysisResult`.
-- [ ] O retorno do motor de análise possui as mesmas chaves de `AnalysisResult`.
-- [ ] O JSON do modo demonstração usa `demoMode: true` e contém evidências reais do repositório-demo.
-- [ ] O frontend trata `COMPLETED` e `FAILED` sem criar campos próprios.
+- [x] A fixture ilustrativa de testes possui as mesmas chaves de `AnalysisResult`.
+- [x] O retorno da análise real possui as mesmas chaves de `AnalysisResult`.
+- [x] O JSON do modo demonstração usa `demoMode: true` e reproduz a saída do motor sobre a revisão registrada do repositório-demo.
+- [x] O frontend trata `COMPLETED` e `FAILED` sem criar campos próprios.
 
 ## Alterações no contrato
 
