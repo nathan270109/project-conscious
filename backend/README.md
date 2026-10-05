@@ -6,7 +6,7 @@ O projeto foi desenvolvido como parte do Entra21 e prioriza resultados objetivos
 
 ## Visão geral
 
-O fluxo principal da aplicação será:
+O fluxo principal da aplicação é:
 
 1. A pessoa informa o nome do projeto e a URL de um repositório público do GitHub.
 2. A API identifica a branch padrão e busca somente os arquivos necessários.
@@ -102,7 +102,9 @@ npm ci
 npm run start:dev
 ```
 
-Acesse [http://localhost:3000](http://localhost:3000). Nesta fase inicial, a rota `GET /` responde `Hello World!`, confirmando que a API está ativa.
+A API escuta em `http://localhost:3000`. Para confirmar a inicialização, consulte
+`GET /demo/analysis`: a resposta deve ser 200 com o resultado salvo. Não há rota
+`GET /` registrada atualmente.
 
 ## Variáveis de ambiente
 
@@ -143,17 +145,67 @@ Execute os comandos dentro de `backend/`.
 - [x] Estrutura inicial do frontend Angular.
 - [x] Backend NestJS iniciado em `backend/`.
 - [x] Serviço para leitura seletiva de repositórios públicos com Octokit.
-- [ ] Formulário completo e rota de scanning.
-- [ ] Endpoint para iniciar a análise de um projeto.
-- [ ] Motor de análise, Score e Risk Radar.
-- [ ] Dashboard com resultado da análise.
-- [ ] Modo demonstração sem internet.
+- [x] Formulário com cadastro e análise, exibindo progresso na própria página.
+- [x] Endpoint para iniciar a análise de um projeto.
+- [x] Motor com cinco analisadores, Score, Risk Radar e Insight.
+- [x] Dashboard com resultado da análise.
+- [x] Modo demonstração salvo, disponível localmente sem GitHub ou backend.
 
 ## API atual
 
 | Método | Rota | Descrição |
 | --- | --- | --- |
 | `POST` | `/projects` | Cria um projeto em memória após validar nome, URL e descrição opcional. |
+| `GET` | `/projects/:id/files` | Consulta os arquivos filtrados do repositório do projeto cadastrado. |
+| `POST` | `/projects/:id/analyze` | Executa o motor real e retorna `AnalysisResult`. |
+| `GET` | `/demo/analysis` | Retorna a análise demonstrativa salva, sem consultar GitHub. |
+
+### Exemplo completo de cadastro e análise
+
+Com o backend iniciado na porta 3000:
+
+```bash
+curl -i -X POST http://localhost:3000/projects \
+  -H 'Content-Type: application/json' \
+  -d '{"name":"Project Conscious Demo","repositoryUrl":"https://github.com/katherinykamili/project-conscious-demo"}'
+
+# Copie o id retornado pelo cadastro para UUID_RETORNADO.
+curl -i http://localhost:3000/projects/UUID_RETORNADO/files
+curl -i -X POST http://localhost:3000/projects/UUID_RETORNADO/analyze
+
+# Esta rota usa somente o JSON salvo e não precisa de cadastro.
+curl -i http://localhost:3000/demo/analysis
+```
+
+O cadastro responde 201. A análise concluída responde 200, `status: COMPLETED`,
+`demoMode: false`, o mesmo `projectId`, data UTC, cinco dimensões, findings
+ordenados e insight com `category`, `title` e `message`.
+Analisar ao vivo o repositório-demo também usa `demoMode: false`: esse campo
+identifica o resultado salvo, não o nome do repositório.
+
+O Angular usa `/api/projects` e `/api/projects/:id/analyze`. O proxy de
+desenvolvimento configurado na raiz encaminha essas chamadas ao backend e remove
+`/api`; não é necessário habilitar CORS global. Em produção, configure o
+encaminhamento equivalente no servidor, como descrito no [README principal](../README.md).
+
+### Demonstração salva e limitações do MVP
+
+`GET /demo/analysis` devolve o JSON de `src/demo-data/analysis-result.json`, com
+`demoMode: true`, UUID exclusivo e data da geração preservada. A revisão
+`2770289e71c3ea7ef0e89ba056f67ba99f4110ee` do repositório-demo produziu score 74,
+cinco dimensões e dez findings. O snapshot contém os arquivos e seus hashes;
+`src/demo/demo.service.spec.ts` reproduz o resultado com o motor real.
+
+No formulário Angular, **Abrir demonstração salva** usa esse mesmo JSON incluído
+no aplicativo. O dashboard abre sem backend e após recarga, exibindo o selo
+**Modo demonstração: análise salva**, origem, revisão e data. Essa escolha é
+explícita; falhas de outros projetos continuam sendo erros. Para apresentação
+sem internet, as dependências e o servidor Angular devem estar disponíveis
+localmente antes do ensaio. Não há service worker.
+
+Projetos ficam em memória no backend, e resultados reais ficam em memória no
+Angular. Reiniciar a API invalida os projetos; recarregar o dashboard real exige
+nova análise. O resultado demonstrativo salvo continua disponível.
 
 ### Respostas esperadas
 
@@ -184,14 +236,17 @@ Exemplo de requisição válida:
 ```json
 {
   "name": "Project Conscious Demo",
-  "repositoryUrl": "https://github.com/octocat/Hello-World",
+  "repositoryUrl": "https://github.com/katherinykamili/project-conscious-demo",
   "description": "Repositório usado para demonstração"
 }
 ```
 
 #### Leitura de repositório público — `GithubService`
 
-A rota de análise que chamará este serviço ainda será criada. Quando ela existir, deve preservar as respostas abaixo para que o frontend trate erros de forma previsível:
+`GET /projects/:id/files` utiliza este serviço diretamente e expõe os erros
+abaixo. Já `POST /projects/:id/analyze` transforma falhas do GitHub nas respostas
+seguras de `FAILED` descritas acima; o status dessa rota de análise é 404 ou 500,
+conforme o caso.
 
 | Situação | Status | Mensagem segura para o frontend |
 | --- | --- | --- |
@@ -217,6 +272,12 @@ A regra é determinística:
 | README completo | `100` | nenhum finding |
 
 O analisador reconhece arquivos como `README`, `README.md` e `docs/README.md`.
+
+Descrição, instalação e execução são reconhecidas por palavras e padrões
+específicos. A frase “Projeto de demonstração.” existe no README do demo, mas
+não corresponde aos padrões de descrição; por isso, essa regra gera um falso
+positivo documentado. As notas da tabela são individuais do analisador:
+as notas finais da API usam as penalidades do ScoringService, descritas abaixo.
 
 Cada finding informa categoria, severidade, mensagem, arquivo e linha quando disponível. Os resultados são reproduzíveis: os mesmos arquivos sempre geram a mesma nota e os mesmos findings.
 
@@ -268,9 +329,8 @@ Exemplo ilustrativo (não é evidência de execução em um repositório real):
 
 ### Integração e validação
 
-`src/insights/insights.module.ts` exporta `InsightsService`. O módulo consumidor
-deverá importar `InsightsModule`; essa conexão fica para a CONSCIOUS-49.
-Esta entrega não registra outro endpoint nem altera a orquestração existente.
+`src/insights/insights.module.ts` exporta `InsightsService`. O `AnalysisModule`
+importa esse módulo e conecta o serviço ao `RepositoryAnalysisEngine`.
 O serviço gera apenas o insight de uma análise concluída; na resposta `FAILED`,
 a orquestração mantém `insight: null`, conforme o contrato.
 
@@ -300,9 +360,9 @@ npm run build
 git diff --check
 ```
 
-A evidência do repositório-demo ainda precisa ser produzida: registrar o
-repositório, a revisão analisada e a saída obtida, alinhando com CONSCIOUS-39 e
-CONSCIOUS-47. Não apresentar o exemplo ilustrativo acima como análise real.
+A evidência do repositório-demo está em `src/demo-data/analysis-result.json` e
+`src/demo-data/repository-snapshot.json`, integrada pela PR #61. O exemplo de
+insight acima continua sendo apenas uma ilustração do formato.
 
 ### Regras de testes e acessibilidade integradas
 
@@ -317,11 +377,11 @@ de acessibilidade. Labels envolvendo inputs e outras formas de nome acessível
 não são reconhecidos por essa primeira versão, podendo gerar falsos positivos.
 
 As notas individuais dos analisadores não substituem o score agregado:
-a integração deve usar `ScoringService.calculate(findings)` conforme o plano.
+a integração usa `ScoringService.calculate(findings)`.
 
 ## Contribuição
 
-1. Atualize sua cópia da `main` antes de iniciar uma entrega.
+1. Atualize sua cópia da `master` antes de iniciar uma entrega.
 2. Crie uma branch com nome objetivo, por exemplo `feat/github-integration`.
 3. Faça commits pequenos e descritivos.
 4. Envie a branch com `git push origin nome-da-branch`.
@@ -336,7 +396,7 @@ fix(project-form): valida URL do GitHub
 docs(readme): documenta execução local
 ```
 
-Não faça commits diretamente na `main` e não altere arquivos de outra frente sem alinhamento com a equipe.
+Não faça commits diretamente na `master` e não altere arquivos de outra frente sem alinhamento com a equipe.
 
 ## Solução de problemas
 

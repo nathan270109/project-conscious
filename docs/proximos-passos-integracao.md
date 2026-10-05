@@ -2,6 +2,92 @@
 
 Referência: 28/09/2026. Este guia registra o estado verificado nessa data; confirme novas entregas antes de integrar código.
 
+### Aceite final da integração — 05/10/2026
+
+Estado atual conferido na master `b4af205`, após merge da
+[PR #61](https://github.com/nathan270109/project-conscious/pull/61).
+CONSCIOUS-39 e CONSCIOUS-47 já constam como Feito, e a história CONSCIOUS-12
+também está Feito. CONSCIOUS-49, sua história CONSCIOUS-13 e o épico
+CONSCIOUS-5 continuam Fazendo. A consulta foi somente de leitura.
+
+Esta revisão está na branch `docs/entrega-integracao`, na mesma pasta original.
+Atualiza `backend/README.md`, que ainda descrevia motor, dashboard e demo como
+pendentes. Inclui comandos completos de cadastro/análise/demo, proxy Angular,
+respostas, limitações de memória e distinção entre resultado atual e salvo.
+Corrige também a indicação antiga de `GET /`: essa rota não está registrada;
+`GET /demo/analysis` permite verificar a API inicializada.
+
+#### Evidência de aceite da CONSCIOUS-49
+
+| Critério | Evidência conferida |
+| --- | --- |
+| Cadastro e análise pelo mesmo UUID | Ensaio real: POST /projects 201, análise 200 para o UUID retornado |
+| Leitura de arquivos públicos | GET /projects/:id/files 200; README, misc/data.ts, src/Utils.ts, src/app.html e src/app.ts |
+| Cinco analisadores e serviços reutilizados | RepositoryAnalysisEngine + teste analysis-flow.e2e-spec.ts pelo AppModule |
+| Resultado completo e contrato de insight | Score 74, cinco categorias distintas, dez findings, insight category/title/message |
+| Erros de ID e projeto | Ensaio real: UUID inválido 400 e projeto inexistente 404 |
+| Falhas externas e do motor | Testes E2E: FAILED seguro, sem dados internos, sem COMPLETED parcial |
+| Consumo Angular e proxy | PR #60 integrada; formulário usa UUID recebido e dashboard preserva os dados |
+| Contingência e alinhamento | PR #61 integrada; mesmo JSON no backend/Angular, demoMode true e seleção explícita |
+| Documentação de consumo | README principal, backend/README.md e docs/api-contract.md |
+
+Ensaio realizado em API temporária na porta 3001, com GitHub real e o demo oficial.
+UUID do ensaio: `923bd275-b96f-473b-9713-5720a0c7aa35`. Esse cadastro era apenas
+em memória e deixa de existir ao encerrar a API temporária.
+A chamada de análise ao vivo usou `demoMode: false`; GET /demo/analysis retornou
+200 com `demoMode: true` e identidade exclusiva. A API temporária foi encerrada
+após a conferência. A análise ao vivo consulta a branch padrão; o resultado salvo
+continua vinculado à revisão fixa documentada abaixo.
+
+Nesta revisão, build backend e os 15 testes E2E passaram novamente.
+Os 127 testes unitários, 54 testes Angular, lint backend e builds já haviam
+passado na entrega do demo, cujo código foi integrado sem alterações nesta master.
+Esta branch altera somente documentação.
+
+#### Publicação desta revisão
+
+1. Revise `git diff` e faça `git diff --check`.
+2. Faça commit: `docs: atualiza entrega e aceite da integração`.
+3. Publique `docs/entrega-integracao` e abra PR para master.
+4. Após merge da documentação, registre as evidências na CONSCIOUS-49 e marque
+   essa tarefa como Feito. As implementações estão nas PRs #58, #60 e #61.
+5. Confira o encerramento das subtarefas da CONSCIOUS-13 e das histórias do
+   épico CONSCIOUS-5 antes de concluir esses itens maiores. Não é necessário
+   criar outra implementação da API.
+
+Comentário sugerido para CONSCIOUS-49 após integrar esta documentação:
+
+> Integração concluída nas PRs #58, #60 e #61. POST /projects cadastra o projeto
+> e POST /projects/:id/analyze usa o mesmo UUID, executa os cinco analisadores e
+> reutiliza scoring, ordenação dos riscos e insight. Ensaio com o repositório
+> público oficial do demo retornou 201/200, score 74, cinco dimensões e dez
+> findings. IDs inválidos retornam 400; projetos inexistentes retornam 404.
+> Os 15 testes E2E passaram, incluindo falhas externas e do motor com FAILED
+> seguro. Consumo Angular, proxy e demo salvo estão integrados e documentados.
+> Resultado ao vivo usa demoMode false; demonstração salva usa demoMode true.
+
+#### Ensaio final com a equipe
+
+1. Prepare dependências antes de ficar sem internet. Na raiz, inicie `npm start`;
+   em outro terminal, entre em backend e inicie `npm run start:dev`.
+2. Em `/projects/new`, cadastre `Project Conscious Demo` com
+   `https://github.com/katherinykamili/project-conscious-demo` e execute a análise.
+3. Confira o resultado atual: cinco dimensões, riscos na ordem recebida e insight.
+   Na revisão pública conferida hoje, score 74, dez findings e acessibilidade 40.
+4. Mostre a imagem sem alt em src/app.html:4 e sua relação com a primeira ação
+   do insight. Explique que as regras apontam sinais e têm limitações, inclusive
+   a detecção de descrição curta do README.
+5. Volte ao formulário e escolha **Abrir demonstração salva**. Confira selo,
+   repositório, revisão e data. Recarregue para mostrar que o demo continua disponível.
+6. Pare apenas o backend iniciado para o ensaio e repita a abertura do demo.
+   A aplicação Angular local precisa continuar ativa.
+7. Combine com Matheus a explicação das regras de score/prioridade e com Letícia
+   a apresentação do dashboard. Reserve uma pessoa para conduzir o cadastro e
+   a troca explícita para a análise salva.
+
+Melhorias de regras, autenticação e persistência precisam de escopo próprio.
+Não são pendências de implementação da CONSCIOUS-49.
+
 ### Demonstração salva — 05/10/2026
 
 Implementação local na branch `feat/demo-offline`, na pasta original do projeto,
