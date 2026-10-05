@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, of, tap, throwError, timeout } from 'rxjs';
 import type { AnalysisResult, Project, ProjectDraft } from '../models/analysis-result.model';
 import { isAnalysisResult } from '../models/analysis-result.guard';
+import { DEMO_PROJECT_ID, readDemoAnalysis } from '../models/demo-analysis';
 
 @Injectable({ providedIn: 'root' })
 export class AnalysisService {
@@ -48,7 +49,12 @@ export class AnalysisService {
   }
 
   getByProjectId(id: string): AnalysisResult | undefined {
+    if (id === DEMO_PROJECT_ID) return this.getDemoAnalysis();
     const result = this.results.get(id);
     return result ? structuredClone(result) : undefined;
+  }
+
+  getDemoAnalysis() {
+    return readDemoAnalysis();
   }
 }

@@ -2,6 +2,64 @@
 
 Referência: 28/09/2026. Este guia registra o estado verificado nessa data; confirme novas entregas antes de integrar código.
 
+### Demonstração salva — 05/10/2026
+
+Implementação local na branch `feat/demo-offline`, na pasta original do projeto,
+baseada na master `e807487` após as PRs #59 (login) e #60 (consumo Angular).
+As seções anteriores abaixo são registros históricos.
+
+- Demo oficial confirmado no comentário da [CONSCIOUS-38](https://katherinykc13.atlassian.net/browse/CONSCIOUS-38): `https://github.com/katherinykamili/project-conscious-demo`.
+- Revisão fixada: `2770289e71c3ea7ef0e89ba056f67ba99f4110ee`. Árvore pública completa (não truncada), cinco arquivos; bytes conferidos pelos hashes dos blobs Git.
+- Motor real da master gerou o JSON `backend/src/demo-data/analysis-result.json`, com score 74, cinco dimensões, dez findings e insight de acessibilidade. Data da geração: `2026-10-05T18:31:40.811Z`.
+- Snapshot dos arquivos e revisão do motor preservados em `backend/src/demo-data/repository-snapshot.json`; teste reproduz exatamente score, dimensões, findings e insight.
+- `DemoService.getDemoAnalysis()` e `GET /demo/analysis` fornecem cópia do resultado salvo, sem consultar GitHub.
+- Angular inclui o mesmo JSON no bundle. O link **Abrir demonstração salva** usa UUID exclusivo; funciona com o backend desligado, inclusive após recarga. Dashboard identifica o selo **Modo demonstração: análise salva**, repositório, revisão e data.
+- Seleção explícita: falha em outro projeto continua sendo FAILED/erro. Nenhum cadastro ou resultado de usuário é substituído pela demonstração.
+- Comparação automatizada da CONSCIOUS-47 verifica contrato e chaves do resultado salvo e da fixture ilustrativa. A fixture permanece restrita aos testes.
+- Teste de login recém-integrado recebeu `provideRouter([])` para seus RouterLinks. Ajustes de apresentação limitados ao formulário/dashboard.
+
+Validação: 127 testes unitários e 15 E2E do backend passaram; build e lint do
+backend passaram. Angular: 54 testes passaram; build de produção passou.
+No navegador, o demo abriu e foi recarregado com o backend desligado.
+O teste Angular confirma ausência de requisições HTTP ao abrir esse dashboard;
+o E2E simula GitHub indisponível e mantém a rota demonstrativa disponível.
+
+Limitações verificadas: o offline requer o Angular/arquivos locais disponíveis;
+não há service worker. O finding de descrição do README reflete a heurística
+atual do analisador (palavras específicas); o README contém uma frase curta que
+ela não reconhece. Também não há arquivo grande na revisão do demo: não inventar
+esse finding. As regras da equipe foram mantidas e o resultado é a saída delas.
+
+#### Próximos passos para publicar e encerrar
+
+1. Confira `git status` e `git diff HEAD` nesta branch. Parte dos arquivos pode
+   estar staged; inclua também as correções finais do formulário, testes e docs.
+2. Faça o commit da entrega com `feat(demo): adiciona resultado local de contingência`.
+3. Publique `feat/demo-offline` com `git push -u origin feat/demo-offline` e abra
+   uma PR para `master`, relacionando CONSCIOUS-39/47 e a evidência da 45.
+4. Na revisão, confirme que Matheus/Letícia concordam com a saída do motor e que
+   o dashboard preserva o contrato. O alerta de README é limitação documentada,
+   a avaliar em melhoria separada do analisador.
+5. Após aprovação e merge, ensaie pelo formulário: abra **Abrir demonstração
+   salva**, confira 74/100, cinco dimensões, dez riscos e insight, recarregue e
+   repita com o backend desligado. Para a apresentação sem internet, prepare e
+   inicie o servidor Angular local antes do ensaio.
+6. Registre a PR e a evidência nas CONSCIOUS-39/47 e então marque essas tarefas
+   como concluídas. A 45 já está Feito no Jira; acrescente a evidência do JSON.
+   Nenhum status/comentário Jira foi alterado por esta implementação.
+
+Reprodução automatizada, sem buscar novamente o GitHub:
+
+```bash
+cd backend
+npm test -- demo.service.spec.ts
+npm run test:e2e -- demo.e2e-spec.ts
+cd ..
+npm test -- --watch=false
+npm run build
+git diff HEAD --check
+```
+
 ### Consumo Angular — 05/10/2026
 
 Branch `feat/frontend-api-integration`, baseada na master após PRs #49 e #58.

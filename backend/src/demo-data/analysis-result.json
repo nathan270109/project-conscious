@@ -1,0 +1,106 @@
+{
+  "projectId": "8e5ab4e0-42c9-4d06-a917-6639d1dfe038",
+  "status": "COMPLETED",
+  "analyzedAt": "2026-10-05T18:31:40.811Z",
+  "demoMode": true,
+  "score": 74,
+  "dimensions": [
+    {
+      "category": "DOCUMENTATION",
+      "score": 70
+    },
+    {
+      "category": "TESTS",
+      "score": 75
+    },
+    {
+      "category": "ACCESSIBILITY",
+      "score": 40
+    },
+    {
+      "category": "ORGANIZATION",
+      "score": 95
+    },
+    {
+      "category": "MAINTAINABILITY",
+      "score": 90
+    }
+  ],
+  "findings": [
+    {
+      "category": "ACCESSIBILITY",
+      "severity": "HIGH",
+      "message": "Imagem sem atributo alt.",
+      "file": "src/app.html",
+      "line": 4
+    },
+    {
+      "category": "ACCESSIBILITY",
+      "severity": "HIGH",
+      "message": "Campo input sem label associada.",
+      "file": "src/app.html",
+      "line": 6
+    },
+    {
+      "category": "TESTS",
+      "severity": "HIGH",
+      "message": "Nenhum arquivo de teste foi encontrado no repositório.",
+      "file": "tests",
+      "line": null
+    },
+    {
+      "category": "ACCESSIBILITY",
+      "severity": "MEDIUM",
+      "message": "Botão sem texto ou nome acessível.",
+      "file": "src/app.html",
+      "line": 8
+    },
+    {
+      "category": "DOCUMENTATION",
+      "severity": "MEDIUM",
+      "message": "README não possui uma descrição do projeto.",
+      "file": "README.md",
+      "line": null
+    },
+    {
+      "category": "DOCUMENTATION",
+      "severity": "MEDIUM",
+      "message": "README não possui instruções de instalação.",
+      "file": "README.md",
+      "line": null
+    },
+    {
+      "category": "DOCUMENTATION",
+      "severity": "MEDIUM",
+      "message": "README não possui instruções de execução.",
+      "file": "README.md",
+      "line": null
+    },
+    {
+      "category": "MAINTAINABILITY",
+      "severity": "LOW",
+      "message": "console.log é um sinal de manutenção; confirme se o log é intencional.",
+      "file": "src/app.ts",
+      "line": 1
+    },
+    {
+      "category": "MAINTAINABILITY",
+      "severity": "LOW",
+      "message": "TODO indica uma pendência de manutenção.",
+      "file": "src/app.ts",
+      "line": 3
+    },
+    {
+      "category": "ORGANIZATION",
+      "severity": "LOW",
+      "message": "Nome de arquivo ou pasta fora do padrão: use letras minúsculas, números e hífens.",
+      "file": "src/Utils.ts",
+      "line": null
+    }
+  ],
+  "insight": {
+    "category": "ACCESSIBILITY",
+    "title": "Melhore a acessibilidade",
+    "message": "Acessibilidade apresentou a menor nota: 40/100. Como primeira ação, revise o apontamento de acessibilidade: Imagem sem atributo alt. Revise esse apontamento no arquivo src/app.html:4."
+  }
+}

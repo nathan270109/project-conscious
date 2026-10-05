@@ -1,7 +1,7 @@
 .dashboard {
     width: min(1200px, calc(100% - 48px));
     margin: 0 auto;
-    padding: 48px 0 80px;
+    padding: 96px 0 80px;
     color: #0f2747;
 }
 
@@ -41,12 +41,17 @@
     color: #1d4ed8;
     font-size: 0.875rem;
     font-weight: 600;
-    white-space: nowrap;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .dashboard__section {
     padding: 40px 0;
     border-bottom: 1px solid #e5eaf0;
+}
+
+.dashboard__section code {
+    overflow-wrap: anywhere;
 }
 
 .dashboard__section h2 {
@@ -195,7 +200,7 @@
 @media (max-width: 700px) {
     .dashboard {
         width: min(100% - 32px, 1200px);
-        padding-top: 32px;
+        padding-top: 96px;
     }
 
     .dashboard__header {

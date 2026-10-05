@@ -108,6 +108,13 @@ describe('ProjectForm', () => {
     expect(component.busy()).toBe(false);
   });
 
+  it('oferece demo independente do cadastro e sem requisições', () => {
+    const link = fixture.nativeElement.querySelector('a');
+    expect(link.textContent).toContain('Abrir demonstração salva');
+    expect(link.getAttribute('href')).toBe('/projects/' + component.demoProjectId + '/dashboard');
+    http.expectNone(() => true);
+  });
+
   it('cancela a solicitação quando a tela é destruída', async () => {
     await submit();
     const pending = http.expectOne('/api/projects');
