@@ -1,12 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { AnalysisService } from '../../../core/services/analysis.service';
+import { createAnalysisFixture } from '../../../core/testing/analysis.fixture';
 import type { AnalysisResult, CompletedAnalysisResult, FailedAnalysisResult } from '../../../core/models/analysis-result.model';
 import { ProjectDashboard } from './project-dashboard';
 
 describe('ProjectDashboard — contrato de análise', () => {
   function completed(): CompletedAnalysisResult {
-    const result = new AnalysisService().getByProjectId('1');
+    const result = createAnalysisFixture();
     if (result?.status !== 'COMPLETED') throw new Error('Fixture de sucesso ausente');
     return result;
   }

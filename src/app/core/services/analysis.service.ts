@@ -1,73 +1,54 @@
-import { Injectable } from '@angular/core';
-import type { AnalysisResult, CompletedAnalysisResult } from '../models/analysis-result.model';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, map, of, tap, throwError, timeout } from 'rxjs';
+import type { AnalysisResult, Project, ProjectDraft } from '../models/analysis-result.model';
+import { isAnalysisResult } from '../models/analysis-result.guard';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AnalysisService {
+  private readonly http = inject(HttpClient);
+  private readonly results = new Map<string, AnalysisResult>();
 
-    // Fixture ilustrativa da interface, não uma análise real do repositório-demo.
-    // A comparação com o demo real permanece pendente na CONSCIOUS-47.
-    private readonly mockResult: CompletedAnalysisResult = {
-        projectId: '1',
-        status: 'COMPLETED',
-        analyzedAt: '2026-09-29T12:00:00.000Z',
-        score: 80,
-        dimensions: [
-            { category: 'DOCUMENTATION', score: 65 },
-            { category: 'TESTS', score: 95 },
-            { category: 'ACCESSIBILITY', score: 60 },
-            { category: 'ORGANIZATION', score: 100 },
-            { category: 'MAINTAINABILITY', score: 80 }
-        ],
-        findings: [
-            {
-                category: 'DOCUMENTATION',
-                severity: 'HIGH',
-                message: 'README sem instruções de execução',
-                file: 'README.md',
-                line: null
-            },
-            {
-                category: 'ACCESSIBILITY',
-                severity: 'HIGH',
-                message: 'Imagem sem atributo alt',
-                file: 'src/app/feats/home/home.html',
-                line: 34
-            },
-            {
-                category: 'TESTS',
-                severity: 'MEDIUM',
-                message: 'Área importante do projeto sem arquivo de teste',
-                file: 'src/app/feats/home/home.ts',
-                line: null
-            },
-            {
-                category: 'MAINTAINABILITY',
-                severity: 'LOW',
-                message: 'console.log encontrado no código',
-                file: 'src/app/feats/home/home.ts',
-                line: 18
-            }
-        ],
-        insight: {
-            category: 'DOCUMENTATION',
-            title: 'Comece pela documentação',
-            message:
-                'Acessibilidade apresentou a menor nota: 60/100. ' +
-                'Como primeira ação, revise o apontamento de documentação: ' +
-                'README sem instruções de execução. ' +
-                'Revise esse apontamento no arquivo README.md.'
-        },
-        demoMode: true
-    };
-
-    getByProjectId(id: string): AnalysisResult | undefined {
-        if (this.mockResult.projectId === id) {
-            return structuredClone(this.mockResult);
+  createProject(draft: ProjectDraft) {
+    return this.http.post<Project>('/api/projects', draft).pipe(
+      timeout(60000),
+      map((project) => {
+        if (!project || typeof project.id !== 'string' || !project.id) {
+          throw new Error('Resposta de cadastro inválida.');
         }
+        return project;
+      }),
+    );
+  }
 
-        return undefined;
-    }
+  analyze(projectId: string) {
+    this.results.delete(projectId);
+    return this.http
+      .post<unknown>(`/api/projects/${encodeURIComponent(projectId)}/analyze`, {})
+      .pipe(
+        timeout(60000),
+        catchError((error: unknown) => {
+          if (
+            error instanceof HttpErrorResponse &&
+            (error.status === 404 || error.status === 500) &&
+            isAnalysisResult(error.error, projectId) &&
+            error.error.status === 'FAILED'
+          ) {
+            return of(error.error);
+          }
+          return throwError(() => error);
+        }),
+        map((result) => {
+          if (!isAnalysisResult(result, projectId))
+            throw new Error('Resultado incompatível com o contrato.');
+          return result;
+        }),
+        tap((result) => this.results.set(projectId, structuredClone(result))),
+      );
+  }
 
+  getByProjectId(id: string): AnalysisResult | undefined {
+    const result = this.results.get(id);
+    return result ? structuredClone(result) : undefined;
+  }
 }
