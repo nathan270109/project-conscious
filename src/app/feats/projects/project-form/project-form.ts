@@ -3,7 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { DEMO_PROJECT_ID } from '../../../core/models/demo-analysis';
 import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { finalize, switchMap, TimeoutError } from 'rxjs';
+import { finalize, TimeoutError } from 'rxjs';
 import { AnalysisService } from '../../../core/services/analysis.service';
 import type { ProjectDraft } from '../../../core/models/analysis-result.model';
 import { FormsModule } from '@angular/forms';
@@ -71,23 +71,19 @@ export class ProjectForm {
     this.analysis
       .createProject(draft)
       .pipe(
-        switchMap((project) => {
-          this.progress.set('Analisando o repositório… Aguarde.');
-          return this.analysis.analyze(project.id);
-        }),
         takeUntilDestroyed(this.destroyRef),
         finalize(() => this.busy.set(false)),
       )
       .subscribe({
-        next: (result) => {
+        next: (project) => {
           void this.router
-            .navigate(['/projects', result.projectId, 'dashboard'])
+            .navigate(['/projects', project.id, 'scanning'])
             .then((navigated) => {
               if (!navigated)
-                this.errorMessage.set('Não foi possível abrir o dashboard. Tente novamente.');
+                this.errorMessage.set('Não foi possível abrir a tela de análise. Tente novamente.');
             })
             .catch(() =>
-              this.errorMessage.set('Não foi possível abrir o dashboard. Tente novamente.'),
+              this.errorMessage.set('Não foi possível abrir a tela de análise. Tente novamente.'),
             );
         },
         error: (error: unknown) => {

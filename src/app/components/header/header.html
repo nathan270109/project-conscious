@@ -1,13 +1,13 @@
-<div class="header-container">
+<div class="header-container" (keydown.escape)="closeMenu()">
 
     <div class="fixed-left">
         <a routerLink="/home" class="logo-link">
-            <img class="logo" src="/assets/logo-black.png" alt="logo">
+            <img class="logo" src="/assets/logo-black.png" alt="Project Conscious — início">
         </a>
     </div>
 
     <div class="scrolling-nav">
-        <nav class="nav">
+        <nav class="nav" aria-label="Navegação principal">
             <a routerLink="/home">Início</a>
             <a routerLink="/">Sobre</a>
             <a routerLink="/">Contato</a>
@@ -21,18 +21,21 @@
             </div>
         </div>
 
-        <div class="fixed-right" (click)="toggleMenu()" style="cursor: pointer;">
-            <i class="fa-solid fa-bars fa-xl"></i>
-        </div>
+        <button #menuToggle class="fixed-right" type="button" (click)="toggleMenu()"
+            aria-label="Abrir menu de navegação" aria-controls="header-menu"
+            [attr.aria-expanded]="isMenuOpen()">
+            <span aria-hidden="true">☰</span>
+        </button>
 
 
     </div>
 
     <div class="overlay" [class.open]="isMenuOpen()" (click)="closeMenu()"></div>
 
-    <div class="sidebar-menu" [class.open]="isMenuOpen()">
+    <div id="header-menu" class="sidebar-menu" [class.open]="isMenuOpen()"
+        [attr.inert]="isMenuOpen() ? null : ''" [attr.aria-hidden]="!isMenuOpen()">
         <div class="sidebar-header">
-            <button class="close-btn" (click)="closeMenu()">&times;</button>
+            <button type="button" class="close-btn" aria-label="Fechar menu" (click)="closeMenu()">&times;</button>
         </div>
         
         <ul class="sidebar-links">

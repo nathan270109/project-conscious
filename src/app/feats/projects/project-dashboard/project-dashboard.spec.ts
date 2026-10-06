@@ -18,7 +18,7 @@ describe('ProjectDashboard — contrato de análise', () => {
       providers: [
         provideRouter([]),
         { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ id: '1' }) } } },
-        { provide: AnalysisService, useValue: { getByProjectId: () => {
+        { provide: AnalysisService, useValue: { getProjectById: () => undefined, getByProjectId: () => {
           if (throws) throw new Error('Detalhe interno não deve ser exibido');
           return result;
         } } },

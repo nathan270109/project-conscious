@@ -45,4 +45,22 @@ describe('Header', () => {
     expect(element.querySelector('.sidebar-menu.open')).toBeNull();
     expect(element.querySelector('.overlay.open')).toBeNull();
   });
+
+  it('informa expansão, impede foco no menu fechado e fecha com Escape', async () => {
+    const element = fixture.nativeElement as HTMLElement;
+    const trigger = element.querySelector<HTMLButtonElement>('.fixed-right')!;
+    const menu = element.querySelector<HTMLElement>('.sidebar-menu')!;
+    expect(trigger.tagName).toBe('BUTTON');
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(menu.hasAttribute('inert')).toBe(true);
+    trigger.click();
+    await fixture.whenStable();
+    expect(trigger.getAttribute('aria-expanded')).toBe('true');
+    expect(menu.hasAttribute('inert')).toBe(false);
+    menu.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    await fixture.whenStable();
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(menu.hasAttribute('inert')).toBe(true);
+    expect(document.activeElement).toBe(trigger);
+  });
 });

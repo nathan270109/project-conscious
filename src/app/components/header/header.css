@@ -6,22 +6,34 @@
   left: 0;
   width: 100%;
   z-index: 10;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 24px;
+  min-height: 72px;
+  padding: 12px 20px;
+  box-sizing: border-box;
 }
 
 .fixed-left,
 .fixed-right {
-  position: fixed;
-  top: 15px;
-  z-index: 1000;
+  position: static;
 }
 
 .fixed-left {
-  left: 20px;
+  min-width: 0;
 }
 
 .fixed-right {
-  right: 20px;
-  top: 20px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #000;
+  font-size: 28px;
+  cursor: pointer;
+  flex-shrink: 0;
 }
 
 .logo-link {
@@ -41,7 +53,7 @@
 }
 
 .nav {
-  padding-top: 20px;
+  padding-top: 0;
   display: flex;
   gap: 24px;
   background-color: transparent;
@@ -76,11 +88,12 @@
 .container-right {
   display: flex;
   justify-content: flex-end;
-  margin-top: -35px;
+  align-items: center;
+  gap: 12px;
 }
 
 .scrolling-button {
-  margin-right: 60px;
+  margin-right: 0;
   margin-top: 0px;
 }
 
@@ -145,19 +158,23 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 280px;
-  height: 100vh;
+  width: min(320px, calc(100vw - 16px));
+  height: 100dvh;
+  box-sizing: border-box;
+  overflow-y: auto;
   background-color: #111;
   color: #fff;
   z-index: 1002;
   padding: 20px;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
   transform: translateX(100%);
+  visibility: hidden;
   transition: transform 0.3s ease-in-out;
 }
 
 .sidebar-menu.open {
   transform: translateX(0);
+  visibility: visible;
 }
 
 .sidebar-header {
@@ -193,4 +210,26 @@
 
 .sidebar-links a:hover {
   opacity: 0.8;
+}
+
+.header-container :is(a, button):focus-visible {
+  outline: 3px solid #2459a6;
+  outline-offset: 4px;
+}
+
+.sidebar-menu :is(a, button):focus-visible { outline-color: #fff; }
+
+@media (max-width: 767px) {
+  .header-container {
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    padding: 12px 16px;
+  }
+  .scrolling-nav { display: none; }
+  .logo { width: 40px; }
+  .botao a { padding: 10px 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-menu, .overlay, .botao span, .nav a::after { transition: none; }
 }

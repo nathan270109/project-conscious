@@ -6,7 +6,6 @@ import { provideRouter, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { vi } from 'vitest';
-import { createAnalysisFixture } from '../../../core/testing/analysis.fixture';
 import { AnalysisService } from '../../../core/services/analysis.service';
 
 describe('ProjectForm', () => {
@@ -46,7 +45,7 @@ describe('ProjectForm', () => {
     return form;
   }
 
-  it('cadastra, usa o UUID real, evita envio duplicado e abre o dashboard', async () => {
+  it('cadastra, preserva metadados e abre scanning sem iniciar análise', async () => {
     const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
     const form = await submit();
     component.onSubmit(form);
@@ -57,36 +56,22 @@ describe('ProjectForm', () => {
       repositoryUrl: 'https://github.com/octocat/Hello-World',
     });
     expect(component.busy()).toBe(true);
-    create.flush({ id });
-    expect(component.progress()).toContain('Analisando');
-    const result = { ...createAnalysisFixture(), projectId: id, demoMode: false };
-    http.expectOne('/api/projects/' + id + '/analyze').flush(result);
+    create.flush({ id, name: 'Projeto teste', repositoryUrl: 'https://github.com/octocat/Hello-World', createdAt: '2026-10-05T12:00:00.000Z' });
+    http.expectNone('/api/projects/' + id + '/analyze');
     await fixture.whenStable();
-    expect(navigate).toHaveBeenCalledExactlyOnceWith(['/projects', id, 'dashboard']);
+    expect(navigate).toHaveBeenCalledExactlyOnceWith(['/projects', id, 'scanning']);
     expect(component.busy()).toBe(false);
-    expect(TestBed.inject(AnalysisService).getByProjectId(id)).toEqual(result);
+    expect(TestBed.inject(AnalysisService).getProjectById(id)?.name).toBe('Projeto teste');
   });
 
-  it('abre o dashboard também para o FAILED seguro do backend', async () => {
+  it('não navega quando o cadastro devolve dados incompletos', async () => {
     const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
     await submit();
     http.expectOne('/api/projects').flush({ id });
-    http.expectOne('/api/projects/' + id + '/analyze').flush(
-      {
-        projectId: id,
-        analyzedAt: '2026-10-02T12:00:00.000Z',
-        status: 'FAILED',
-        score: null,
-        dimensions: [],
-        findings: [],
-        insight: null,
-        error: { code: 'REPOSITORY_NOT_FOUND', message: 'Repositório não encontrado.' },
-      },
-      { status: 404, statusText: 'Not Found' },
-    );
+    http.expectNone('/api/projects/' + id + '/analyze');
     await fixture.whenStable();
-    expect(navigate).toHaveBeenCalledWith(['/projects', id, 'dashboard']);
-    expect(component.errorMessage()).toBe('');
+    expect(navigate).not.toHaveBeenCalled();
+    expect(component.errorMessage()).not.toBe('');
   });
 
   it('mostra falha de rede sem apresentar sucesso nem iniciar análise', async () => {
