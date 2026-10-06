@@ -117,7 +117,7 @@
 @media (max-width: 768px) {
 
     .container {
-        margin: 80px 70px;
+        margin: var(--margin-responsividade);
         padding: 0;
     }
 
