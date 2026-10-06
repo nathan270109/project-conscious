@@ -19,7 +19,6 @@
     width: 100%;
     max-width: 1200px;
     z-index: 1;
-    
 }
 
 .box-texto {
@@ -39,7 +38,7 @@
 
 .box-texto p {
     font-size: 20px;
-    font-weight: 200;  
+    font-weight: 200;
 }
 
 .botao {
@@ -165,28 +164,159 @@
     z-index: 0;
 }
 
+/* Desktop */
+@media (max-width: 1440px) {
+    .hero .container {
+        box-sizing: border-box;
+        max-width: 1200px;
+        gap: 35px;
+    }
+
+    .hero .box-texto {
+        min-width: 0;
+    }
+
+    .hero .box-card {
+        flex-shrink: 0;
+        height: auto;
+        min-height: 450px;
+    }
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .hero .container {
+        gap: 25px;
+        padding: 100px 30px 50px;
+        margin: 40px 60px;
+    }
+
+    .hero .box-texto {
+        flex: 1;
+        width: auto;
+        padding: 0;
+    }
+
+    .hero .box-texto h2 {
+        font-size: 42px;
+    }
+
+    .hero .box-texto p {
+        font-size: 18px;
+    }
+
+    .hero .box-card {
+        width: 280px;
+        padding: 22px;
+    }
+
+    .hero #titulo {
+        font-size: 30px;
+    }
+}
+
+/* Celular */
 @media (max-width: 768px) {
-    .hero {
-        height: auto;
-        min-height: 100vh;
-        padding-top: 60px;
-    }
-
-    .container {
+    .hero .container {
         flex-direction: column;
-        align-items: center;
+        gap: 35px;
+        padding: 100px 24px 50px;
+        margin: 40px 50px;
+    }
+
+    .hero .box-texto {
+        flex: none;
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 500px;
+        padding: 0;
+    }
+
+    .hero .box-texto h2 {
+        font-size: 38px;
+    }
+
+    .hero .box-texto p {
+        font-size: 17px;
+    }
+
+    .hero .box-card {
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 360px;
         height: auto;
-        padding: 40px 20px;
+        min-height: 450px;
+        margin-top: 0;
+        padding: 25px;
     }
 
-    .box-texto {
-        width: 100%;
-        max-width: 450px;
-        padding: 15px 0;
+    .hero #titulo {
+        font-size: 30px;
+        overflow-wrap: anywhere;
     }
 
-    .box-card {
-        width: 100%;
-        max-width: 310px;
+    .hero .texto {
+        gap: 12px;
+    }
+
+    .hero .texto p {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .hero .nota {
+        flex-shrink: 0;
+    }
+
+    .hero .botao a {
+        box-sizing: border-box;
+        width: 190px;
+        display: block;
+        margin: auto;
+        text-align: center;
+    }
+}
+
+/* Celulares pequenos */
+@media (max-width: 375px) {
+    .hero .container {
+        gap: 28px;
+        padding: 90px 16px 35px;
+    }
+
+    .hero .box-texto h2 {
+        font-size: clamp(24px, 8vw, 30px);
+        overflow-wrap: anywhere;
+    }
+
+    .hero #subtitulo {
+        margin-bottom: 16px;
+    }
+
+    .hero .box-texto p {
+        font-size: 16px;
+        overflow-wrap: anywhere;
+    }
+
+    .hero .botao {
+        margin-top: 24px;
+    }
+
+    .hero .box-card {
+        padding: 20px;
+        min-height: 0;
+    }
+
+    .hero #titulo {
+        font-size: 26px;
+    }
+
+    .hero #media {
+        font-size: 28px;
+    }
+
+    .hero .texto {
+        font-size: 14px;
+        gap: 10px;
     }
 }
