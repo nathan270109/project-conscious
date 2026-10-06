@@ -178,7 +178,7 @@
 }
 
 /* Celulares pequenos */
-@media (max-width: 480px) {
+@media (max-width: 375px) {
 
     .textos h2 {
         font-size: 30px;
