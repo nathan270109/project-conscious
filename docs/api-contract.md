@@ -32,6 +32,24 @@ Metadados e resultados reais ficam somente em memória no frontend. Acesso diret
 
 ## Entrada de cadastro
 
+### Validação e normalização
+
+`POST /projects` normaliza espaços nas pontas dos textos antes de validar. O backend é a autoridade das regras; o formulário também verifica os mesmos limites e a política de URL.
+
+| Campo | Regra |
+| --- | --- |
+| `name` | Texto obrigatório, de 3 a 100 caracteres após normalização. Nome somente com espaços é inválido. |
+| `description` | Texto opcional, até 2000 caracteres após normalização. Pode ser omitido ou vazio; `null`, objetos e arrays são inválidos. |
+| `repositoryUrl` | Texto obrigatório, até 2048 caracteres, URL direta `https://github.com/owner/repo`. Aceita `.git` e uma barra final. |
+
+A política de URL desta aplicação aceita owner de 1 a 39 caracteres alfanuméricos/hífens, iniciando e terminando por caractere alfanumérico; o nome do repositório tem de 1 a 100 caracteres alfanuméricos, ponto, hífen ou underscore, sem contar o sufixo `.git`. `.` e `..` não são nomes aceitos. Esta é a política de entrada do MVP, não uma afirmação de suporte a todos os formatos possíveis do GitHub.
+
+Não são aceitos HTTP, outros domínios, credenciais embutidas, portas explícitas (inclusive `:443`), query/fragmento (mesmo vazios), caminhos extras como `/tree/main`, segmentos codificados com `%` ou caminhos normalizados por `..`. O nome e a URL não são convertidos de números/objetos para texto.
+
+O cadastro não verifica a existência nem a visibilidade do repositório: essa consulta ocorre durante a análise. Uma URL sintaticamente válida de repositório inexistente ainda pode ser cadastrada. Entrada inválida retorna HTTP 400 com mensagens de validação, sem criar projeto ou consultar o GitHub; campos adicionais não previstos também são rejeitados.
+
+ID e `createdAt` continuam sendo gerados pelo backend. As regras não adicionam campos ao resultado da análise. Normalização da URL remove apenas espaços nas pontas no cadastro; o serviço do GitHub interpreta o sufixo `.git` na consulta.
+
 ```ts
 type ProjectDraft = {
   name: string;

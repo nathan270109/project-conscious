@@ -6,6 +6,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { finalize, TimeoutError } from 'rxjs';
 import { AnalysisService } from '../../../core/services/analysis.service';
 import type { ProjectDraft } from '../../../core/models/analysis-result.model';
+import { isGithubRepositoryUrl } from '../../../core/models/project-input.validation';
 import { FormsModule } from '@angular/forms';
 import { NgForm } from '@angular/forms';
 
@@ -45,23 +46,10 @@ export class ProjectForm {
       repositoryUrl: this.project.repositoryUrl.trim(),
       ...(this.project.description?.trim() ? { description: this.project.description.trim() } : {}),
     };
-    let validRepository = false;
-    try {
-      const url = new URL(draft.repositoryUrl);
-      validRepository =
-        url.protocol === 'https:' &&
-        url.hostname === 'github.com' &&
-        /^\/[^/]+\/[^/]+\/?$/.test(url.pathname) &&
-        !url.username &&
-        !url.password &&
-        !url.search &&
-        !url.hash;
-    } catch {
-      /* URLs malformadas também são rejeitadas abaixo. */
-    }
-    if (draft.name.length < 3 || !validRepository) {
+    if (draft.name.length < 3 || draft.name.length > 100 ||
+        (draft.description?.length ?? 0) > 2000 || !isGithubRepositoryUrl(draft.repositoryUrl)) {
       this.errorMessage.set(
-        'Informe um nome com ao menos três caracteres e uma URL https://github.com/usuario/repositorio.',
+        'Use nome de 3 a 100 caracteres, descrição de até 2000 e URL https://github.com/usuario/repositorio sem credenciais, porta, parâmetros ou fragmento.',
       );
       return;
     }

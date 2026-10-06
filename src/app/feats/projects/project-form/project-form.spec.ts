@@ -93,6 +93,18 @@ describe('ProjectForm', () => {
     expect(component.busy()).toBe(false);
   });
 
+  it.each([
+    { name: '   ' }, { name: 'x'.repeat(101) }, { description: 'x'.repeat(2001) },
+    { repositoryUrl: 'https://github.com:443/octocat/Hello-World' },
+    { repositoryUrl: 'https://github.com/octocat/Hello-World?' },
+  ])('aplica regras normalizadas antes de enviar à API: %j', patch => {
+    component.project = { name: 'Projeto teste', repositoryUrl: 'https://github.com/octocat/Hello-World', ...patch };
+    component.onSubmit({ invalid: false } as NgForm);
+    expect(component.errorMessage()).not.toBe('');
+    expect(component.busy()).toBe(false);
+    http.expectNone(() => true);
+  });
+
   it('oferece demo independente do cadastro e sem requisições', () => {
     const link = fixture.nativeElement.querySelector('a');
     expect(link.textContent).toContain('Abrir demonstração salva');
