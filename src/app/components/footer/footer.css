@@ -4,7 +4,7 @@
 
     --ft-bg: #000000;
     --ft-line: #263a56;
-    --ft-fg:  rgb(201, 159, 46);
+    --ft-fg: rgb(201, 159, 46);
     --ft-muted: #a9b8cc;
     --ft-accent: #8cc2ff;
     --ft-accent-hover: #a8d2ff;
@@ -16,7 +16,7 @@
     container-type: inline-size;
     border-top: 1px solid var(--branco);
     background: rgb(46, 36, 25);
-    color:  var(--branco);
+    color: var(--branco);
     font-family: var(--fonte);
     font-size: 0.90rem;
     line-height: 1.55;
@@ -40,7 +40,6 @@
     padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.25rem, 4vw, 2rem) 1.5rem;
 }
 
-/* Faixa de chamada (CTA) */
 .footer-cta {
     display: flex;
     flex-direction: column;
@@ -60,7 +59,6 @@
     }
 }
 
-/* Conteúdo principal dividindo marca e links */
 .footer-content {
     display: grid;
     grid-template-columns: 1fr;
@@ -105,8 +103,13 @@
     gap: 15px;
 }
 
+.div-logo a,
+.div-logo .logo {
+    display: block;
+}
+
 #paragrafo {
-    font-size: 17px;
+    font-size: 19px;
     color: var(--cor-destaque);
     font-weight: 700;
 }
@@ -123,7 +126,6 @@
     }
 }
 
-/* Grade de Navegação das Colunas */
 .footer-nav-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -132,8 +134,8 @@
     nav {
         h3 {
             margin: 0 0 0.9rem;
-            font-size: 0.95rem;
-            font-weight: 700;
+            font-size: 16px;
+            font-weight: 300;
             color: var(--ft-fg);
         }
 
@@ -161,7 +163,6 @@
     }
 }
 
-/* Barra inferior */
 .footer-bottom {
     display: flex;
     flex-direction: column;
@@ -178,20 +179,18 @@
 
 .back-to-top {
     color: var(--ft-fg);
-  background-image: linear-gradient(currentColor, currentColor);
-  background-size: 0 1px;
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  transition: color 0.15s ease, background-size 0.2s ease;
-
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: color 0.15s ease, background-size 0.2s ease;
 }
 
 .back-to-top:hover {
-  color: var(--ft-fg);
-  background-size: 100% 1px;
+    color: var(--ft-fg);
+    background-size: 100% 1px;
 }
 
-/* Responsividade Avançada via Container Queries */
 @container (min-width: 40rem) {
     .footer-nav-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -213,6 +212,12 @@
 
     .footer-nav-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .footer-nav-grid nav h3 {
+        display: flex;
+        align-items: center;
+        min-height: 40px;
     }
 
     .footer-bottom {
