@@ -238,7 +238,7 @@
 @media (max-width: 768px){
 
     .container {
-        margin: 80px 70px;
+        margin: var(--margin-responsividade);
     }
 
     .box {
@@ -330,7 +330,7 @@
 }
 
 /* Celulares pequenos */
-@media (max-width: 480px){
+@media (max-width: 375px){
 
     .mapa-superior p {
         font-size: 12px;

@@ -27,7 +27,7 @@
 .cards {
     display: flex;
     justify-content: center;
-    gap: 25px;
+    gap: 15px;
     flex-wrap: wrap;
 }
 
@@ -35,7 +35,7 @@
     background-color: rgb(255, 255, 255);
     border: 1.5px solid rgba(158, 158, 158, 0.4);
     padding: 20px;
-    width: 350px;
+    width: 345px;
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -120,7 +120,7 @@
 @media (max-width: 768px) {
 
     .container{
-        margin: 80px 70px;
+        margin: var(--margin-responsividade);
     }
 
     .box {
@@ -180,7 +180,7 @@
 }
 
 /* Celulares pequenos */
-@media (max-width: 480px) {
+@media (max-width: 375px) {
 
     .textos h2 {
         font-size: 30px;
