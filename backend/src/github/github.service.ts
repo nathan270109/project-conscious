@@ -7,6 +7,7 @@ import {
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { Octokit } from '@octokit/rest';
+import { parseGithubRepositoryUrl } from './repository-url.js';
 
 export interface RepositoryFile {
   path: string;
@@ -26,33 +27,13 @@ export class GithubService {
   });
 
   parseRepositoryUrl(repositoryUrl: string): RepositoryReference {
-    try {
-      const url = new URL(repositoryUrl.trim());
-      const parts = url.pathname
-        .replace(/^\/|\/$/g, '')
-        .replace(/\.git$/, '')
-        .split('/');
-
-      const isGithubUrl =
-        url.protocol === 'https:' &&
-        url.hostname === 'github.com' &&
-        parts.length === 2 &&
-        parts[0] &&
-        parts[1];
-
-      if (!isGithubUrl) {
-        throw new Error('URL inválida');
-      }
-
-      return {
-        owner: parts[0],
-        repo: parts[1],
-      };
-    } catch {
+    const reference = parseGithubRepositoryUrl(repositoryUrl);
+    if (!reference) {
       throw new BadRequestException(
         'Informe uma URL válida, como https://github.com/owner/repo',
       );
     }
+    return reference;
   }
 
   async getRepositoryFiles(repositoryUrl: string): Promise<RepositoryFile[]> {

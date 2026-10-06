@@ -179,6 +179,15 @@ Não marcar o passo 1 global como concluído enquanto a decisão de escopo do gr
 
 - [ ] Passo 2 implementado, testado e integrado.
 
+**Registro de execução — 06/10/2026:** implementação e testes concluídos na branch `fix/project-input-validation`; revisão/PR/merge ainda pendentes, por isso o item global acima permanece desmarcado. A branch foi criada sobre `feat/project-scanning-flow`, pois a PR #63 ainda não estava integrada à master durante a conferência; integrar a #63 antes de abrir esta PR contra master, ou usar temporariamente sua branch como base.
+
+- Nome, URL e descrição são normalizados; limites definidos no contrato (100/2048/2000 caracteres).
+- DTO e `GithubService` usam a mesma função de validação/interpretação da URL. Credenciais, portas, queries/fragmentos e caminhos extras são recusados antes do cadastro.
+- Formulário harmonizado com a política; testes de regressão cobrem as entradas inválidas e as URLs com `.git`/barra final.
+- Testes HTTP comprovam 400 sem chamar o cadastro ou o GitHub, e 201 com UUID/data do backend para entradas válidas.
+- Validação realizada: 162 testes unitários e 34 E2E no backend; 85 testes no frontend. Builds das duas frentes e lint do backend passaram.
+- Sem commit ou push automático. A confirmação do escopo do grupo no passo 1 continua pendente; não foi marcada como aprovada por esta implementação.
+
 ### Passo 3 — Proteger e limitar a coleta de arquivos do GitHub
 
 **Responsável sugerida:** Katheriny. **Dependência:** passo 2. **Branch sugerida:** `fix/github-analysis-limits`.
