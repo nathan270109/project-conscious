@@ -27,7 +27,16 @@ describe('Footer', () => {
     expect(brand?.textContent).toContain('Project Conscious');
     expect(brand?.querySelector('a')?.getAttribute('href')).toBe('/home');
     expect(brand?.querySelector('img')?.getAttribute('src')).toBe('/assets/logo-white.png');
-    const links = element.querySelectorAll('nav[aria-label="Navegação principal"] a');
-    expect(Array.from(links).map(link => link.getAttribute('href'))).toEqual(['/home', '/home']);
+    expect(brand?.querySelector('img')?.getAttribute('alt')).toBeTruthy();
+    const links = Array.from(element.querySelectorAll('nav[aria-label="Navegação do footer"] a'));
+    expect(links.map(link => link.textContent?.trim())).toEqual(['Início', 'Sobre', 'Contato', 'Diagnóstico', 'Login']);
+    expect(links[0].getAttribute('href')).toBe('#top');
+    expect(links[3].getAttribute('href')).toMatch(/^\/projects\/new\/?$/);
+    expect(links[4].getAttribute('href')).toBe('/login');
+    const sections = element.querySelectorAll('nav[aria-label="Seções home"] a');
+    expect(Array.from(sections).map(link => link.getAttribute('href'))).toEqual([
+      '#section-hero', '#section-sobre-o-projeto', '#section-como-funciona',
+      '#section-cinco-dimensoes', '#section-beneficios', '#section-faq',
+    ]);
   });
 });

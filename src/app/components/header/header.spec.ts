@@ -28,6 +28,14 @@ describe('Header', () => {
     expect(element.querySelector('.sidebar-links a')?.getAttribute('href')).toBe('/home');
   });
 
+  it('preserva o destino de voltar ao topo e os rótulos da master', () => {
+    const element = fixture.nativeElement as HTMLElement;
+    expect(element.querySelector('.header-container')?.id).toBe('top');
+    expect(element.querySelector('.logo')?.getAttribute('alt')).toBe('Logo da startup Project Conscious');
+    expect(element.querySelector('.sidebar-links')?.getAttribute('aria-label')).toBeTruthy();
+    expect(element.querySelector('.close-btn')?.getAttribute('aria-label')).toBe('Fechar menu do side-bar');
+  });
+
   it('abre o menu e fecha pelo botão e pelo overlay', async () => {
     const element = fixture.nativeElement as HTMLElement;
     expect(element.querySelector('.sidebar-menu.open')).toBeNull();

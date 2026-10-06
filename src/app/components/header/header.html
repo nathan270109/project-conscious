@@ -1,16 +1,16 @@
-<div class="header-container" (keydown.escape)="closeMenu()">
+<div class="header-container" id="top" (keydown.escape)="closeMenu()">
 
     <div class="fixed-left">
         <a routerLink="/home" class="logo-link">
-            <img class="logo" src="/assets/logo-black.png" alt="Project Conscious — início">
+            <img class="logo" src="/assets/logo-black.png" alt="Logo da startup Project Conscious">
         </a>
     </div>
 
     <div class="scrolling-nav">
         <nav class="nav" aria-label="Navegação principal">
             <a routerLink="/home">Início</a>
-            <a routerLink="/">Sobre</a>
-            <a routerLink="/">Contato</a>
+            <a routerLink="">Sobre</a>
+            <a routerLink="">Contato</a>
         </nav>
     </div>
 
@@ -35,13 +35,13 @@
     <div id="header-menu" class="sidebar-menu" [class.open]="isMenuOpen()"
         [attr.inert]="isMenuOpen() ? null : ''" [attr.aria-hidden]="!isMenuOpen()">
         <div class="sidebar-header">
-            <button type="button" class="close-btn" aria-label="Fechar menu" (click)="closeMenu()">&times;</button>
+            <button type="button" class="close-btn" (click)="closeMenu()" aria-label="Fechar menu do side-bar">&times;</button>
         </div>
         
-        <ul class="sidebar-links">
+        <ul class="sidebar-links" aria-label="links de navegação dentro do side-bar">
             <li><a routerLink="/home" (click)="closeMenu()">Início</a></li>
-            <li><a routerLink="/" (click)="closeMenu()">Sobre</a></li>
-            <li><a routerLink="/" (click)="closeMenu()">Contato</a></li>
+            <li><a routerLink="" (click)="closeMenu()">Sobre</a></li>
+            <li><a routerLink="" (click)="closeMenu()">Contato</a></li>
         </ul>
     </div>
 </div>
