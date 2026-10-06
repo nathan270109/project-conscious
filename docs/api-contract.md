@@ -11,6 +11,17 @@ Este documento é a fonte única de verdade para a troca de dados entre o backen
 
 > Este contrato descreve o resultado da análise. `POST /projects` cadastra o projeto; `POST /projects/:id/analyze` executa o motor real com o UUID retornado. O Angular consome essas rotas. `GET /demo/analysis` fornece a análise demonstrativa salva; o Angular também inclui esse mesmo JSON para uso local sem API.
 
+## Fluxo da interface
+
+1. O formulário cadastra pela API, preserva `id`/`createdAt` e guarda os metadados na sessão pelo `AnalysisService`.
+2. A rota `/projects/:id/scanning` consulta esses metadados e inicia uma única análise. O formulário não inicia a análise.
+3. O scanning mostra espera indeterminada. A lista de estrutura e cinco dimensões é explicativa, não progresso recebido do backend.
+4. Depois de validar e guardar `COMPLETED` ou `FAILED`, o serviço permite que a tela abra `/projects/:id/dashboard` com o mesmo ID. Erros de transporte, timeout ou resposta incompatível permanecem no scanning com recuperação.
+
+Nova tentativa após erro de transporte usa o mesmo projeto, sem cadastro adicional. Ela pode repetir processamento no servidor após timeout; encerrar a assinatura do Angular não garante cancelar o motor. Se já houver resultado válido guardado, voltar ao scanning apenas tenta abrir o dashboard novamente, sem reanalisar.
+
+Metadados e resultados reais ficam somente em memória no frontend. Acesso direto ou recarregamento sem metadados no scanning oferece um novo cadastro; não inventa projeto nem seleciona demo automaticamente. O dashboard continua exibindo o demo salvo independentemente desses metadados.
+
 ## Convenções
 
 - Campos usam `camelCase`.

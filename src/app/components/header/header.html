@@ -1,4 +1,4 @@
-<div class="header-container" id="top">
+<div class="header-container" id="top" (keydown.escape)="closeMenu()">
 
     <div class="fixed-left">
         <a routerLink="/home" class="logo-link">
@@ -21,16 +21,21 @@
             </div>
         </div>
 
-        <div class="fixed-right" (click)="toggleMenu()" style="cursor: pointer;">
-            <i class="fa-solid fa-bars fa-xl"></i>
-        </div>
+        <button #menuToggle class="fixed-right" type="button" (click)="toggleMenu()"
+            aria-label="Abrir menu de navegação" aria-controls="header-menu"
+            [attr.aria-expanded]="isMenuOpen()">
+            <span aria-hidden="true">☰</span>
+        </button>
+
+
     </div>
 
     <div class="overlay" [class.open]="isMenuOpen()" (click)="closeMenu()"></div>
 
-    <div class="sidebar-menu" [class.open]="isMenuOpen()">
+    <div id="header-menu" class="sidebar-menu" [class.open]="isMenuOpen()"
+        [attr.inert]="isMenuOpen() ? null : ''" [attr.aria-hidden]="!isMenuOpen()">
         <div class="sidebar-header">
-            <button class="close-btn" (click)="closeMenu()" aria-label="Fechar menu do side-bar">&times;</button>
+            <button type="button" class="close-btn" (click)="closeMenu()" aria-label="Fechar menu do side-bar">&times;</button>
         </div>
         
         <ul class="sidebar-links" aria-label="links de navegação dentro do side-bar">

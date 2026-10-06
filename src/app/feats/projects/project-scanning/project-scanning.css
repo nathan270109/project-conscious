@@ -1,0 +1,10 @@
+.scanning { max-width: 48rem; margin: 3rem auto; padding: 1.5rem; overflow-wrap: anywhere; }
+.scanning h1 { font-size: clamp(1.5rem, 5vw, 2rem); }
+.scanning section { margin: 2rem 0; }
+.scanning li { margin: .75rem 0; }
+.scanning button { padding: .75rem 1rem; margin: .5rem 0; cursor: pointer; }
+.scanning a { display: inline-block; padding: .75rem 0; }
+.scanning :is(a, button):focus-visible { outline: 3px solid #2459a6; outline-offset: 3px; }
+.spinner { display: inline-block; width: 1rem; height: 1rem; border: 3px solid #d8e2f1; border-top-color: #2459a6; border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }

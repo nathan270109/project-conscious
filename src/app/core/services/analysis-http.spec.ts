@@ -24,6 +24,19 @@ describe('AnalysisService — HTTP', () => {
     expect(service.getByProjectId('1')).toBeUndefined();
   });
 
+  it('preserva metadados da API e protege o cache contra alterações dos consumidores', () => {
+    const project = { id: 'a5f68a91-2ff2-4928-a7b8-ef26e2bc37ad', name: 'Projeto',
+      repositoryUrl: 'https://github.com/octocat/Hello-World', createdAt: '2026-10-05T12:00:00.000Z' };
+    service.createProject({ name: project.name, repositoryUrl: project.repositoryUrl })
+      .subscribe(value => { value.name = 'Alterado'; });
+    http.expectOne('/api/projects').flush(project);
+    const copy = service.getProjectById(project.id)!;
+    expect(copy).toEqual(project);
+    copy.name = 'Outra alteração';
+    expect(service.getProjectById(project.id)).toEqual(project);
+    expect(service.getProjectById('ausente')).toBeUndefined();
+  });
+
   it.each([404, 500])('preserva FAILED recebido com HTTP %i', (status) => {
     const result = {
       projectId: 'id',

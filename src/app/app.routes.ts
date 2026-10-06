@@ -3,12 +3,14 @@ import { Home } from './feats/home/home';
 import { ProjectForm } from './feats/projects/project-form/project-form';
 import { ProjectDashboard } from './feats/projects/project-dashboard/project-dashboard';
 import { Login } from './feats/login/login';
+import { ProjectScanning } from './feats/projects/project-scanning/project-scanning';
 
 export const routes: Routes = [
 
     { path: '', redirectTo: 'home', pathMatch: 'full'},
     { path: 'home', component: Home},
     { path: 'projects/new', component: ProjectForm},
+    { path: 'projects/:id/scanning', component: ProjectScanning},
     { path: 'projects/:id/dashboard', component: ProjectDashboard},
     { path: 'login', component: Login }
 

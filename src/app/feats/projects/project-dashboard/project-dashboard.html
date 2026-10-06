@@ -34,7 +34,7 @@
 
         <h1>Dashboard do projeto</h1>
 
-        <p>Projeto {{ projectId }}</p>
+        <p>Projeto {{ project?.name ?? projectId }}</p>
       </div>
 
       @if (result.demoMode) {

@@ -1,0 +1,20 @@
+<main class="scanning">
+  <h1>{{ project() ? 'Analisando ' + project()!.name : 'Projeto não disponível' }}</h1>
+  @if (busy()) {
+    <p role="status" aria-live="polite"><span class="spinner" aria-hidden="true"></span> Analisando repositório… Aguarde.</p>
+  }
+  @if (errorMessage()) {
+    <p role="alert">{{ errorMessage() }}</p>
+    @if (project() && !busy()) {
+      <button type="button" (click)="start()">Tentar novamente</button>
+    }
+  }
+  @if (project()) {
+    <section aria-labelledby="steps-title">
+      <h2 id="steps-title">O que a análise verifica</h2>
+      <p>Esta lista explica o processo, não indica o progresso de cada etapa. São cinco dimensões e uma preparação de estrutura.</p>
+      <ul>@for (step of steps; track step) { <li>{{ step }}</li> }</ul>
+    </section>
+  }
+  <a routerLink="/projects/new">Voltar ao cadastro</a>
+</main>

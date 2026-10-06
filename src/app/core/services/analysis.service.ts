@@ -9,17 +9,29 @@ import { DEMO_PROJECT_ID, readDemoAnalysis } from '../models/demo-analysis';
 export class AnalysisService {
   private readonly http = inject(HttpClient);
   private readonly results = new Map<string, AnalysisResult>();
+  private readonly projects = new Map<string, Project>();
 
   createProject(draft: ProjectDraft) {
     return this.http.post<Project>('/api/projects', draft).pipe(
       timeout(60000),
       map((project) => {
-        if (!project || typeof project.id !== 'string' || !project.id) {
+        if (!project || typeof project.id !== 'string' ||
+          !/^[\da-f]{8}-[\da-f]{4}-4[\da-f]{3}-[89ab][\da-f]{3}-[\da-f]{12}$/i.test(project.id) ||
+          typeof project.name !== 'string' || !project.name.trim() ||
+          typeof project.repositoryUrl !== 'string' || !project.repositoryUrl ||
+          typeof project.createdAt !== 'string' || !Number.isFinite(Date.parse(project.createdAt)) ||
+          (project.description !== undefined && typeof project.description !== 'string')) {
           throw new Error('Resposta de cadastro inválida.');
         }
-        return project;
+        this.projects.set(project.id, structuredClone(project));
+        return structuredClone(project);
       }),
     );
+  }
+
+  getProjectById(id: string): Project | undefined {
+    const project = this.projects.get(id);
+    return project ? structuredClone(project) : undefined;
   }
 
   analyze(projectId: string) {
