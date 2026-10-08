@@ -12,9 +12,8 @@
 .container {
     display: flex;
     justify-content: center;
-    align-items: center;
     gap: 40px;
-    margin: 0 auto;
+    margin: 40px auto;
     padding: 100px 20px 50px 20px;
     width: 100%;
     max-width: 1200px;
@@ -27,9 +26,11 @@
     color: rgb(0, 0, 0);
 }
 
-.box-texto h2 {
+.box-texto h1 {
     font-size: 50px;
     font-weight: 400;
+    line-height: 1.10;
+    color: var(--cor-textos);
 }
 
 #subtitulo {
@@ -37,8 +38,10 @@
 }
 
 .box-texto p {
-    font-size: 20px;
-    font-weight: 200;
+    font-weight: 300;
+    color: var(--cor-textos);
+    font-size: 1.3rem;
+    line-height: 1.4;
 }
 
 .botao {
