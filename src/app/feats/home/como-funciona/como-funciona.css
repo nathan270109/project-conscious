@@ -91,6 +91,22 @@
     font-weight: 400;
 }
 
+/* Desktop */
+@media (max-width: 1440px) {
+
+    .container {
+        margin: var(--margin);
+    }
+
+    .box {
+        width: 100%;
+    }
+
+    .card {
+        width: calc((100% - 30px) / 3);
+    }
+}
+
 /* Tablet */
 @media (max-width: 1024px) {
 
@@ -99,11 +115,11 @@
     }
 
     .cards {
-        gap: 20px;
+        gap: 15px;
     }
 
     .card {
-        width: 320px;
+        width: 250px;
     }
 
     .numero {
