@@ -2,7 +2,7 @@
     width: auto;
     margin: var(--margin);
     padding: 85px 50px 80px;
-    color: #0f2747;
+    color: var(--cor-textos);
 }
 
 .dashboard__header {
@@ -24,7 +24,7 @@
 
 .dashboard__header h1 {
     margin: 0 0 8px;
-    font-size: 3rem;
+    font-size: 55px;
     font-weight: 700;
     line-height: 1.10;
     color: var(--cor-textos);
@@ -80,10 +80,10 @@
 
 .dashboard__score {
     display: inline-block;
-    font-size: 4.5rem;
+    font-size: 3.8rem;
     line-height: 1;
-    font-weight: 700;
-    color: #0f2747;
+    font-weight: 600;
+    color: var(--cor-textos);
 }
 
 /* DIMENSÕES */
@@ -116,7 +116,7 @@
 
 .dimension-card__header strong {
     font-size: 1.5rem;
-    color: #0f2747;
+    color: var(--cor-textos);
 }
 
 .dimension-progress {
@@ -184,7 +184,7 @@
 
 .risk-card__category {
     font-weight: 600;
-    color: #0f2747;
+    color: var(--cor-textos);
 }
 
 .risk-card__message {
@@ -204,7 +204,7 @@
 .risk-empty {
     margin: 0;
     padding: 20px;
-    border: 1px solid #dbe3ec;
+    border: 1px solid var(--cinza-borda);
     border-radius: 16px;
     background-color: #f8fafc;
     color: #475569;
@@ -258,7 +258,7 @@
 
 .dashboard-state--error {
     padding: 32px;
-    border: 1px solid #fecaca;
+    border: 1px solid var(--cinza-borda);
     border-radius: 16px;
     background-color: #fff7f7;
 }
@@ -289,7 +289,7 @@
 
 .dashboard-state--empty {
     padding: 32px;
-    border: 1px solid #dbe3ec;
+    border: 1px solid var(--cinza-borda);
     border-radius: 16px;
     background-color: #f8fafc;
 }
@@ -297,7 +297,7 @@
 .dashboard-state--empty h1 {
     margin: 0 0 12px;
     font-size: 1.5rem;
-    color: #0f2747;
+    color: var(--cor-textos);
 }
 
 .dashboard-state--empty p {
@@ -320,23 +320,23 @@
 .insight__text {
     margin: 0;
     padding: 20px;
-    border: 1px solid #dbe3ec;
+    border: 1px solid var(--cinza-borda);
     border-radius: 16px;
-    background-color: #f8fafc;
-    color: #0f2747;
+    background-color: #ffffff;
+    color: var(--cor-textos);
     font-size: 1rem;
     line-height: 1.6;
 }
 
 #title {
-    color: #0f2747;
+    color: var(--cor-textos);
     margin: 0 0 10px 0;
 }
 
 .insight__empty {
     margin: 0;
     padding: 20px;
-    border: 1px solid #dbe3ec;
+    border: 1px solid var(--cinza-borda);
     border-radius: 16px;
     background-color: #f8fafc;
     color: #64748b;
