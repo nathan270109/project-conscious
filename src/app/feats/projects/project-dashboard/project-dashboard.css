@@ -322,8 +322,7 @@
     }
 
     .dashboard__header h1 {
-        font-size: 48px;
-        line-height: 1.2;
+        font-size: 50px;
     }
 
     .dimension-card, .risk-card {
@@ -362,7 +361,7 @@
     }
 
     .dashboard__header h1 {
-        font-size: 40px;
+        font-size: 45px;
     }
 
     .dashboard__section {
@@ -404,7 +403,7 @@
     }
 
     .dashboard__header h1 {
-        font-size: 32px;
+        font-size: 35px;
     }
 
     .dashboard__demo {
@@ -485,7 +484,7 @@
     }
 
     .dashboard__header h1 {
-        font-size: 28px;
+        font-size: 30px;
     }
 
     .dashboard__eyebrow {
