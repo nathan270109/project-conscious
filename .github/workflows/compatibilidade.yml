@@ -1,0 +1,51 @@
+name: Compatibilidade macOS Linux Windows
+on:
+  pull_request:
+  push:
+    branches: [master]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validar:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            backend/package-lock.json
+      - run: npm ci
+      - run: npm ci
+        working-directory: backend
+      - run: npm run test:launcher
+      - run: npm run conscious:start -- --check
+      - name: Arquivo de abertura Windows
+        if: runner.os == 'Windows'
+        run: cmd /c iniciar-windows.cmd --check
+      - name: Arquivo de abertura macOS
+        if: runner.os == 'macOS'
+        run: bash iniciar-macos.command --check
+      - name: Arquivo de abertura Linux
+        if: runner.os == 'Linux'
+        run: bash iniciar-linux.sh --check
+      - run: npm test
+        working-directory: backend
+      - run: npm run test:e2e
+        working-directory: backend
+      - run: npm run build
+        working-directory: backend
+      - run: npm run lint
+        working-directory: backend
+      - run: npm test -- --watch=false
+      - run: npm run build
+      - name: Ensaio do inicializador e clone público
+        run: npm run conscious:start -- --smoke

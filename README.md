@@ -4,6 +4,16 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 
 ## Development server
 
+### Iniciar com um clique
+
+Na raiz, abra `iniciar-macos.command` (macOS), `iniciar-linux.sh` (Linux, executar
+no terminal) ou `iniciar-windows.cmd` (Windows). O inicializador sobe backend e
+frontend, mostra links separados e encerra ambos com Q/Ctrl+C. Instale Node/Git
+uma vez; dependências ausentes são instaladas automaticamente.
+
+Veja [Inicialização por sistema](docs/inicializacao.md) para pré-requisitos,
+permissões de execução, logs e testes de compatibilidade.
+
 ### Fluxo integrado com o backend
 
 Em um terminal, a partir da raiz:
@@ -39,6 +49,22 @@ Cada requisição tem limite de espera de 60 segundos. Sair do formulário cance
 a assinatura HTTP local; isso não garante cancelamento do processamento já iniciado
 no servidor. Erros FAILED válidos são exibidos no dashboard; falhas de rede,
 cadastro, timeout ou resposta incompatível são apresentadas no formulário.
+
+### Coleta real por clone temporário
+
+A análise real usa Git instalado no servidor (`git --version`), sem token nem
+API REST do GitHub. Aceita somente repositórios públicos. O backend faz um clone
+raso da branch padrão, em modo bare (sem checkout), lê arquivos do clone e mantém
+o mesmo motor de cinco dimensões. Não instala dependências nem executa código do visitante.
+
+Inicie o backend a partir de `backend`, como indicado acima. Cada operação cria
+uma pasta exclusiva `backend/.analysis-tmp/scan-*/repository.git`. A cópia é removida
+após a análise, inclusive em falhas; a raiz vazia pode permanecer. As pastas temporárias
+são ignoradas pelo Git. A leitura direta de `/projects/:id/files` também remove sua cópia
+antes de responder. Não há cache persistente dos códigos baixados.
+
+Limites e cuidados para apresentação/produção estão em
+[Coleta por clone temporário](docs/coleta-clone-temporario.md).
 
 ### Demonstração offline — CONSCIOUS-39/47
 

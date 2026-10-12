@@ -15,7 +15,15 @@ describe('Análise integrada pelo AppModule', () => {
     getRepositoryFiles.mockReset();
     const module = await Test.createTestingModule({ imports: [AppModule] })
       .overrideProvider(GithubService)
-      .useValue({ getRepositoryFiles })
+      .useValue({
+        getRepositoryFiles,
+        withRepositoryFiles: async (
+          url: string,
+          consume: (
+            files: Awaited<ReturnType<GithubService['getRepositoryFiles']>>,
+          ) => unknown,
+        ) => consume(await getRepositoryFiles(url)),
+      })
       .compile();
     app = module.createNestApplication();
     app.useGlobalPipes(
