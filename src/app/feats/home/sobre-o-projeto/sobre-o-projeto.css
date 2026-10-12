@@ -93,18 +93,6 @@
     font-weight: 200;
 }
 
-/* Desktop */
-@media (max-width: 1440px) {
-
-    .container {
-        margin: var(--margin);
-    }
-
-    .box {
-        width: calc((100% - 30px) / 3);
-    }
-}
-
 /* Tablet */
 @media (max-width: 1024px) {
 
@@ -113,11 +101,11 @@
     }
 
     .boxes {
-        gap: 15px;
+        gap: 20px;
     }
 
     .box {
-        width: 250px;
+        width: 320px;
     }
 
     .textos h2 {
@@ -129,7 +117,7 @@
 @media (max-width: 768px) {
 
     .container {
-        margin: 80px 70px;
+        margin: var(--margin-responsividade);
         padding: 0;
     }
 
@@ -191,10 +179,6 @@
 
 /* Celulares pequenos */
 @media (max-width: 375px) {
-
-    .container {
-        margin: var(--margin-responsividade);
-    }
 
     .textos h2 {
         font-size: 30px;

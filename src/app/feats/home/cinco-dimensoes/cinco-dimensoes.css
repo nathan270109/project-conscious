@@ -8,11 +8,11 @@
     padding: var(--padding-divs);
     display: flex;
     justify-content: center;
-    gap: 50px;
+    gap: 10px;
 }
 
 .textos {
-    width: 100%;
+    width: 90%;
 }
 
 .textos h3 {
@@ -203,52 +203,13 @@
     margin: 0 0 0 10px;
 }
 
-/* Desktop */
-@media (max-width: 1440px) {
-
-    .container {
-        margin: var(--margin);
-    }
-
-    .box {
-        width: 100%;
-        gap: 30px;
-    }
-
-    .caixa {
-        width: 40%;
-        min-width: 0;
-    }
-
-    .mapa {
-        width: calc(60% - 30px);
-        min-width: 0;
-    }
-
-    .mapa-superior {
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-
-    .mapa-meio {
-        grid-template-columns: minmax(0, 1fr) 63px 60px 50px;
-    }
-
-    .area-dimensao {
-        grid-template-columns: minmax(0, 1fr) 70px 75px 45px;
-    }
-
-    .dados {
-        overflow-wrap: anywhere;
-    }
-}
-
 /* Tablet */
 @media (max-width: 1024px){
 
     .box {
         gap: 35px;
         padding: 40px 30px;
+        align-items: center;
     }
 
     .textos, .dimensoes{
@@ -265,7 +226,7 @@
     }
 
     .mapa-meio {
-        grid-template-columns: 1fr 70px 67px 55px;
+        grid-template-columns: 1fr 80px 80px 55px;
     }
 
     .area-dimensao {
@@ -277,7 +238,7 @@
 @media (max-width: 768px){
 
     .container {
-        margin: 80px 70px;
+        margin: var(--margin-responsividade);
     }
 
     .box {
@@ -291,7 +252,7 @@
     }
 
     .mapa {
-        width: 100%;
+        width: 95%;
     }
 
     .textos, .dimensoes {
@@ -329,12 +290,12 @@
     }
 
     .mapa-meio {
-        grid-template-columns: 1fr 53px 60px 35px;
+        grid-template-columns: 1fr 55px 70px 40px;
         margin: 0 30px 0 15px;
     }
 
     .area-dimensao {
-        grid-template-columns: 1fr 53px 65px 40px;
+        grid-template-columns: 1fr 55px 70px 40px;
         margin: 0 15px;
         gap: 8px;
     }
@@ -349,7 +310,8 @@
     }
 
     .risco {
-        width: 50px;
+        width: auto;
+        min-width: 55px;
         padding: 4px 6px;
         font-size: 12px;
     }
@@ -368,45 +330,27 @@
 }
 
 /* Celulares pequenos */
-@media (max-width: 375px) {
-
-    .container {
-        margin: var(--margin-responsividade);
-    }
-
-    .caixa {
-        width: 100%;
-    }
-
-    .mapa-superior {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
+@media (max-width: 375px){
 
     .mapa-superior p {
-        font-size: 13px;
+        font-size: 12px;
     }
 
     #p-3 {
-        margin: auto;
+        font-size: 11px;
         padding: 4px 6px;
     }
 
     .mapa-meio {
-        grid-template-columns: 1fr 40px 45px 35px;
-    }
-
-    .mapa-meio p {
-        font-size: 11px;
+        grid-template-columns: 1fr 45px 60px 35px;
     }
 
     .area-dimensao {
-        grid-template-columns: 1fr 45px 50px 35px;
+        grid-template-columns: 1fr 45px 60px 35px;
     }
 
     .nota,.detalhe {
-        font-size: 11px;
+        font-size: 13px;
     }
 
     .risco {
@@ -414,15 +358,7 @@
         min-width: 50px;
     }
 
-    .dados h3 {
-        font-size: 12px;
-    }
-
     .dados p {
-        font-size: 10px;
-    }
-
-    .texto-inferior p {
-        font-size: 12px;
+        font-size: 11px;
     }
 }
