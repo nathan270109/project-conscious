@@ -1,20 +1,17 @@
 .form-container {
   position: relative;
   width: auto;
-  margin: 45px 90px 60px;
   min-height: 100vh;
   font-family: var(--fonte);
   display: flex;
-  align-items: center;
-  z-index: 1;
-  justify-content: center;
+  justify-content: space-between;
   background: transparent;
   box-sizing: border-box;
-  padding: 96px 50px 32px;
 }
 
 .form-container__content {
-  width: min(100%, 1100px);
+  margin: var(--margin);
+  padding: 85px 50px;
   display: grid;
   grid-template-columns: 1fr 1.1fr;
   gap: 48px;
@@ -214,13 +211,6 @@
 /* Desktop */
 @media (max-width: 1440px) {
 
-  .form-container {
-    margin: var(--margin);
-    padding: 80px 50px 40px;
-    min-height: auto;
-    align-items: flex-start;
-  }
-
   .form-container__content {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
     gap: 36px;
@@ -261,8 +251,10 @@
 @media (max-width: 1024px) {
 
   .form-container__content {
-    grid-template-columns: minmax(0, 1fr);
-    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 35px 70px;
     gap: 32px;
   }
 
@@ -287,11 +279,9 @@
 /* Celular */
 @media (max-width: 768px) {
 
-  .form-container {
-    margin: var(--margin-responsividade);
-  }
-
   .form-container__content {
+    margin: 110px 70px;
+    padding: 0;
     gap: 28px;
   }
 
@@ -355,11 +345,9 @@
 /* Celulares pequenos */
 @media (max-width: 375px) {
 
-  .form-container {
-    margin: 80px 20px 40px;
-  }
-
   .form-container__content {
+    margin: var(--margin-responsividade);
+    padding: 30px 0;
     gap: 24px;
   }
 
