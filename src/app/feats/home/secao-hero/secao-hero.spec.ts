@@ -23,7 +23,7 @@ describe('SecaoHero', () => {
 
   it('apresenta a proposta do projeto e o link para analisar repositório', () => {
     const element = fixture.nativeElement as HTMLElement;
-    expect(element.querySelector('h2')?.textContent).toContain('Seu software funciona.');
+    expect(element.querySelector('h1')?.textContent).toContain('Seu software funciona.');
     const link = element.querySelector('a#repositorio');
     expect(link?.textContent).toContain('Analisar repositório');
     expect(link?.getAttribute('href')).toBe('/projects/new');
