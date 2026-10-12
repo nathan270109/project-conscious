@@ -1,7 +1,7 @@
 .login-container {
     display: flex;
     justify-content: center;
-    margin: 150px 100px;
+    margin: 130px 100px;
 }
 
 .login {
@@ -207,6 +207,10 @@ form button:hover {
 /* Desktop */
 @media (max-width: 1440px) {
 
+    .login-container {
+        margin: 150px 0;
+    }
+
     .login {
         padding: 30px 40px;
     }
@@ -214,6 +218,10 @@ form button:hover {
 
 /* Tablet */
 @media (max-width: 1024px) {
+
+    .login-container {
+        margin: 130px 0;
+    }
 
     .login {
         max-width: 550px;
@@ -230,7 +238,7 @@ form button:hover {
 @media (max-width: 768px) {
 
     .login-container {
-        margin: 140px 60px;
+        margin: 115px 60px;
     }
 
     .login {
@@ -269,6 +277,11 @@ form button:hover {
 
 /* Celulares pequenos */
 @media (max-width: 375px) {
+
+    .login-container {
+        margin: var(--margin-responsividade);
+        padding: 35px 0;
+    }
 
     .login {
         gap: 18px;
