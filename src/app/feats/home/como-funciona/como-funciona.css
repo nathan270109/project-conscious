@@ -135,8 +135,8 @@
 /* Celular */
 @media (max-width: 768px) {
 
-    .container{
-        margin: var(--margin-responsividade);
+    .container {
+        margin: 80px 70px;
     }
 
     .box {
@@ -197,6 +197,10 @@
 
 /* Celulares pequenos */
 @media (max-width: 375px) {
+
+    .container {
+        margin: var(--margin-responsividade);
+    }
 
     .textos h2 {
         font-size: 30px;
