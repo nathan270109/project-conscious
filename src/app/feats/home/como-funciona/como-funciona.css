@@ -91,22 +91,6 @@
     font-weight: 400;
 }
 
-/* Desktop */
-@media (max-width: 1440px) {
-
-    .container {
-        margin: var(--margin);
-    }
-
-    .box {
-        width: 100%;
-    }
-
-    .card {
-        width: calc((100% - 30px) / 3);
-    }
-}
-
 /* Tablet */
 @media (max-width: 1024px) {
 
@@ -115,11 +99,11 @@
     }
 
     .cards {
-        gap: 15px;
+        gap: 20px;
     }
 
     .card {
-        width: 250px;
+        width: 320px;
     }
 
     .numero {
@@ -135,8 +119,8 @@
 /* Celular */
 @media (max-width: 768px) {
 
-    .container {
-        margin: 80px 70px;
+    .container{
+        margin: var(--margin-responsividade);
     }
 
     .box {
@@ -197,10 +181,6 @@
 
 /* Celulares pequenos */
 @media (max-width: 375px) {
-
-    .container {
-        margin: var(--margin-responsividade);
-    }
 
     .textos h2 {
         font-size: 30px;

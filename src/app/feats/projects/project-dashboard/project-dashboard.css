@@ -1,8 +1,8 @@
 .dashboard {
-    width: auto;
-    margin: var(--margin);
-    padding: 85px 50px;
-    color: var(--cor-textos);
+    width: min(1200px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 96px 0 80px;
+    color: #0f2747;
 }
 
 .dashboard__header {
@@ -16,18 +16,17 @@
 
 .dashboard__eyebrow {
     margin: 0 0 8px;
-    font-size: var(--tamanho-h3-secoes-home);
-    color: var(--cor-destaque);
+    font-size: 0.875rem;
     font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #2563eb;
 }
 
 .dashboard__header h1 {
     margin: 0 0 8px;
-    font-size: 55px;
-    font-weight: 700;
-    line-height: 1.10;
-    color: var(--cor-textos);
+    font-size: 2.5rem;
+    line-height: 1.1;
 }
 
 .dashboard__header p {
@@ -77,10 +76,10 @@
     display: inline-block;
     padding: 8px 14px;
     border-radius: 999px;
-    background-color: #f1f08c96;
-    color: var(--cor-destaque);
+    background-color: #eaf2ff;
+    color: #1d4ed8;
     font-size: 0.875rem;
-    font-weight: 700;
+    font-weight: 600;
     max-width: 100%;
     box-sizing: border-box;
 }
@@ -151,29 +150,14 @@
     line-height: 1.3;
 }
 
-.dashboard__section h3 {
-    margin: 0 0 40px;
-    font-size: var(--tamanho-h3-secoes-home);
-    color: var(--cor-destaque);
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.dashboard__section p {
-    font-size: 1.1rem;
-    line-height: 1.5;
-    color: var(--cor-textos);
-    font-weight: 300;
-}
-
 /* CONSCIOUS SCORE */
 
 .dashboard__score {
     display: inline-block;
-    font-size: 3.8rem;
+    font-size: 4.5rem;
     line-height: 1;
-    font-weight: 600;
-    color: var(--cor-textos);
+    font-weight: 700;
+    color: #0f2747;
 }
 
 /* DIMENSÕES */
@@ -186,7 +170,7 @@
 
 .dimension-card {
     padding: 24px;
-    border: 1px solid var(--cinza-borda);
+    border: 1px solid #dbe3ec;
     border-radius: 16px;
     background-color: #ffffff;
 }
@@ -206,7 +190,7 @@
 
 .dimension-card__header strong {
     font-size: 1.5rem;
-    color: var(--cor-textos);
+    color: #0f2747;
 }
 
 .dimension-progress {
@@ -220,7 +204,7 @@
 .dimension-progress__fill {
     height: 100%;
     border-radius: inherit;
-    background-color: #e0a21d;
+    background-color: #2563eb;
 }
 
 /* RISK RADAR */
@@ -232,7 +216,7 @@
 
 .risk-card {
     padding: 20px;
-    border: 1px solid var(--cinza-borda);
+    border: 1px solid #dbe3ec;
     border-radius: 16px;
     background-color: #ffffff;
 }
@@ -251,6 +235,7 @@
     font-size: 0.8rem;
     font-weight: 700;
 }
+
 
 .risk-card__severity--critical {
     background-color: #fee2e2;
@@ -274,7 +259,7 @@
 
 .risk-card__category {
     font-weight: 600;
-    color: var(--cor-textos);
+    color: #0f2747;
 }
 
 .risk-card__message {
@@ -721,10 +706,76 @@
 .risk-empty {
     margin: 0;
     padding: 20px;
-    border: 1px solid var(--cinza-borda);
+    border: 1px solid #dbe3ec;
     border-radius: 16px;
     background-color: #f8fafc;
     color: #475569;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 700px) {
+    .dashboard {
+        width: min(100% - 32px, 1200px);
+        padding-top: 96px;
+    }
+
+    .dashboard__header {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .ai-entry {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .dashboard__header h1 {
+        font-size: 2rem;
+    }
+
+    .dashboard__section {
+        padding: 32px 0;
+    }
+
+    .dashboard__score {
+        font-size: 3.5rem;
+    }
+
+    .dimensions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .risk-card__header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .ai-dialog {
+        width: 100%;
+        height: 100dvh;
+        border-radius: 0;
+    }
+
+    .ai-dialog__layout {
+        grid-template-columns: 1fr;
+    }
+
+    .ai-dialog__context {
+        display: none;
+    }
+
+    .ai-dialog__messages {
+        padding: 18px 14px;
+    }
+
+    .ai-message {
+        max-width: 96%;
+    }
+
+    .ai-dialog__composer {
+        padding: 14px;
+    }
 }
 
 .dashboard-state {
@@ -740,7 +791,7 @@
 
 .dashboard-state--error {
     padding: 32px;
-    border: 1px solid var(--cinza-borda);
+    border: 1px solid #fecaca;
     border-radius: 16px;
     background-color: #fff7f7;
 }
@@ -771,7 +822,7 @@
 
 .dashboard-state--empty {
     padding: 32px;
-    border: 1px solid var(--cinza-borda);
+    border: 1px solid #dbe3ec;
     border-radius: 16px;
     background-color: #f8fafc;
 }
@@ -779,7 +830,7 @@
 .dashboard-state--empty h1 {
     margin: 0 0 12px;
     font-size: 1.5rem;
-    color: var(--cor-textos);
+    color: #0f2747;
 }
 
 .dashboard-state--empty p {
@@ -788,12 +839,8 @@
 
 /* CONSCIOUS INSIGHT */
 
-#insight-title {
-    margin: 0 0 30px 0;
-}
-
 .insight__context {
-    margin: 0 0 20px;
+    margin: 0 0 12px;
     color: #64748b;
     font-size: 0.95rem;
     line-height: 1.5;
@@ -802,259 +849,21 @@
 .insight__text {
     margin: 0;
     padding: 20px;
-    border: 1px solid var(--cinza-borda);
+    border: 1px solid #dbe3ec;
     border-radius: 16px;
-    background-color: #ffffff;
-    color: var(--cor-textos);
+    background-color: #f8fafc;
+    color: #0f2747;
     font-size: 1rem;
     line-height: 1.6;
-}
-
-#title {
-    color: var(--cor-textos);
-    margin: 0 0 10px 0;
 }
 
 .insight__empty {
     margin: 0;
     padding: 20px;
-    border: 1px solid var(--cinza-borda);
+    border: 1px solid #dbe3ec;
     border-radius: 16px;
     background-color: #f8fafc;
     color: #64748b;
     font-size: 1rem;
     line-height: 1.5;
-}
-
-/* Desktop */
-@media (max-width: 1440px) {
-
-    .dashboard__header {
-        flex-wrap: wrap;
-        gap: 24px;
-    }
-
-    .dashboard__header > div {
-        min-width: 0;
-    }
-
-    .dashboard__header h1 {
-        font-size: 50px;
-    }
-
-    .dimension-card, .risk-card {
-        min-width: 0;
-    }
-
-    .dimension-card__header span {
-        min-width: 0;
-    }
-
-    .dimension-card__header strong {
-        flex-shrink: 0;
-    }
-
-    .risk-card__header {
-        flex-wrap: wrap;
-    }
-
-    .risk-card__file {
-        max-width: 100%;
-        white-space: normal;
-        overflow-wrap: anywhere;
-    }
-
-    .dashboard-state__action {
-        max-width: 100%;
-        text-align: center;
-    }
-}
-
-/* Tablet */
-@media (max-width: 1024px) {
-
-    .dashboard {
-        margin: 35px 70px;
-    }
-
-    .dashboard__header h1 {
-        font-size: 45px;
-    }
-
-    .dashboard__section {
-        padding: 32px 0;
-    }
-
-    .dashboard__section h3 {
-        margin-bottom: 28px;
-    }
-
-    .dimensions-grid {
-        gap: 16px;
-    }
-
-    .dimension-card {
-        padding: 20px;
-    }
-
-    .dashboard__score {
-        font-size: 3.5rem;
-    }
-}
-
-/* Celular */
-@media (max-width: 768px) {
-
-    .dashboard {
-        margin: 25px 20px;
-    }
-
-    .dashboard__header {
-        flex-direction: column;
-        gap: 18px;
-        padding-bottom: 24px;
-    }
-
-    .dashboard__eyebrow {
-        font-size: 17px;
-    }
-
-    .dashboard__header h1 {
-        font-size: 35px;
-    }
-
-    .dashboard__demo {
-        font-size: 13px;
-        line-height: 1.5;
-        padding: 8px 12px;
-    }
-
-    .dashboard__section {
-        padding: 28px 0;
-    }
-
-    .dashboard__section h3 {
-        font-size: 18px;
-        margin-bottom: 24px;
-    }
-
-    .dashboard__section p {
-        font-size: 16px;
-    }
-
-    .dashboard__score {
-        font-size: 3rem;
-    }
-
-    .dimensions-grid {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .dimension-card__header {
-        gap: 12px;
-    }
-
-    .risk-card__header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-
-    .risk-card__file {
-        font-size: 12px;
-    }
-
-    .dashboard-state {
-        padding: 28px 0;
-    }
-
-    .dashboard-state--error, .dashboard-state--empty {
-        padding: 20px;
-    }
-
-    .dashboard-state--error h1, .dashboard-state--empty h1 {
-        font-size: 22px;
-        line-height: 1.3;
-    }
-
-    .dashboard-state__action {
-        width: 100%;
-        font-size: 14px;
-    }
-
-    #insight-title {
-        margin-bottom: 20px;
-    }
-
-    #title {
-        font-size: 17px;
-        margin-bottom: 10px;
-    }
-}
-
-/* Celulares pequenos */
-@media (max-width: 375px) {
-
-    .dashboard {
-        margin: var(--margin-responsividade);
-        padding: 30px 0;
-    }
-
-    .dashboard__header h1 {
-        font-size: 30px;
-    }
-
-    .dashboard__eyebrow {
-        font-size: 16px;
-    }
-
-    .dashboard__section {
-        padding: 24px 0;
-    }
-
-    .dashboard__section h3 {
-        font-size: 16px;
-        margin-bottom: 20px;
-    }
-
-    .dashboard__section p {
-        font-size: 14px;
-    }
-
-    .dashboard__score {
-        font-size: 2.7rem;
-    }
-
-    .dimension-card, .risk-card, .risk-empty, .insight__text, .insight__empty {
-        padding: 16px;
-    }
-
-    .dimension-card__header span {
-        font-size: 14px;
-    }
-
-    .dimension-card__header strong {
-        font-size: 20px;
-    }
-
-    .risk-card__category {
-        font-size: 14px;
-    }
-
-    .dashboard-state--error, .dashboard-state--empty {
-        padding: 18px 16px;
-    }
-
-    .dashboard-state--error h1, .dashboard-state--empty h1 {
-        font-size: 20px;
-    }
-
-    .dashboard-state p {
-        font-size: 14px;
-        line-height: 1.5;
-    }
-
-    #title {
-        font-size: 16px;
-    }
 }
