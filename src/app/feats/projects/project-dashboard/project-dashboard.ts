@@ -12,7 +12,7 @@ import {
 @Component({
   imports: [RouterLink],
   selector: 'app-project-dashboard',
-  styleUrl: './project-dashboard.css',
+  styleUrl: './project-dashboard.design.css',
   templateUrl: './project-dashboard.html',
 })
 export class ProjectDashboard {

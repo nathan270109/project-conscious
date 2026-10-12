@@ -8,3 +8,22 @@
 .spinner { display: inline-block; width: 1rem; height: 1rem; border: 3px solid #d8e2f1; border-top-color: #2459a6; border-radius: 50%; animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }
+
+:host { display: block; }
+.scanning { width: min(calc(100% - 40px),880px); min-height: 78svh; padding: calc(var(--header-height) + 80px) 0 90px; color: var(--color-text); }
+.scanning__eyebrow { margin-bottom: 18px; color: var(--color-positive); font-size: .72rem; font-weight: 750; letter-spacing: .14em; }
+.scanning h1 { max-width: 15ch; font-family: var(--font-display); font-size: clamp(2.8rem,7vw,5.5rem); font-weight: 500; line-height: .95; letter-spacing: -.055em; }
+.scanning > p[role] { margin-top: 28px; padding: 16px 18px; border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text-muted); }
+.scanning > p[role="alert"] { border-color: rgba(255,107,107,.28); background: var(--color-danger-soft); color: #ffaaaa; }
+.scanning section { margin: 56px 0 32px; padding: 30px; border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: var(--color-surface); }
+.scanning section h2 { margin-bottom: 8px; font-family: var(--font-display); font-size: 1.5rem; }
+.scanning section > p { color: var(--color-text-muted); }
+.scanning ul { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 26px; margin-top: 24px; list-style: none; counter-reset: analysis-step; }
+.scanning li { display: flex; align-items: center; gap: 12px; margin: 0; padding: 14px 0; border-top: 1px solid var(--color-border); color: var(--color-text); counter-increment: analysis-step; }
+.scanning li span::before { content: counter(analysis-step,decimal-leading-zero); color: var(--color-accent); font-family: var(--font-mono); font-size: .72rem; }
+.scanning button, .scanning a { border-radius: var(--radius-sm); font-weight: 700; }
+.scanning button { border: 0; background: var(--color-text); color: #111116; }
+.scanning a { color: var(--color-text-muted); text-decoration: none; }
+.scanning a:hover { color: var(--color-accent); }
+.spinner { border-color: var(--color-border-strong); border-top-color: var(--color-accent); }
+@media (max-width: 600px) { .scanning { width: min(calc(100% - 32px),880px); } .scanning section { padding: 22px 18px; } .scanning ul { grid-template-columns: 1fr; } }

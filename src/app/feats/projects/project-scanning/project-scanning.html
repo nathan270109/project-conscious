@@ -1,4 +1,5 @@
 <main class="scanning">
+  <p class="scanning__eyebrow">ANÁLISE DO REPOSITÓRIO</p>
   <h1>{{ project() ? 'Analisando ' + project()!.name : 'Projeto não disponível' }}</h1>
   @if (busy()) {
     <p role="status" aria-live="polite"><span class="spinner" aria-hidden="true"></span> Analisando repositório… Aguarde.</p>
@@ -13,7 +14,7 @@
     <section aria-labelledby="steps-title">
       <h2 id="steps-title">O que a análise verifica</h2>
       <p>Esta lista explica o processo, não indica o progresso de cada etapa. São cinco dimensões e uma preparação de estrutura.</p>
-      <ul>@for (step of steps; track step) { <li>{{ step }}</li> }</ul>
+      <ul>@for (step of steps; track step) { <li><span aria-hidden="true"></span>{{ step }}</li> }</ul>
     </section>
   }
   <a routerLink="/projects/new">Voltar ao cadastro</a>
