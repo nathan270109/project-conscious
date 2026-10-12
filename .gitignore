@@ -3,6 +3,8 @@
 # Compiled output
 /dist
 /tmp
+.analysis-tmp/
+.conscious-runtime/
 /out-tsc
 /bazel-out
 
@@ -42,3 +44,19 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Terraform local data and plans
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+**/tfplan*
+/infra/backend.hcl
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.env
+.env.*
+!.env.example

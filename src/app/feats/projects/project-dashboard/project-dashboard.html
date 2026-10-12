@@ -34,13 +34,24 @@
 
         <h1>Dashboard do projeto</h1>
 
-        <p>Projeto {{ project?.name ?? projectId }}</p>
+        @if (project?.repositoryUrl; as repositoryUrl) {
+          <a class="dashboard__repository" [href]="repositoryUrl" target="_blank" rel="noopener noreferrer">
+            <span>Repositório</span>
+            <strong>{{ project?.name ?? 'Abrir no GitHub' }}</strong>
+            <span aria-hidden="true">↗</span>
+          </a>
+        } @else if (projectId === demoProjectId) {
+          <a class="dashboard__repository" [href]="demoRepositoryUrl" target="_blank" rel="noopener noreferrer">
+            <span>Repositório</span>
+            <strong>Project Conscious Demo</strong>
+            <span aria-hidden="true">↗</span>
+          </a>
+        }
       </div>
 
       @if (result.demoMode) {
-        <span class="dashboard__demo">Modo demonstração: análise salva</span>
+        <span class="dashboard__demo">Demonstração</span>
       }
-    </header>
 
     @if (result.demoMode) {
       <section class="dashboard__section" aria-label="Origem da demonstração">
@@ -89,7 +100,7 @@
 
       @if (result.findings.length > 0) {
         <div class="risk-list">
-          @for (finding of result.findings; track $index) {
+          @for (finding of result.findings; track $index; let findingIndex = $index) {
             <article class="risk-card">
               <div class="risk-card__header">
                 <span
@@ -120,6 +131,24 @@
                   }
                 </code>
               }
+
+              <div class="risk-card__ai">
+                <button
+                  type="button"
+                  (click)="explainFinding(finding, findingIndex)"
+                  [disabled]="explainingFindingIndex !== null"
+                >
+                  <span aria-hidden="true">✦</span>
+                  {{ explainingFindingIndex === findingIndex ? 'Explicando…' : 'Explicar com IA' }}
+                </button>
+
+                @if (findingExplanations[findingIndex]; as explanation) {
+                  <div class="risk-card__explanation" aria-live="polite">
+                    <strong>Conscious AI</strong>
+                    <p>{{ explanation }}</p>
+                  </div>
+                }
+              </div>
             </article>
           }
         </div>
@@ -147,5 +176,105 @@
         </p>
       }
     </section>
+
+    <dialog
+      #chatDialog
+      class="ai-dialog"
+      aria-labelledby="ai-chat-title"
+      (click)="$event.target === chatDialog && closeChat()"
+    >
+      <div class="ai-dialog__layout">
+        <aside class="ai-dialog__context">
+          <p class="dashboard__eyebrow">Contexto da análise</p>
+          <h2 id="ai-chat-title">Converse com o seu projeto.</h2>
+          <p>A IA explica as evidências. As métricas objetivas continuam sendo a fonte da verdade.</p>
+
+          <div class="ai-dialog__score">
+            <span>Conscious Score</span>
+            <strong>{{ result.score }}</strong>
+            <small>/100</small>
+          </div>
+
+          <dl class="ai-dialog__facts">
+            <div><dt>Findings</dt><dd>{{ result.findings.length }}</dd></div>
+            <div><dt>Dimensões</dt><dd>{{ result.dimensions.length }}</dd></div>
+            <div><dt>Modelo</dt><dd>Gemma 4 E2B</dd></div>
+          </dl>
+
+          <p class="ai-dialog__privacy">
+            Somente score, dimensões e findings desta análise são enviados ao modelo.
+          </p>
+        </aside>
+
+        <section class="ai-dialog__chat">
+          <header class="ai-dialog__header">
+            <div class="ai-dialog__identity">
+              <span aria-hidden="true">✦</span>
+              <div><strong>Conscious AI</strong><small>Amazon Bedrock</small></div>
+            </div>
+            <button type="button" class="ai-dialog__close" aria-label="Fechar chat" (click)="closeChat()">×</button>
+          </header>
+
+          <div class="ai-dialog__messages" aria-live="polite">
+            <div class="ai-message ai-message--assistant">
+              <span class="ai-message__avatar" aria-hidden="true">AI</span>
+              <p>Olá! Posso explicar os riscos, priorizar arquivos ou apresentar o projeto para quem acabou de chegar.</p>
+            </div>
+
+            @for (message of chatMessages; track $index) {
+              <div
+                class="ai-message"
+                [class.ai-message--user]="message.role === 'user'"
+                [class.ai-message--assistant]="message.role === 'assistant'"
+              >
+                <span class="ai-message__avatar" aria-hidden="true">{{ message.role === 'user' ? 'EU' : 'AI' }}</span>
+                <p>{{ message.content }}</p>
+              </div>
+            }
+
+            @if (chatLoading) {
+              <div class="ai-message ai-message--assistant">
+                <span class="ai-message__avatar" aria-hidden="true">AI</span>
+                <p class="ai-thinking"><i></i><i></i><i></i><span class="sr-only">Analisando</span></p>
+              </div>
+            }
+          </div>
+
+          <footer class="ai-dialog__composer">
+            <p class="ai-dialog__prompt-label">Perguntas sugeridas</p>
+            <div class="ai-dialog__prompts">
+              @for (question of suggestedQuestions; track question) {
+                <button type="button" [disabled]="chatLoading" (click)="sendQuestion(question)">{{ question }}</button>
+              }
+            </div>
+
+            <div class="ai-dialog__input">
+              <textarea
+                rows="1"
+                maxlength="1000"
+                aria-label="Pergunta sobre a análise"
+                placeholder="Pergunte algo sobre esta análise…"
+                [value]="chatQuestion"
+                [disabled]="chatLoading"
+                (input)="updateChatQuestion($event)"
+                (keydown)="handleChatKeydown($event)"
+              ></textarea>
+              <button
+                type="button"
+                aria-label="Enviar pergunta"
+                [disabled]="chatLoading || !chatQuestion.trim()"
+                (click)="sendQuestion()"
+              >↑</button>
+            </div>
+
+            @if (chatError) {
+              <p class="ai-dialog__error" role="alert">{{ chatError }}</p>
+            } @else {
+              <p class="ai-dialog__note">Enter para enviar · Shift + Enter para nova linha</p>
+            }
+          </footer>
+        </section>
+      </div>
+    </dialog>
   }
 </main>

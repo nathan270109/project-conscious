@@ -108,6 +108,19 @@ de `FAILED`.
 
 ## Tipos do resultado
 
+### Coleta por clone temporário
+
+A análise real agora clona repositórios **públicos**, sem API REST ou token GitHub.
+O contrato de cadastro/AnalysisResult permanece igual. O código é lido de um
+clone bare raso da branch padrão, sem executar código ou instalar dependências.
+A pasta exclusiva `.analysis-tmp/scan-*` é removida após o motor terminar,
+inclusive em falhas. Privado/inexistente retorna REPOSITORY_NOT_FOUND; falhas de
+clone, prazo e limites continuam em ANALYSIS_FAILED. A exclusão é da cópia
+temporária, não do cadastro nem do repositório original do visitante.
+
+Exclusões, limites, requisito Git e restrições de limpeza estão em
+[Coleta por clone temporário](coleta-clone-temporario.md).
+
 ### Resultado demonstrativo salvo
 
 `GET /demo/analysis` retorna HTTP 200 e um `CompletedAnalysisResult` com

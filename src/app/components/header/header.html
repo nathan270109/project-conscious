@@ -9,8 +9,10 @@
     <div class="scrolling-nav">
         <nav class="nav" aria-label="Navegação principal">
             <a routerLink="/home">Início</a>
-            <a routerLink="">Sobre</a>
-            <a routerLink="">Contato</a>
+            <a routerLink="/home" fragment="section-sobre-o-projeto">Sobre</a>
+            <a routerLink="/home" fragment="section-como-funciona">Como funciona</a>
+            <a routerLink="/projects/new">Diagnóstico</a>
+            <a routerLink="/home" fragment="contato">Contato</a>
         </nav>
     </div>
 
@@ -40,8 +42,11 @@
         
         <ul class="sidebar-links" aria-label="links de navegação dentro do side-bar">
             <li><a routerLink="/home" (click)="closeMenu()">Início</a></li>
-            <li><a routerLink="" (click)="closeMenu()">Sobre</a></li>
-            <li><a routerLink="" (click)="closeMenu()">Contato</a></li>
+            <li><a routerLink="/home" fragment="section-sobre-o-projeto" (click)="closeMenu()">Sobre</a></li>
+            <li><a routerLink="/home" fragment="section-como-funciona" (click)="closeMenu()">Como funciona</a></li>
+            <li><a routerLink="/projects/new" (click)="closeMenu()">Diagnóstico</a></li>
+            <li><a routerLink="/home" fragment="contato" (click)="closeMenu()">Contato</a></li>
+            <li><a routerLink="/login" (click)="closeMenu()">Login</a></li>
         </ul>
     </div>
 </div>

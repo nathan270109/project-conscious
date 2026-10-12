@@ -1,11 +1,11 @@
 .header-container {
   font-family: Arial, Helvetica, sans-serif;
   background-color: transparent;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 10;
+  z-index: 1000;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
@@ -13,6 +13,9 @@
   min-height: 72px;
   padding: 12px 20px;
   box-sizing: border-box;
+  border-bottom: 1px solid rgba(15, 39, 71, 0.08);
+  background: rgba(250, 247, 247, 0.9);
+  backdrop-filter: blur(14px);
 }
 
 .fixed-left,
@@ -55,7 +58,7 @@
 .nav {
   padding-top: 0;
   display: flex;
-  gap: 24px;
+  gap: clamp(14px, 2vw, 24px);
   background-color: transparent;
 }
 
@@ -64,7 +67,7 @@
   text-transform: uppercase;
   text-decoration: none;
   color: #000000;
-  font-size: 18px;
+  font-size: clamp(14px, 1.45vw, 18px);
   font-weight: 500;
   padding: 4px 0;
   cursor: pointer;

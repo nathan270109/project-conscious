@@ -1,9 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
+import { of } from 'rxjs';
 import { AnalysisService } from '../../../core/services/analysis.service';
+import {
+  AiChatService,
+  type AiAnalysisContext,
+  type AiChatMessage,
+} from '../../../core/services/ai-chat.service';
 import { createAnalysisFixture } from '../../../core/testing/analysis.fixture';
 import type { AnalysisResult, CompletedAnalysisResult, FailedAnalysisResult } from '../../../core/models/analysis-result.model';
 import { ProjectDashboard } from './project-dashboard';
+import { DEMO_PROJECT_ID, DEMO_REPOSITORY_URL } from '../../../core/models/demo-analysis';
 
 describe('ProjectDashboard — contrato de análise', () => {
   function completed(): CompletedAnalysisResult {
@@ -13,6 +20,11 @@ describe('ProjectDashboard — contrato de análise', () => {
   }
 
   async function render(result: AnalysisResult | undefined, throws = false, loading = false) {
+    const ask = vi.fn((
+      _question: string,
+      _analysis: AiAnalysisContext,
+      _history?: readonly AiChatMessage[],
+    ) => of({ answer: 'Explicação baseada na análise.', model: 'google.gemma-4-e2b' }));
     await TestBed.configureTestingModule({
       imports: [ProjectDashboard],
       providers: [
@@ -22,13 +34,14 @@ describe('ProjectDashboard — contrato de análise', () => {
           if (throws) throw new Error('Detalhe interno não deve ser exibido');
           return result;
         } } },
+        { provide: AiChatService, useValue: { ask } },
       ],
     }).compileComponents();
     const fixture = TestBed.createComponent(ProjectDashboard);
     fixture.componentInstance.loading = loading;
     fixture.detectChanges();
     await fixture.whenStable();
-    return { fixture, element: fixture.nativeElement as HTMLElement };
+    return { fixture, element: fixture.nativeElement as HTMLElement, ask };
   }
 
   it('renderiza cinco dimensões, notas e insight como título e mensagem', async () => {
@@ -45,7 +58,37 @@ describe('ProjectDashboard — contrato de análise', () => {
     expect(element.querySelector('.insight__text p')?.textContent).toContain(result.insight.message);
     expect(element.querySelector('.insight__context')?.textContent).toContain('métricas e evidências');
     expect(element.textContent).not.toContain('[object Object]');
-    expect(element.textContent).toContain('Modo demonstração');
+    expect(element.textContent).toContain('Demonstração');
+  });
+
+  it('mostra apenas o repositório na identificação da demonstração', async () => {
+    const result = completed();
+    await TestBed.resetTestingModule();
+    await TestBed.configureTestingModule({
+      imports: [ProjectDashboard],
+      providers: [
+        provideRouter([]),
+        { provide: ActivatedRoute, useValue: {
+          snapshot: { paramMap: convertToParamMap({ id: DEMO_PROJECT_ID }) },
+        } },
+        { provide: AnalysisService, useValue: {
+          getProjectById: () => undefined,
+          getByProjectId: () => result,
+        } },
+        { provide: AiChatService, useValue: { ask: vi.fn(() => of({
+          answer: 'Resposta', model: 'google.gemma-4-e2b',
+        })) } },
+      ],
+    }).compileComponents();
+    const fixture = TestBed.createComponent(ProjectDashboard);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const element = fixture.nativeElement as HTMLElement;
+    expect(element.querySelector('.dashboard__repository')?.getAttribute('href')).toBe(DEMO_REPOSITORY_URL);
+    expect(element.textContent).not.toContain(`Projeto ${DEMO_PROJECT_ID}`);
+    expect(element.textContent).not.toContain('Este resultado é uma análise salva');
+    expect(element.textContent).not.toContain('Revisão:');
+    expect(element.textContent).not.toContain('Data da análise');
   });
 
   it('mostra FAILED sem nota, dimensões, insight ou falsa ausência de riscos', async () => {
@@ -104,5 +147,33 @@ describe('ProjectDashboard — contrato de análise', () => {
     const { element } = await render(completed(), false, true);
     expect(element.textContent).toContain('Carregando análise');
     expect(element.querySelector('.dashboard__score')).toBeNull();
+  });
+
+  it('envia uma pergunta sugerida com o contexto objetivo da análise', async () => {
+    const result = completed();
+    const { fixture, ask } = await render(result);
+    const question = fixture.componentInstance.suggestedQuestions[0];
+
+    fixture.componentInstance.sendQuestion(question);
+
+    expect(ask).toHaveBeenCalledOnce();
+    const call = ask.mock.calls[0]!;
+    expect(call[0]).toBe(question);
+    expect(call[1]).toMatchObject({ score: result.score });
+    expect(call[1].findings).toHaveLength(result.findings.length);
+    expect(fixture.componentInstance.chatMessages.at(-1)?.content).toBe('Explicação baseada na análise.');
+  });
+
+  it('solicita uma explicação da IA para um finding sem alterar a análise', async () => {
+    const result = completed();
+    const original = structuredClone(result);
+    const { fixture, ask } = await render(result);
+    const finding = result.findings[0]!;
+
+    fixture.componentInstance.explainFinding(finding, 0);
+
+    expect(ask.mock.calls[0]![0]).toContain(finding.message);
+    expect(fixture.componentInstance.findingExplanations[0]).toBe('Explicação baseada na análise.');
+    expect(result).toEqual(original);
   });
 });

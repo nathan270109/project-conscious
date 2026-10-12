@@ -32,7 +32,7 @@
     color: var(--cor-textos);
 }
 
-#subtitulo {
+#hero-subtitle {
     margin-bottom: 20px;
 }
 
@@ -105,23 +105,23 @@
     gap: 10px;
 }
 
-#titulo {
+#hero-score-title {
     color: #ffecd5;
     font-size: 33px;
     font-weight: 300;
 }
 
-#p-especial {
+#hero-score {
     color: #fff0dd;
     font-size: 18px;
 }
 
-#media {
+#hero-score-value {
     font-size: 30px;
     color: white;
 }
 
-#paragrafo {
+#hero-score-caption {
     margin-bottom: 13px;
     color: #ffffff;
     font-weight: 200;

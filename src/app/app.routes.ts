@@ -4,6 +4,7 @@ import { ProjectForm } from './feats/projects/project-form/project-form';
 import { ProjectDashboard } from './feats/projects/project-dashboard/project-dashboard';
 import { Login } from './feats/login/login';
 import { ProjectScanning } from './feats/projects/project-scanning/project-scanning';
+import { NotFound } from './feats/not-found/not-found';
 
 export const routes: Routes = [
 
@@ -12,6 +13,7 @@ export const routes: Routes = [
     { path: 'projects/new', component: ProjectForm},
     { path: 'projects/:id/scanning', component: ProjectScanning},
     { path: 'projects/:id/dashboard', component: ProjectDashboard},
-    { path: 'login', component: Login }
+    { path: 'login', component: Login },
+    { path: '**', component: NotFound }
 
 ];

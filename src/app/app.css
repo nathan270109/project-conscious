@@ -1,6 +1,6 @@
 .html {
     position: relative;
-    overflow: hidden;
+    overflow-x: clip;
 }
 
 .img-fundo {

@@ -11,22 +11,25 @@
 
             <div class="login-formulario">
                 <div class="formulario-container">
-                    <form>
+                    <form (submit)="onSubmit($event)">
                         <div class="formulario">
                             <label for="email">Email</label>
-                            <input id="email" type="email" placeholder="Digite seu email">
+                            <input id="email" name="email" type="email" autocomplete="email" required placeholder="Digite seu email">
                         </div>
 
                         <div class="formulario">
                             <label for="senha">Senha</label>
-                            <input id="senha" type="password" placeholder="Digite sua senha">
+                            <input id="senha" name="senha" type="password" autocomplete="current-password" required placeholder="Digite sua senha">
                         </div>
 
                         <div class="login-cadastro">
-                            <a class="clique-aqui" routerLink=""><span>Esqueceu a senha?</span></a>
+                            <button class="clique-aqui" type="button" disabled>Esqueceu a senha?</button>
                         </div>
 
                         <button type="submit">Login</button>
+                        @if (statusMessage) {
+                            <p class="login-status" role="status">{{ statusMessage }}</p>
+                        }
                     </form>
                 </div>
 
@@ -39,20 +42,20 @@
                 <div class="formulario-box">
                     <div class="conectar">
                         <div class="card">
-                            <a routerLink=""><img src="/assets/logo-google.png" alt="google"></a> 
+                            <button type="button" disabled aria-label="Entrar com Google — indisponível"><img src="/assets/logo-google.png" alt=""></button>
                         </div>
 
                         <div class="card">
-                            <a routerLink=""><img src="/assets/logo-apple.png" alt="apple"></a>
+                            <button type="button" disabled aria-label="Entrar com Apple — indisponível"><img src="/assets/logo-apple.png" alt=""></button>
                         </div>
 
                         <div class="card">
-                            <a routerLink=""><img src="/assets/logo-facebook.png" alt="facebook"></a>
+                            <button type="button" disabled aria-label="Entrar com Facebook — indisponível"><img src="/assets/logo-facebook.png" alt=""></button>
                         </div>
                     </div>
 
                     <div class="formulario-texto">
-                        <p>Não tem uma conta? <a routerLink=""><span>Cadastre-se</span></a></p>
+                        <p>Não tem uma conta? <button type="button" disabled>Cadastro em breve</button></p>
                     </div>
                 </div>
             </div>

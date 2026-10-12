@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Login } from './login';
-import { provideRouter } from '@angular/router';
 
 describe('Login', () => {
   let component: Login;
@@ -9,7 +8,6 @@ describe('Login', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Login],
-      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Login);
@@ -19,5 +17,17 @@ describe('Login', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('não apresenta links vazios e explica que autenticação ainda não está disponível', async () => {
+    const element = fixture.nativeElement as HTMLElement;
+    expect(element.querySelector('a')).toBeNull();
+    element.querySelector<HTMLFormElement>('form')!.dispatchEvent(
+      new SubmitEvent('submit', { bubbles: true, cancelable: true }),
+    );
+    await fixture.whenStable();
+    expect(element.querySelector('[role="status"]')?.textContent).toContain(
+      'autenticação ainda não está disponível',
+    );
   });
 });
