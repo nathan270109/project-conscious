@@ -1,7 +1,7 @@
 .dashboard {
     width: auto;
     margin: var(--margin);
-    padding: 85px 50px 80px;
+    padding: 85px 50px;
     color: var(--cor-textos);
 }
 
@@ -358,7 +358,7 @@
 @media (max-width: 1024px) {
 
     .dashboard {
-        margin: 80px 75px;
+        margin: 35px 70px;
     }
 
     .dashboard__header h1 {
@@ -390,7 +390,7 @@
 @media (max-width: 768px) {
 
     .dashboard {
-        margin: 60px 10px;
+        margin: 25px 20px;
     }
 
     .dashboard__header {
