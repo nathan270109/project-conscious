@@ -4,7 +4,6 @@
     min-height: 100vh;
     width: 100%;
     display: flex;
-    align-items: center;
     justify-content: center;
     box-sizing: border-box;
 }
@@ -12,10 +11,9 @@
 .container {
     display: flex;
     justify-content: center;
-    align-items: center;
     gap: 40px;
-    margin: 0 auto;
-    padding: 100px 20px 50px 20px;
+    margin: 40px auto;
+    padding: 95px 20px 50px;
     width: 100%;
     max-width: 1200px;
     z-index: 1;
@@ -27,9 +25,11 @@
     color: rgb(0, 0, 0);
 }
 
-.box-texto h2 {
-    font-size: 50px;
-    font-weight: 400;
+.box-texto h1 {
+    font-size: 55px;
+    font-weight: 700;
+    line-height: 1.10;
+    color: var(--cor-textos);
 }
 
 #hero-subtitle {
@@ -37,8 +37,10 @@
 }
 
 .box-texto p {
-    font-size: 20px;
-    font-weight: 200;
+    font-weight: 300;
+    color: var(--cor-textos);
+    font-size: 1.3rem;
+    line-height: 1.4;
 }
 
 .botao {
@@ -166,109 +168,107 @@
 
 /* Desktop */
 @media (max-width: 1440px) {
-    .hero .container {
-        box-sizing: border-box;
-        max-width: 1200px;
-        gap: 35px;
+
+    .hero {
+        min-height: 50vh;
     }
 
-    .hero .box-texto {
-        min-width: 0;
+    .box-texto h1 {
+        font-size: 50px;
     }
 
-    .hero .box-card {
-        flex-shrink: 0;
-        height: auto;
+    .box-card {
         min-height: 450px;
     }
 }
 
 /* Tablet */
 @media (max-width: 1024px) {
-    .hero .container {
+
+    .container {
         gap: 25px;
-        padding: 100px 30px 50px;
-        margin: 0;
+        padding: 0;
+        margin: 120px;
     }
 
-    .hero .box-texto {
+    .box-texto {
         flex: 1;
         width: auto;
         padding: 0;
     }
 
-    .hero .box-texto h2 {
-        font-size: 42px;
+    .box-texto h1 {
+        font-size: 45px;
     }
 
-    .hero .box-texto p {
+    .box-texto p {
         font-size: 18px;
     }
 
-    .hero .box-card {
+    .box-card {
         width: 280px;
         padding: 22px;
     }
 
-    .hero #hero-score-title {
+    #titulo {
         font-size: 30px;
     }
 }
 
 /* Celular */
 @media (max-width: 768px) {
-    .hero .container {
+
+    .container {
+        display: flex;
         flex-direction: column;
+        justify-content: center;
         gap: 35px;
-        padding: 100px 24px 50px;
-        margin: 0;
+        width: 100%;
+        margin: 110px 60px;
     }
 
-    .hero .box-texto {
-        flex: none;
-        box-sizing: border-box;
+    .box-texto {
+        text-align: center;
         width: 100%;
-        max-width: 500px;
         padding: 0;
     }
 
-    .hero .box-texto h2 {
-        font-size: 38px;
+    .box-texto h1 {
+        font-size: 35px;
     }
 
-    .hero .box-texto p {
+    .box-texto p {
         font-size: 17px;
     }
 
-    .hero .box-card {
-        box-sizing: border-box;
+    .box-card {
+        margin: auto;
         width: 100%;
-        max-width: 360px;
+        max-width: 320px;
         height: auto;
-        min-height: 450px;
-        margin-top: 0;
+        min-height: 360px;
         padding: 25px;
     }
 
-    .hero #hero-score-title {
+    #titulo {
         font-size: 30px;
         overflow-wrap: anywhere;
     }
 
-    .hero .texto {
+    .texto {
         gap: 12px;
     }
 
-    .hero .texto p {
+    .texto p {
         min-width: 0;
         overflow-wrap: anywhere;
     }
 
-    .hero .nota {
+    .nota {
         flex-shrink: 0;
     }
 
-    .hero .botao a {
+    .botao a {
         box-sizing: border-box;
         width: 190px;
         display: block;
@@ -279,43 +279,45 @@
 
 /* Celulares pequenos */
 @media (max-width: 375px) {
-    .hero .container {
-        gap: 28px;
-        padding: 90px 16px 35px;
+
+    .container {
+        margin: var(--margin-responsividade);
+        padding: 30px 0;
+        width: 100%;
+        gap: 35px;
     }
 
-    .hero .box-texto h2 {
-        font-size: clamp(24px, 8vw, 30px);
-        overflow-wrap: anywhere;
+    .box-texto h1 {
+        font-size: 30px;
     }
 
-    .hero #hero-subtitle {
+    #subtitulo {
         margin-bottom: 16px;
     }
 
-    .hero .box-texto p {
+    .box-texto p {
         font-size: 16px;
         overflow-wrap: anywhere;
     }
 
-    .hero .botao {
+    .botao {
         margin-top: 24px;
     }
 
-    .hero .box-card {
+    .box-card {
         padding: 20px;
         min-height: 0;
     }
 
-    .hero #hero-score-title {
+    #titulo {
         font-size: 26px;
     }
 
-    .hero #hero-score-value {
+    #media {
         font-size: 28px;
     }
 
-    .hero .texto {
+    .texto {
         font-size: 14px;
         gap: 10px;
     }

@@ -9,8 +9,7 @@
 .login-container {
     display: flex;
     justify-content: center;
-    width: min(100%, 600px);
-    margin: 0;
+    margin: 130px 100px;
 }
 
 .login {
@@ -18,12 +17,13 @@
     flex-direction: column;
     gap: 20px;
     padding: 30px 45px;
-    border-radius: 30px;
-    background-color: rgb(240, 233, 233);
     width: 100%;
     max-width: 600px;
-    border: 1px solid var(--cinza-borda);
-    box-shadow: var(--sombra);
+    border-radius: 20px;
+    background: #241c09a6;
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .logo {
@@ -36,11 +36,11 @@
     height: 100px;
 }
 
-.login-titulo h2 {
+.login-titulo h3 {
     text-align: center;
-    font-size: 35px;
-    font-weight: 500;
+    font-size: var(--tamanho-h3-secoes-home);
     color: var(--cor-destaque);
+    font-weight: var(--font-weight-h3);
 }
 
 .login-formulario {
@@ -68,6 +68,7 @@ form {
 .formulario label {
     font-size: 18px;
     font-weight: 600;
+    color: #fcfbf8;
 }
 
 .formulario input {
@@ -76,8 +77,11 @@ form {
     width: 100%;
     padding: 18px;
     border-radius: 10px;
-    border: 1px solid var(--cinza-borda);
-    transition: .4s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.07);
+    transition: all 0.25s ease;
+    box-sizing: border-box;
 }
 
 .formulario input:hover {
@@ -87,14 +91,15 @@ form {
 
 .formulario input:focus {
     outline: none;
-    border: 1px solid rgb(192, 192, 192);
-    box-shadow: var(--sombra);
+    border-color: #f8c538;
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 4px rgba(248, 165, 56, 0.2);
 }
 
 .formulario input::placeholder {
     font-family: var(--fonte);
-    color: var(--cinza-texto);
-    font-size: 16px;
+    color: #ebe2cc8f;
+    font-size: 18px;
 }
 
 .login-cadastro {
@@ -107,7 +112,7 @@ form {
     background: transparent;
     text-decoration: none;
     font-size: 14px;
-    color: rgb(8, 80, 138);
+    color: rgb(24, 69, 105);
     font-weight: 600;
 }
 
@@ -119,20 +124,22 @@ form {
 form > button[type="submit"] {
     width: 100%;
     padding: 15px;
-    border-radius: 30px;
+    border-radius: 12px;
     border: none;
     background-color: var(--cor-destaque);
     color: rgb(255, 255, 255);
     font-size: 16px;
     font-family: var(--fonte);
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
-    transition: .4s ease;
+    background: var(--cor-destaque);
+    transition: all 0.2s ease;
 }
 
-form > button[type="submit"]:hover {
-    transform: scale(1.02);
-    box-shadow: var(--sombra);
+form button:hover {
+    background: #d8971d;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(232, 219, 37, 0.5);
 }
 
 .login-ou {
@@ -145,14 +152,14 @@ form > button[type="submit"]:hover {
 
 .linha {
     width: 100%;
-    height: 2px;
+    height: 1px;
     background-color: var(--cinza-borda);
 }
 
 .login-ou span {
     font-size: 17px;
-    font-weight: 300;
-    color: var(--cinza-texto);
+    font-weight: 700;
+    color: rgb(255, 255, 255);
 }
 
 .formulario-box {
@@ -210,47 +217,35 @@ form > button[type="submit"]:hover {
 
 .formulario-texto p {
     font-size: 17px;
-    color: var(--cor-textos);
+    color: rgb(255, 255, 255);
+    font-weight: 300;
 }
 
 .formulario-texto a {
     text-decoration: none;
     font-size: 17px;
-    color: var(--cinza-texto);
+    color: rgb(255, 255, 255);
     font-weight: 700;
     text-decoration: underline;
 }
 
-.formulario-texto button {
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: var(--cinza-texto);
-    font: inherit;
-    font-weight: 700;
-    text-decoration: underline;
-}
+/* Desktop */
+@media (max-width: 1440px) {
 
-.formulario-texto button:disabled {
-    cursor: not-allowed;
-    opacity: 0.7;
-}
+    .login-container {
+        margin: 150px 0;
+    }
 
-.login-status {
-    margin: 0;
-    padding: 12px 14px;
-    border: 1px solid #e2c36e;
-    border-radius: 10px;
-    background: #fff9e8;
-    color: #664b00;
-    line-height: 1.5;
+    .login {
+        padding: 30px 40px;
+    }
 }
 
 /* Tablet */
 @media (max-width: 1024px) {
 
-    .secao-login {
-        padding-inline: 40px;
+    .login-container {
+        margin: 130px 0;
     }
 
     .login {
@@ -258,7 +253,7 @@ form > button[type="submit"]:hover {
         padding: 30px 40px;
     }
 
-    .login-titulo h2 {
+    .login-titulo h3 {
         font-size: 32px;
     }
 
@@ -267,8 +262,8 @@ form > button[type="submit"]:hover {
 /* Celular */
 @media (max-width: 768px) {
 
-    .secao-login {
-        padding: 96px 20px 48px;
+    .login-container {
+        margin: 115px 60px;
     }
 
     .login {
@@ -282,7 +277,7 @@ form > button[type="submit"]:hover {
         height: 90px;
     }
 
-    .login-titulo h2 {
+    .login-titulo h3 {
         font-size: 30px;
     }
 
@@ -306,10 +301,11 @@ form > button[type="submit"]:hover {
 }
 
 /* Celulares pequenos */
-@media (max-width: 480px) {
+@media (max-width: 375px) {
 
-    .secao-login {
-        padding: 88px 12px 36px;
+    .login-container {
+        margin: var(--margin-responsividade);
+        padding: 35px 0;
     }
 
     .login {
@@ -323,7 +319,7 @@ form > button[type="submit"]:hover {
         height: 75px;
     }
 
-    .login-titulo h2 {
+    .login-titulo h3 {
         font-size: 27px;
     }
 
@@ -373,6 +369,7 @@ form > button[type="submit"]:hover {
 
     .formulario-texto p, .formulario-texto button {
         font-size: 14px;
+        text-align: center;
     }
 
 }
