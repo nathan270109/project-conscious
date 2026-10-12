@@ -50,4 +50,16 @@ describe('App', () => {
     expect(compiled.querySelector('app-header')).not.toBeNull();
     expect(compiled.querySelector('app-footer')).not.toBeNull();
   });
+
+  it('mostra uma página 404 com caminhos de recuperação para rota desconhecida', async () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    const router = TestBed.inject(Router);
+    await router.navigateByUrl('/pagina-inexistente');
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(router.url).toBe('/pagina-inexistente');
+    expect(compiled.querySelector('app-not-found')?.textContent).toContain('ERRO 404');
+    expect(compiled.querySelector('app-not-found a')?.getAttribute('href')).toBe('/home');
+  });
 });

@@ -26,8 +26,9 @@ describe('Demo offline e compatibilidade CONSCIOUS-47', () => {
     fixture.detectChanges();
     await fixture.whenStable();
     const element = fixture.nativeElement as HTMLElement;
-    expect(element.textContent).toContain('Modo demonstração: análise salva');
-    expect(element.textContent).toContain(DEMO_REVISION);
+    expect(element.textContent).toContain('Demonstração');
+    expect(element.querySelector('.dashboard__repository')?.getAttribute('href')).toBe(DEMO_REPOSITORY_URL);
+    expect(element.textContent).not.toContain(DEMO_REVISION);
     expect(element.querySelector('.dashboard__score')?.textContent).toContain('74/100');
     expect(element.querySelectorAll('.dimension-card')).toHaveLength(5);
     expect(element.querySelectorAll('.risk-card')).toHaveLength(10);

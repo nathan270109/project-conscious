@@ -1,7 +1,13 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:net';
-import { supportedNode, windowsKillArgs, availablePort } from './start-project.mjs';
+import {
+  availablePort,
+  defaultAiTarget,
+  developmentProxyConfig,
+  supportedNode,
+  windowsKillArgs,
+} from './start-project.mjs';
 
 test('valida versões mínimas do Angular sem aceitar versões incompatíveis', () => {
   for (const version of ['v22.22.3', 'v24.15.0', 'v26.0.0'])
@@ -23,4 +29,16 @@ test('porta ocupada é preservada e o inicializador escolhe outra', async () => 
   } finally {
     await new Promise((done) => server.close(done));
   }
+});
+test('proxy local separa a IA na AWS das demais rotas do backend', () => {
+  const proxy = developmentProxyConfig('http://127.0.0.1:3210');
+  assert.equal(proxy['/api/ai/**'].target, defaultAiTarget);
+  assert.equal(proxy['/api/ai/**'].changeOrigin, true);
+  assert.equal(proxy['/api/**'].target, 'http://127.0.0.1:3210');
+  assert.deepEqual(proxy['/api/**'].pathRewrite, { '^/api': '' });
+  assert.deepEqual(Object.keys(proxy), ['/api/ai/**', '/api/**']);
+});
+test('proxy local permite trocar o destino da IA explicitamente', () => {
+  const proxy = developmentProxyConfig('http://127.0.0.1:3000', 'https://ai.example.test');
+  assert.equal(proxy['/api/ai/**'].target, 'https://ai.example.test');
 });

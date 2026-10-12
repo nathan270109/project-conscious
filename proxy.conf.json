@@ -1,4 +1,9 @@
 {
+  "/api/ai/**": {
+    "target": "https://d373x30t8ya2si.cloudfront.net",
+    "changeOrigin": true,
+    "secure": true
+  },
   "/api/**": {
     "target": "http://127.0.0.1:3000",
     "pathRewrite": { "^/api": "" }
