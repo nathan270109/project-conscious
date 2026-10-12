@@ -35,7 +35,8 @@ No Windows, caminhos com espaços são tratados com aspas e `pushd`.
 3. Compila o backend atual para não usar uma versão antiga de `dist`.
 4. Escolhe portas livres, começando em 3000 e 4200. Não mata processos existentes.
 5. Inicia o backend e o Angular, gera um proxy temporário próprio e espera respostas
-   HTTP reais antes de anunciar que estão prontos.
+   HTTP reais antes de anunciar que estão prontos. O proxy mantém as rotas de projeto
+   no backend local e encaminha `/api/ai/**` para a implantação AWS do Conscious AI.
 6. Mostra os dois links separados. Copie/clique no link FRONTEND para abrir o cadastro.
 7. Guarda logs e proxy em `.conscious-runtime/session-*`, ignorada pelo Git.
 
@@ -43,6 +44,9 @@ Os links podem variar conforme as portas ocupadas: use sempre os exibidos na jan
 O proxy versionado do projeto não é alterado. Ambos os serviços iniciados pelo
 inicializador ficam vinculados a 127.0.0.1 (loopback), sem publicação na rede local.
 Este script não configura publicação na internet, firewall ou servidor de produção.
+O chat requer internet porque o modelo Gemma 4 E2B é executado no Amazon Bedrock.
+Para testar outra implantação, defina `CONSCIOUS_AI_TARGET` com a origem HTTPS antes
+de iniciar; sem essa variável, o inicializador usa a implantação AWS oficial do projeto.
 
 ```text
 +--------------------------------------------------+

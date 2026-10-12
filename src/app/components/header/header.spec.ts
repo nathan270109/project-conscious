@@ -28,6 +28,21 @@ describe('Header', () => {
     expect(element.querySelector('.sidebar-links a')?.getAttribute('href')).toBe('/home');
   });
 
+  it('usa destinos reais em todos os itens do menu', () => {
+    const element = fixture.nativeElement as HTMLElement;
+    const links = Array.from(element.querySelectorAll<HTMLAnchorElement>('.nav a'));
+    expect(links.map((link) => link.getAttribute('href'))).toEqual([
+      '/home',
+      '/home#section-sobre-o-projeto',
+      '/home#section-como-funciona',
+      '/projects/new',
+      '/home#contato',
+    ]);
+    expect(Array.from(element.querySelectorAll('.sidebar-links a')).every(
+      (link) => link.getAttribute('href') !== '',
+    )).toBe(true);
+  });
+
   it('preserva o destino de voltar ao topo e os rótulos da master', () => {
     const element = fixture.nativeElement as HTMLElement;
     expect(element.querySelector('.header-container')?.id).toBe('top');

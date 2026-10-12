@@ -1,4 +1,4 @@
-<footer class="site-footer">
+<footer class="site-footer" id="contato">
     <div class="footer-container">
         <div class="footer-cta">
             <h2>Seu software funciona. Mas ele está saudável?</h2>
@@ -12,7 +12,7 @@
                     height="40">
                     </a>
         
-                    <p id="paragrafo">Project Conscious</p>
+                    <p id="footer-brand-name">Project Conscious</p>
                 </div>
 
                 <p>Diagnóstico explicável da saúde do software.</p>
@@ -22,10 +22,10 @@
                 <nav aria-label="Navegação do footer">
                     <h3>Explorar</h3>
                     <ul>
-                        <li><a href="#top">Início</a></li>
-                        <li><a routerLink="">Sobre</a></li>
-                        <li><a routerLink="">Contato</a></li>
-                        <li><a routerLink="/projects/new/">Diagnóstico</a></li>
+                        <li><a routerLink="/home" fragment="top">Início</a></li>
+                        <li><a routerLink="/home" fragment="section-sobre-o-projeto">Sobre</a></li>
+                        <li><a routerLink="/home" fragment="contato">Contato</a></li>
+                        <li><a routerLink="/projects/new">Diagnóstico</a></li>
                         <li><a routerLink="/login">Login</a></li>
                     </ul>
                 </nav>
@@ -33,12 +33,12 @@
                 <nav aria-label="Seções home">
                     <h3>Seções da página</h3>
                     <ul>
-                        <li><a href="#section-hero" rel="noopener noreferrer">Hero</a></li>
-                        <li><a href="#section-sobre-o-projeto" rel="noopener noreferrer">Sobre o projeto</a></li>
-                        <li><a href="#section-como-funciona" rel="noopener noreferrer">Como funciona</a></li>
-                        <li><a href="#section-cinco-dimensoes" rel="noopener noreferrer">Cinco dimensões</a></li>
-                        <li><a href="#section-beneficios" rel="noopener noreferrer">Benefícios</a></li>
-                        <li><a href="#section-faq" rel="noopener noreferrer">Perguntas frequentes</a></li>
+                        <li><a routerLink="/home" fragment="section-hero">Hero</a></li>
+                        <li><a routerLink="/home" fragment="section-sobre-o-projeto">Sobre o projeto</a></li>
+                        <li><a routerLink="/home" fragment="section-como-funciona">Como funciona</a></li>
+                        <li><a routerLink="/home" fragment="section-cinco-dimensoes">Cinco dimensões</a></li>
+                        <li><a routerLink="/home" fragment="section-beneficios">Benefícios</a></li>
+                        <li><a routerLink="/home" fragment="section-faq">Perguntas frequentes</a></li>
                     </ul>
                 </nav>
 
@@ -54,7 +54,7 @@
 
         <div class="footer-bottom">
             <p>© 2026 Project Conscious. Diagnóstico explicável da saúde do software.</p>
-            <a href="#top" class="back-to-top">Voltar ao topo</a>
+            <a routerLink="/home" fragment="top" class="back-to-top">Voltar ao topo</a>
         </div>
     </div>
 </footer>

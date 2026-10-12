@@ -8,6 +8,25 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { emitKeypressEvents } from 'node:readline';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+export const defaultAiTarget = 'https://d373x30t8ya2si.cloudfront.net';
+
+export function developmentProxyConfig(
+  backendUrl,
+  aiTarget = process.env.CONSCIOUS_AI_TARGET || defaultAiTarget,
+) {
+  return {
+    '/api/ai/**': {
+      target: aiTarget,
+      changeOrigin: true,
+      secure: true,
+    },
+    '/api/**': {
+      target: backendUrl,
+      pathRewrite: { '^/api': '' },
+    },
+  };
+}
+
 export function supportedNode(version) {
   const [major, minor, patch] = version.replace(/^v/, '').split('.').map(Number);
   return (
@@ -214,7 +233,7 @@ export async function main(args = process.argv.slice(2)) {
     const proxy = join(runtime, 'proxy.json');
     await writeFile(
       proxy,
-      JSON.stringify({ '/api/**': { target: backendUrl, pathRewrite: { '^/api': '' } } }),
+      JSON.stringify(developmentProxyConfig(backendUrl), null, 2),
     );
     const api = startChild(
       'backend',
