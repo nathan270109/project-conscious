@@ -19,23 +19,27 @@ export class ProjectAnalysisService {
     let filesLoaded = false;
 
     try {
-      const files = await this.projectsService.getProjectFiles(projectId);
-      filesLoaded = true;
-
-      const result = await this.analysisEngine.analyze(files);
-
-      validateAnalysisResult(result);
-
-      return {
+      return await this.projectsService.withProjectFiles(
         projectId,
-        status: 'COMPLETED',
-        analyzedAt: new Date().toISOString(),
-        demoMode: false,
-        score: result.score,
-        dimensions: result.dimensions,
-        findings: result.findings,
-        insight: result.insight,
-      };
+        async (files): Promise<AnalysisResult> => {
+          filesLoaded = true;
+
+          const result = await this.analysisEngine.analyze(files);
+
+          validateAnalysisResult(result);
+
+          return {
+            projectId,
+            status: 'COMPLETED',
+            analyzedAt: new Date().toISOString(),
+            demoMode: false,
+            score: result.score,
+            dimensions: result.dimensions,
+            findings: result.findings,
+            insight: result.insight,
+          };
+        },
+      );
     } catch (error) {
       const repositoryNotFound =
         !filesLoaded && error instanceof NotFoundException;

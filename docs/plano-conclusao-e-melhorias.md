@@ -195,17 +195,19 @@ Não marcar o passo 1 global como concluído enquanto a decisão de escopo do gr
 **Arquivos:** `backend/src/github/github.service.ts`, `github.service.spec.ts`, testes de falha da análise e `docs/api-contract.md`.
 
 1. Definir limites de arquivos, bytes, concorrência e duração da operação. Documentar os valores escolhidos; não escolher limites sem testar um repositório representativo.
-2. Verificar `tree.truncated`. Se a árvore estiver incompleta, implementar coleta completa dentro dos limites ou falhar com mensagem segura. Não apresentar uma análise parcial como completa.
-3. Limitar downloads simultâneos em vez de executar todos com `Promise.all` sem controle.
+2. Coletar a árvore do clone local, sem API REST/Git Trees e sem paginação ou `tree.truncated`. Falhar se exceder limites, sem apresentar coleta parcial como completa.
+3. Limitar clones simultâneos e ler conteúdos sequencialmente, sem `Promise.all` irrestrito.
 4. Definir exclusões para dependências, código gerado e artefatos de build; testar que arquivos relevantes não desapareçam por engano.
-5. Validar metadados dos blobs e tratar arquivos muito grandes ou indisponíveis.
-6. Se o escopo for público, rejeitar explicitamente `repository.data.private === true` antes de baixar conteúdos.
-7. Usar token com permissões mínimas, mantê-lo fora do repositório e documentar configuração sem registrar seu valor.
-8. Testar árvore truncada, excesso de arquivos/bytes, timeout, repositório privado simulado e erros do GitHub, além do caminho normal.
+5. Validar tamanhos dos objetos Git e tratar arquivos muito grandes ou indisponíveis.
+6. Manter o escopo público: desabilitar prompts, credenciais locais e configurações herdadas; privado/inexistente deve falhar de forma segura.
+7. Não usar tokens: mudança de escopo solicitada por Katheriny em 07/10/2026. Clonar em pasta exclusiva e removê-la após análise, inclusive em falhas.
+8. Testar excesso de arquivos/bytes, timeout, privado/inexistente simulado, isolamento de pastas, falhas do motor e limpeza, além do caminho normal.
 
 **Aceite:** operações têm limites previsíveis e a API não apresenta coleta incompleta como sucesso. Não usar repositórios privados reais de terceiros para testar.
 
-**Referência:** o GitHub documenta o sinal de truncamento em [Git Trees](https://docs.github.com/en/rest/git/trees?apiVersion=2022-11-28).
+**Nova implementação:** branch `feat/temporary-git-clone`; valores iniciais e limitações em [Coleta por clone temporário](coleta-clone-temporario.md). O aceite final ainda exige revisão/merge e ensaio no ambiente da apresentação. Cache persistente de código e token da API REST deixam de ser requisitos desse passo.
+
+**Referência:** [git clone](https://git-scm.com/docs/git-clone).
 
 - [ ] Passo 3 implementado, testado e integrado.
 

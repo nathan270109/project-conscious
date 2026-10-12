@@ -2,6 +2,8 @@
   "name": "project-conscious",
   "version": "0.0.0",
   "scripts": {
+    "conscious:start": "node scripts/start-project.mjs",
+    "test:launcher": "node --test scripts/start-project.test.mjs",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",

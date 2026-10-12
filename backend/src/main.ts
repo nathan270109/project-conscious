@@ -6,7 +6,19 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     instrument: ObserveInstrument,
   });
-  
+  app.enableShutdownHooks();
+  // Canal privado do processo pai, sem endpoint HTTP de desligamento.
+  if (process.send) {
+    process.on('message', (message: unknown) => {
+      if (message === 'conscious:shutdown') {
+        void app
+          .close()
+          .then(() => process.exit(0))
+          .catch(() => process.exit(1));
+      }
+    });
+  }
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -19,7 +31,9 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(process.env.PORT ?? 3000);
+  if (process.env.HOST)
+    await app.listen(process.env.PORT ?? 3000, process.env.HOST);
+  else await app.listen(process.env.PORT ?? 3000);
 }
 
 await bootstrap();

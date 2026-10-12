@@ -13,9 +13,9 @@ interface Project {
 
 @Injectable()
 export class ProjectsService {
-    private readonly projects: Project[] = [];
+  private readonly projects: Project[] = [];
 
-    constructor(private readonly githubService: GithubService) {}
+  constructor(private readonly githubService: GithubService) {}
 
   create(createProjectDto: CreateProjectDto): Project {
     const project: Project = {
@@ -32,18 +32,29 @@ export class ProjectsService {
   }
 
   findById(id: string): Project {
-  const project = this.projects.find((item) => item.id === id);
+    const project = this.projects.find((item) => item.id === id);
 
-  if (!project) {
-    throw new NotFoundException('Projeto não encontrado.');
+    if (!project) {
+      throw new NotFoundException('Projeto não encontrado.');
+    }
+
+    return project;
   }
 
-  return project;
-}
-
-   async getProjectFiles(id: string): Promise<RepositoryFile[]> {
+  async getProjectFiles(id: string): Promise<RepositoryFile[]> {
     const project = this.findById(id);
 
     return this.githubService.getRepositoryFiles(project.repositoryUrl);
+  }
+
+  withProjectFiles<T>(
+    id: string,
+    consume: (files: RepositoryFile[]) => T | Promise<T>,
+  ): Promise<T> {
+    const project = this.findById(id);
+    return this.githubService.withRepositoryFiles(
+      project.repositoryUrl,
+      consume,
+    );
   }
 }

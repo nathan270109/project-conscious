@@ -77,7 +77,13 @@ describe('ProjectAnalysisService', () => {
         ProjectAnalysisService,
         {
           provide: ProjectsService,
-          useValue: { findById, getProjectFiles },
+          useValue: {
+            findById,
+            withProjectFiles: async (
+              id: string,
+              consume: (files: { path: string; content?: string }[]) => unknown,
+            ) => consume(await getProjectFiles(id)),
+          },
         },
         {
           provide: ANALYSIS_ENGINE,
