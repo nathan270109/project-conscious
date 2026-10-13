@@ -45,12 +45,12 @@ que o código contém um bug:
 
 ## Tecnologias
 
-| Camada | Tecnologia |
-| --- | --- |
-| Frontend | Angular 22 + TypeScript |
-| Backend | NestJS 12 + TypeScript |
-| Integração GitHub | Octokit REST |
-| Testes | Vitest |
+| Camada            | Tecnologia              |
+| ----------------- | ----------------------- |
+| Frontend          | Angular 22 + TypeScript |
+| Backend           | NestJS 12 + TypeScript  |
+| Integração GitHub | Octokit REST            |
+| Testes            | Vitest                  |
 
 ## Estrutura do repositório
 
@@ -123,22 +123,22 @@ Nunca escreva tokens no código, no README, no Jira ou em commits.
 
 ### Frontend
 
-| Comando | Finalidade |
-| --- | --- |
-| `npm start` | Executa o Angular em modo de desenvolvimento. |
-| `npm test` | Executa os testes do frontend em modo de observação. |
-| `npm run build` | Gera a versão de produção do frontend. |
+| Comando         | Finalidade                                           |
+| --------------- | ---------------------------------------------------- |
+| `npm start`     | Executa o Angular em modo de desenvolvimento.        |
+| `npm test`      | Executa os testes do frontend em modo de observação. |
+| `npm run build` | Gera a versão de produção do frontend.               |
 
 ### Backend
 
 Execute os comandos dentro de `backend/`.
 
-| Comando | Finalidade |
-| --- | --- |
+| Comando             | Finalidade                             |
+| ------------------- | -------------------------------------- |
 | `npm run start:dev` | Executa o NestJS e observa alterações. |
-| `npm run build` | Compila a API para `backend/dist`. |
-| `npm test` | Executa os testes unitários. |
-| `npm run lint` | Verifica problemas de código. |
+| `npm run build`     | Compila a API para `backend/dist`.     |
+| `npm test`          | Executa os testes unitários.           |
+| `npm run lint`      | Verifica problemas de código.          |
 
 ## Estado atual
 
@@ -153,12 +153,12 @@ Execute os comandos dentro de `backend/`.
 
 ## API atual
 
-| Método | Rota | Descrição |
-| --- | --- | --- |
-| `POST` | `/projects` | Cria um projeto em memória após validar nome, URL e descrição opcional. |
-| `GET` | `/projects/:id/files` | Consulta os arquivos filtrados do repositório do projeto cadastrado. |
-| `POST` | `/projects/:id/analyze` | Executa o motor real e retorna `AnalysisResult`. |
-| `GET` | `/demo/analysis` | Retorna a análise demonstrativa salva, sem consultar GitHub. |
+| Método | Rota                    | Descrição                                                               |
+| ------ | ----------------------- | ----------------------------------------------------------------------- |
+| `POST` | `/projects`             | Cria um projeto em memória após validar nome, URL e descrição opcional. |
+| `GET`  | `/projects/:id/files`   | Consulta os arquivos filtrados do repositório do projeto cadastrado.    |
+| `POST` | `/projects/:id/analyze` | Executa o motor real e retorna `AnalysisResult`.                        |
+| `GET`  | `/demo/analysis`        | Retorna a análise demonstrativa salva, sem consultar GitHub.            |
 
 ### Exemplo completo de cadastro e análise
 
@@ -185,8 +185,12 @@ identifica o resultado salvo, não o nome do repositório.
 
 O Angular usa `/api/projects` e `/api/projects/:id/analyze`. O proxy de
 desenvolvimento configurado na raiz encaminha essas chamadas ao backend e remove
-`/api`; não é necessário habilitar CORS global. Em produção, configure o
-encaminhamento equivalente no servidor, como descrito no [README principal](../README.md).
+`/api`. O backend também aceita chamadas diretas originadas de `localhost`,
+`127.0.0.1` e `[::1]`, em qualquer porta local. Origens externas permanecem
+bloqueadas por padrão; quando frontend e API usarem domínios diferentes,
+configure uma lista explícita separada por vírgulas em `CORS_ORIGINS`, por exemplo
+`CORS_ORIGINS=https://app.example.com,https://preview.example.com`. Em produção,
+prefira o encaminhamento de mesma origem descrito no [README principal](../README.md).
 
 ### Demonstração salva e limitações do MVP
 
@@ -226,9 +230,9 @@ orquestração de análise, que converte essas falhas para 500 seguro.
 
 #### Cadastro de projeto — `POST /projects`
 
-| Situação | Status | Resposta esperada |
-| --- | --- | --- |
-| Projeto válido | `201 Created` | Retorna `id`, `name`, `repositoryUrl`, `description` quando informada e `createdAt`. |
+| Situação       | Status            | Resposta esperada                                                                                |
+| -------------- | ----------------- | ------------------------------------------------------------------------------------------------ |
+| Projeto válido | `201 Created`     | Retorna `id`, `name`, `repositoryUrl`, `description` quando informada e `createdAt`.             |
 | Corpo inválido | `400 Bad Request` | Retorna mensagens de validação, por exemplo para nome com menos de 3 caracteres ou URL inválida. |
 
 Exemplo de requisição válida:
@@ -248,12 +252,12 @@ abaixo. Já `POST /projects/:id/analyze` transforma falhas do GitHub nas respost
 seguras de `FAILED` descritas acima; o status dessa rota de análise é 404 ou 500,
 conforme o caso.
 
-| Situação | Status | Mensagem segura para o frontend |
-| --- | --- | --- |
-| URL fora do padrão `https://github.com/owner/repo` | `400 Bad Request` | `Informe uma URL válida, como https://github.com/owner/repo` |
-| Repositório público inexistente | `404 Not Found` | `Repositório público não encontrado.` |
+| Situação                                                    | Status                    | Mensagem segura para o frontend                                                      |
+| ----------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------ |
+| URL fora do padrão `https://github.com/owner/repo`          | `400 Bad Request`         | `Informe uma URL válida, como https://github.com/owner/repo`                         |
+| Repositório público inexistente                             | `404 Not Found`           | `Repositório público não encontrado.`                                                |
 | Limite de requisições, acesso negado ou GitHub indisponível | `503 Service Unavailable` | `GitHub indisponível ou limite de requisições atingido. Tente novamente mais tarde.` |
-| Falha de rede ou erro técnico sem status | `503 Service Unavailable` | `Não foi possível consultar o GitHub. Verifique sua conexão e tente novamente.` |
+| Falha de rede ou erro técnico sem status                    | `503 Service Unavailable` | `Não foi possível consultar o GitHub. Verifique sua conexão e tente novamente.`      |
 
 A API não retorna token, stack trace nem detalhes internos. Os logs do backend registram somente o status técnico necessário para diagnóstico.
 
@@ -263,13 +267,13 @@ O `DocumentationAnalyzer` avalia somente arquivos README, sem usar IA.
 
 A regra é determinística:
 
-| Situação | Nota | Resultado |
-| --- | ---: | --- |
-| README ausente | `0` | finding `HIGH` |
-| Descrição ausente | -30 pontos | finding `MEDIUM` |
+| Situação           |       Nota | Resultado        |
+| ------------------ | ---------: | ---------------- |
+| README ausente     |        `0` | finding `HIGH`   |
+| Descrição ausente  | -30 pontos | finding `MEDIUM` |
 | Instalação ausente | -30 pontos | finding `MEDIUM` |
-| Execução ausente | -30 pontos | finding `MEDIUM` |
-| README completo | `100` | nenhum finding |
+| Execução ausente   | -30 pontos | finding `MEDIUM` |
+| README completo    |      `100` | nenhum finding   |
 
 O analisador reconhece arquivos como `README`, `README.md` e `docs/README.md`.
 
@@ -433,11 +437,11 @@ Cada dimensão começa com nota `100`.
 Os findings reduzem a nota conforme a severidade:
 
 | Severidade | Desconto |
-| --- | ---: |
-| `CRITICAL` | 40 |
-| `HIGH` | 25 |
-| `MEDIUM` | 10 |
-| `LOW` | 5 |
+| ---------- | -------: |
+| `CRITICAL` |       40 |
+| `HIGH`     |       25 |
+| `MEDIUM`   |       10 |
+| `LOW`      |        5 |
 
 A nota de uma dimensão nunca fica abaixo de `0`.
 
