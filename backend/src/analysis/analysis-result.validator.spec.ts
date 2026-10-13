@@ -18,11 +18,17 @@ const validResult = () => ({
   ].map((category) => ({ category, score: 95 })),
   findings: [
     {
+      ruleId: 'TEST002',
       category: 'TESTS',
       severity: 'HIGH',
+      title: 'Teste ausente',
       message: 'Teste ausente.',
+      whyItMatters: 'Regressões podem passar sem detecção.',
+      remediation: 'Adicione testes automatizados.',
+      evidence: null,
       file: 'tests',
       line: null as number | null,
+      occurrences: 1,
     },
   ],
   insight: {
@@ -104,8 +110,14 @@ describe('validateAnalysisResult', () => {
     ),
     ...[
       { category: 'OTHER' },
+      { ruleId: '' },
       { severity: 'OTHER' },
+      { title: '' },
       { message: '' },
+      { whyItMatters: '' },
+      { remediation: '' },
+      { evidence: 1 },
+      { occurrences: 0 },
       { file: '  ' },
       { file: undefined },
       { line: undefined },

@@ -17,19 +17,23 @@ import { RouterLink } from '@angular/router';
   `,
   styles: `
     .not-found {
-      width: min(100% - 40px, 760px);
-      min-height: 70vh;
+      display: grid;
+      width: min(calc(100% - 40px), 900px);
+      min-height: 78svh;
       margin: 0 auto;
-      padding: 140px 0 80px;
-      color: #0f2747;
+      padding: calc(var(--header-height) + 72px) 0 80px;
+      align-content: center;
+      justify-items: start;
+      color: var(--color-text);
     }
-    .not-found p { margin: 0 0 12px; color: #9a6c08; font-weight: 800; letter-spacing: .12em; }
-    .not-found h1 { margin: 0 0 18px; font-size: clamp(2.5rem, 8vw, 5rem); line-height: 1; }
-    .not-found span { display: block; max-width: 52ch; color: #53677c; font-size: 1.1rem; line-height: 1.6; }
+    .not-found p { margin: 0 0 18px; color: var(--color-accent); font-size: .72rem; font-weight: 750; letter-spacing: .14em; }
+    .not-found h1 { max-width: 12ch; margin: 0 0 22px; font-family: var(--font-display); font-size: clamp(3.5rem, 10vw, 8rem); font-weight: 500; line-height: .9; letter-spacing: -.06em; }
+    .not-found > span { display: block; max-width: 52ch; color: var(--color-text-muted); font-size: 1.05rem; line-height: 1.65; }
     .not-found div { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
-    .not-found a { padding: 12px 18px; border: 1px solid #0f2747; border-radius: 999px; color: #0f2747; font-weight: 700; text-decoration: none; }
-    .not-found a:last-child { background: #0f2747; color: #fff; }
-    .not-found a:focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
+    .not-found a { display: inline-flex; min-height: 48px; align-items: center; padding: 0 18px; border: 1px solid var(--color-border-strong); border-radius: var(--radius-sm); color: var(--color-text); font-weight: 700; text-decoration: none; }
+    .not-found a:last-child { border-color: var(--color-text); background: var(--color-text); color: #111116; }
+    .not-found a:hover { border-color: var(--color-accent); }
+    @media (max-width: 520px) { .not-found { width: min(calc(100% - 32px),900px); } .not-found div, .not-found a { width: 100%; } .not-found a { justify-content: center; } }
   `,
 })
 export class NotFound {}

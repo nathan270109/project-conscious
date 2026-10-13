@@ -72,7 +72,14 @@ def _sanitize_analysis(raw: Any) -> dict[str, Any]:
                     {
                         "severity": _text(item.get("severity"), 12).upper(),
                         "category": _text(item.get("category"), 60),
+                        "title": _text(item.get("title"), 160),
                         "problem": _text(item.get("problem"), 240),
+                        "whyItMatters": _text(item.get("whyItMatters"), 320),
+                        "remediation": _text(item.get("remediation"), 320),
+                        "evidence": _text(item.get("evidence"), 240),
+                        "occurrences": item.get("occurrences")
+                        if isinstance(item.get("occurrences"), int)
+                        else 1,
                         "file": _text(item.get("file"), 240),
                         "line": item.get("line")
                         if isinstance(item.get("line"), int)

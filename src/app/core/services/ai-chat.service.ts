@@ -15,7 +15,12 @@ export interface AiAnalysisContext {
   findings: Array<{
     severity: string;
     category: string;
+    title: string;
     problem: string;
+    whyItMatters: string;
+    remediation: string;
+    evidence: string | null;
+    occurrences: number;
     file: string;
     line: number | null;
   }>;

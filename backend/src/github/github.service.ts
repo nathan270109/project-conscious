@@ -247,10 +247,12 @@ export class GithubService {
     )
       return false;
     const name = segments.at(-1) ?? '';
+    if (/^(package-lock\.json|yarn\.lock|pnpm-lock\.yaml)$/i.test(name)) return false;
     return (
       name === 'readme' ||
       name.startsWith('readme.') ||
-      /\.(html?|[jt]sx?)$/.test(name)
+      name === 'dockerfile' ||
+      /\.(html?|[cm]?[jt]sx?|md|json|ya?ml|css|scss)$/.test(name)
     );
   }
 

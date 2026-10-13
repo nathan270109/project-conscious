@@ -82,10 +82,16 @@ describe('AnalysisService — contrato e cache de resultado', () => {
     for (const finding of result.findings) {
       expect(Object.keys(finding).sort()).toEqual([
         'category',
+        'evidence',
         'file',
         'line',
         'message',
+        'occurrences',
+        'remediation',
+        'ruleId',
         'severity',
+        'title',
+        'whyItMatters',
       ]);
       expect(finding.file.length).toBeGreaterThan(0);
       expect(finding.line === null || (Number.isInteger(finding.line) && finding.line > 0)).toBe(

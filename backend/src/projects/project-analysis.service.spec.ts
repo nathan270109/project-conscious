@@ -47,11 +47,17 @@ describe('ProjectAnalysisService', () => {
     ],
     findings: [
       {
+        ruleId: 'DOC003',
         category: 'DOCUMENTATION',
         severity: 'HIGH',
+        title: 'Instalação ausente',
         message: 'README sem instruções de instalação.',
+        whyItMatters: 'Onboarding não é reproduzível.',
+        remediation: 'Documente a instalação.',
+        evidence: null,
         file: 'README.md',
         line: null,
+        occurrences: 1,
       },
     ],
     insight: {

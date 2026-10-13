@@ -1,47 +1,30 @@
+import type { RepositoryFile } from '../../github/github.service.js';
+import { RepositoryProfiler } from '../repository-profiler.service.js';
 import { TestsAnalyzer } from './tests.analyzer.js';
 
-// Bloco de testes unitários para a classe TestsAnalyzer
 describe('TestsAnalyzer', () => {
   const analyzer = new TestsAnalyzer();
+  const profiler = new RepositoryProfiler();
+  const analyze = (files: RepositoryFile[]) => analyzer.analyze(files, profiler.profile(files));
 
-  // Cenário 1: Garante que a pontuação é 100 e não há erros quando existem arquivos de teste (.spec.ts)
-  it('returns score 100 when test files exist', () => {
-    const result = analyzer.analyze([
-      {
-        path: 'src/app.ts',
-        content: 'export const app = true;',
-      },
-      {
-        path: 'src/app.spec.ts', // Arquivo de teste presente
-        content: 'describe("App", () => {});',
-      },
-    ]);
-
-    // Valida o sucesso do resultado esperado
-    expect(result.score).toBe(100);
-    expect(result.findings).toEqual([]);
+  it('accepts an executable suite with assertions', () => {
+    const files = [{ path: 'package.json', content: '{"scripts":{"test":"vitest"}}' },
+      { path: 'src/app.ts', content: 'export const value=1' },
+      { path: 'src/app.spec.ts', content: 'test("value",()=>expect(1).toBe(1))' }];
+    expect(analyze(files).findings).toEqual([]);
   });
 
-  // Cenário 2: Garante que retorna nota 0 e um alerta de alta severidade quando nenhum arquivo de teste é enviado
-  it('returns a high severity finding when no test file exists', () => {
-    const result = analyzer.analyze([
-      {
-        path: 'src/app.ts',
-        content: 'export const app = true;',
-        // Nenhum arquivo .spec ou .test presente
-      },
-    ]);
+  it('does not award a clean result for a test-shaped empty file', () => {
+    const files = [{ path: 'package.json', content: '{"scripts":{"test":"vitest"}}' },
+      { path: 'src/app.spec.ts', content: 'describe("app",()=>{})' }];
+    expect(analyze(files).findings[0].ruleId).toBe('TEST003');
+  });
 
-    // Valida se o score foi zerado e o finding de erro foi gerado corretamente
-    expect(result.score).toBe(0);
-    expect(result.findings).toEqual([
-      {
-        category: 'TESTS',
-        severity: 'HIGH',
-        message: 'Nenhum arquivo de teste foi encontrado no repositório.',
-        file: 'tests',
-        line: null,
-      },
-    ]);
+  it('detects missing tests, missing assertions, focused and skipped tests', () => {
+    expect(analyze([{ path: 'src/app.ts', content: '' }]).findings.map((f) => f.ruleId))
+      .toEqual(['TEST002']);
+    const files = [{ path: 'package.json', content: '{"scripts":{"test":"vitest"}}' },
+      { path: 'src/app.spec.ts', content: 'test.only("a",()=>{}); test.skip("b",()=>{})' }];
+    expect(analyze(files).findings.map((f) => f.ruleId)).toEqual(['TEST004', 'TEST005', 'TEST006']);
   });
 });

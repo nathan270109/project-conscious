@@ -9,6 +9,7 @@ import { TestsAnalyzer } from './analyzers/tests.analyzer.js';
 import { DocumentationAnalyzer } from './analyzers/documentation.analyzer.js';
 import { MaintainabilityAnalyzer } from './analyzers/maintainability.analyzer.js';
 import { OrganizationAnalyzer } from './analyzers/organization.analyzer.js';
+import { RepositoryProfiler } from './repository-profiler.service.js';
 
 @Module({
   imports: [ScoringModule, RisksModule, InsightsModule],
@@ -20,6 +21,7 @@ import { OrganizationAnalyzer } from './analyzers/organization.analyzer.js';
     DocumentationAnalyzer,
     OrganizationAnalyzer,
     MaintainabilityAnalyzer,
+    RepositoryProfiler,
   ],
   exports: [
     ANALYSIS_ENGINE,
@@ -28,6 +30,7 @@ import { OrganizationAnalyzer } from './analyzers/organization.analyzer.js';
     DocumentationAnalyzer,
     OrganizationAnalyzer,
     MaintainabilityAnalyzer,
+    RepositoryProfiler,
   ],
 })
 export class AnalysisModule {}

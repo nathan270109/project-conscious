@@ -29,9 +29,9 @@ describe('Demo offline e compatibilidade CONSCIOUS-47', () => {
     expect(element.textContent).toContain('Demonstração');
     expect(element.querySelector('.dashboard__repository')?.getAttribute('href')).toBe(DEMO_REPOSITORY_URL);
     expect(element.textContent).not.toContain(DEMO_REVISION);
-    expect(element.querySelector('.dashboard__score')?.textContent).toContain('74/100');
+    expect(element.querySelector('.dashboard__score')?.textContent).toContain('72/100');
     expect(element.querySelectorAll('.dimension-card')).toHaveLength(5);
-    expect(element.querySelectorAll('.risk-card')).toHaveLength(10);
+    expect(element.querySelectorAll('.risk-card')).toHaveLength(9);
     expect(element.textContent).toContain(readDemoAnalysis().insight.message);
     TestBed.inject(HttpTestingController).expectNone(() => true);
   });
@@ -40,7 +40,7 @@ describe('Demo offline e compatibilidade CONSCIOUS-47', () => {
     const service = TestBed.inject(AnalysisService);
     expect(service.getByProjectId('outro-projeto')).toBeUndefined();
     service.getDemoAnalysis().findings.length = 0;
-    expect(service.getByProjectId(DEMO_PROJECT_ID)?.findings).toHaveLength(10);
+    expect(service.getByProjectId(DEMO_PROJECT_ID)?.findings).toHaveLength(9);
     expect(DEMO_REVISION).toBe(snapshot.revision);
     expect(DEMO_REPOSITORY_URL).toBe(snapshot.repositoryUrl);
   });

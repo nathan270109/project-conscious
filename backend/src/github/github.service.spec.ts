@@ -156,6 +156,18 @@ describe('GithubService — clone temporário', () => {
     ).toHaveLength(1);
   });
 
+  it('inclui configurações relevantes e ignora lockfiles', async () => {
+    git.mockImplementation(async (args) => {
+      if (args.includes('ls-tree'))
+        return entry('package.json') + entry('.github/workflows/ci.yml') +
+          entry('src/styles.scss') + entry('Dockerfile') + entry('package-lock.json');
+      return 'conteúdo';
+    });
+    expect((await service.getRepositoryFiles(url)).map((file) => file.path)).toEqual([
+      'package.json', '.github/workflows/ci.yml', 'src/styles.scss', 'Dockerfile',
+    ]);
+  });
+
   it.each([
     entry('large.ts', CLONE_LIMITS.fileBytes + 1),
     entry('a.ts').repeat(CLONE_LIMITS.files + 1),

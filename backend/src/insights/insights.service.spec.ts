@@ -10,6 +10,10 @@ import { InsightsService } from './insights.service.js';
 
 describe('InsightsService', () => {
   const service = new InsightsService();
+  const buildFinding = (value: Partial<Finding> & Pick<Finding, 'category' | 'severity' | 'message' | 'file'>): Finding => ({
+    ruleId: 'RULE001', title: 'Apontamento', whyItMatters: 'Impacto', remediation: 'Correção',
+    evidence: null, line: null, occurrences: 1, ...value,
+  });
   const dimensions: DimensionScore[] = [
     'DOCUMENTATION',
     'TESTS',
@@ -32,13 +36,13 @@ describe('InsightsService', () => {
   it('inclui arquivo e linha quando disponíveis', () => {
     expect(
       service.generate(dimensions, [
-        {
+        buildFinding({
           category: 'DOCUMENTATION',
           severity: 'HIGH',
           message: 'README não possui instruções de instalação.',
           file: 'README.md',
           line: 12,
-        },
+        }),
       ]),
     ).toEqual({
       category: 'DOCUMENTATION',
@@ -51,20 +55,20 @@ describe('InsightsService', () => {
 
   it('respeita a ordem recebida sem mutar a lista ou os findings', () => {
     const findings: readonly Finding[] = Object.freeze([
-      Object.freeze({
+      Object.freeze(buildFinding({
         category: 'ACCESSIBILITY' as const,
         severity: 'LOW' as const,
         message: 'Imagem sem texto alternativo.',
         file: 'src/app.html',
         line: null,
-      }),
-      Object.freeze({
+      })),
+      Object.freeze(buildFinding({
         category: 'DOCUMENTATION' as const,
         severity: 'CRITICAL' as const,
         message: 'Documentação incompleta.',
         file: 'README.md',
         line: 5,
-      }),
+      })),
     ]);
     const original = findings.map((finding) => ({ ...finding }));
 
@@ -102,13 +106,13 @@ describe('InsightsService', () => {
     (category, title) => {
       expect(
         service.generate(dimensions, [
-          {
+          buildFinding({
             category,
             severity: 'MEDIUM',
             message: 'Apontamento de exemplo.',
             file: 'src/example.ts',
             line: null,
-          },
+          }),
         ]),
       ).toEqual({
         category,
@@ -120,13 +124,13 @@ describe('InsightsService', () => {
     },
   );
 
-  const finding: Finding = {
+  const finding: Finding = buildFinding({
     category: 'ACCESSIBILITY',
     severity: 'HIGH',
     message: 'Imagem sem alt.',
     file: 'src/app.html',
     line: 1,
-  };
+  });
 
   it('menciona empates em ordem fixa independentemente da ordem das dimensões', () => {
     const tied = dimensions.map((d) => ({
