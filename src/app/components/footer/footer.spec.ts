@@ -40,6 +40,7 @@ describe('Footer', () => {
       '/home#section-hero', '/home#section-sobre-o-projeto', '/home#section-como-funciona',
       '/home#section-cinco-dimensoes', '/home#section-beneficios', '/home#section-faq',
     ]);
+    expect(element.querySelector('.back-to-top')?.getAttribute('href')).toBe('/home#section-hero');
     expect(element.querySelector('footer')?.id).toBe('contato');
   });
 });
