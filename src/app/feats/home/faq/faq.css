@@ -103,6 +103,31 @@
     }
 }
 
+/* Desktop */
+@media (max-width: 1440px) {
+
+    .container {
+        margin: var(--margin);
+    }
+
+    .box {
+        gap: 30px;
+    }
+
+    .textos, .perguntas-frequentes {
+        width: calc((100% - 30px) / 2);
+        min-width: 0;
+    }
+
+    .card summary {
+        gap: 15px;
+    }
+
+    .card summary i {
+        flex-shrink: 0;
+    }
+}
+
 /* Tablet */
 @media (max-width: 1024px) {
 
@@ -129,7 +154,7 @@
 @media (max-width: 768px) {
 
     .container {
-        margin: var(--margin-responsividade);
+        margin: 80px 70px;
     }
 
     .box {
@@ -186,6 +211,10 @@
 
 /* Celulares pequenos */
 @media (max-width: 375px) {
+
+    .container {
+        margin: var(--margin-responsividade);
+    }
 
     .textos h2 {
         font-size: 30px;
