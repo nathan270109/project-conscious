@@ -1,46 +1,32 @@
-# Infraestrutura AWS do Project Conscious
+# Infra
 
-Esta pasta publica o build Angular e a API de IA do projeto correto.
+> **Esta pasta não provisiona mais infraestrutura na AWS.** Em 13/10/2026
+> todos os recursos foram destruídos (S3 do site, CloudFront, API Gateway,
+> Lambda, IAM e CloudWatch Logs, além do bucket de state do Terraform) e o
+> código Terraform removido do repositório.
 
-## Arquitetura
+## Bedrock Mantle (modelo de IA)
 
-- CloudFront distribui a aplicação e encaminha `/api/ai/*` para a API.
-- S3 privado armazena `dist/project-conscious/browser` com OAC, criptografia e versionamento.
-- API Gateway chama uma Lambda Python com throttling e logs.
-- A Lambda usa IAM/SigV4 para chamar `google.gemma-4-e2b` no Bedrock Mantle.
-- O state fica em S3 com versionamento e lockfile nativo.
+O chat "Conscious AI" continua usando o **Amazon Bedrock Mantle**
+(`google.gemma-4-e2b`), mas agora é executado **100% localmente**, sem nenhum
+recurso provisionado:
 
-Nenhuma credencial ou chave de modelo é armazenada no código.
+- A chamada ao modelo é feita pelo **backend NestJS** (
+  `backend/src/ai/`) em `POST /ai/chat`, consumida pelo frontend via proxy
+  `/api/ai/**` em desenvolvimento.
+- A chamada ao Bedrock usa SigV4 manual com credenciais **do operador local**
+  (`AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` / `AWS_SESSION_TOKEN`,
+  renovadas por `aws login`). Nunca há credenciais no repositório.
+- Endpoint do modelo: `bedrock-mantle.<região>.api.aws/openai/v1/chat/completions`.
+- Região/modelo configurados por env do backend (`CONSCIOUS_AI_MODEL`,
+  `AWS_REGION`); o default do projeto é `us-east-1` / `google.gemma-4-e2b`.
 
-## Deploy
+## Custos
 
-```bash
-npm ci
-npm run build
-cd infra
-terraform init -backend-config=backend.hcl
-terraform plan -out=tfplan
-terraform apply tfplan
-```
+Sem infra fixa: não há cobrança por recurso ocioso. Bedrock cobra apenas por
+token consumido no chat.
 
-O build é uma etapa separada do Terraform para manter a infraestrutura declarativa e reproduzível.
+## Se for preciso voltar a provisionar
 
-## Backend remoto
-
-O bucket de state foi criado pelo módulo `bootstrap`. Para recriá-lo em outra conta, execute primeiro:
-
-```bash
-cd infra/bootstrap
-terraform init
-terraform apply
-```
-
-Não execute dois `apply` simultâneos. O backend usa `use_lockfile = true`.
-
-## Segurança e limites
-
-- O bucket do site bloqueia acesso público e só aceita leitura pelo CloudFront.
-- A role da Lambda permite apenas logs e inferência no modelo configurado.
-- Perguntas, histórico e findings são truncados e validados antes da inferência.
-- A rota de IA é pública para esta demonstração e tem throttling. Antes de produção, adicione autenticação/autorização.
-- Para impor TLS 1.2 com política controlada, configure domínio próprio e certificado ACM em vez do certificado padrão do CloudFront.
+Isso não é uma pendência planejada; qualquer ressurreição de infra exige
+decisão de arquitetura documentada (contrato em `docs/api-contract.md`).

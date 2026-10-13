@@ -8,6 +8,7 @@ import { ProjectsModule } from './projects/projects.module.js';
 import { AnalysisModule } from './analysis/analysis.module.js';
 import { RisksModule } from './risks/risks.module.js';
 import { DemoModule } from './demo/demo.module.js';
+import { AiModule } from './ai/ai.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -24,6 +25,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     ScoringModule,
     RisksModule,
     DemoModule,
+    AiModule,
   ],
   controllers: [AppController],
   providers: [AppService],

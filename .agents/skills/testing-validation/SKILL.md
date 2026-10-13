@@ -47,7 +47,7 @@ Toque em backend? Rode os 4 do backend. Toque no launcher? Rode `test:launcher`.
 - Backend tem `.oxlintrc.json` com `no-floating-promises: error` — lint pode passar no TS e falhar no lint.
 - `test:e2e` pode depender de rede em fluxos de clone; e2e de contrato usa mock — diferencie o que você está rodando.
 - Portas: launcher escolhe portas livres a partir de 3000/4200; conflito de porta em dev use `--check` primeiro.
-- `dist/` raiz é build de produção (lido pelo Terraform): não use como evidência de teste; evidência de build = saída do `npm run build`.
+- `dist/` raiz é build de produção (não há publicação automática): não use como evidência de teste; evidência de build = saída do `npm run build`.
 
 ## Referências
 

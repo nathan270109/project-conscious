@@ -5,6 +5,7 @@ import {
   availablePort,
   defaultAiTarget,
   developmentProxyConfig,
+  parseAwsCredentialExport,
   supportedNode,
   windowsKillArgs,
 } from './start-project.mjs';
@@ -30,10 +31,19 @@ test('porta ocupada é preservada e o inicializador escolhe outra', async () => 
     await new Promise((done) => server.close(done));
   }
 });
-test('proxy local separa a IA na AWS das demais rotas do backend', () => {
+test('parse e export de credenciais AWS aceitam chaves e tokens com caracteres especiais', () => {
+  assert.deepEqual(
+    parseAwsCredentialExport('\nexport AWS_ACCESS_KEY_ID=AKID123\nexport AWS_SECRET_ACCESS_KEY=ab=/CD+x\nexport AWS_SESSION_TOKEN="IQo/JQ=="\nNAO_E_CREDENCIAIS=1'),
+    { AWS_ACCESS_KEY_ID: 'AKID123', AWS_SECRET_ACCESS_KEY: 'ab=/CD+x', AWS_SESSION_TOKEN: 'IQo/JQ==' },
+  );
+  assert.deepEqual(parseAwsCredentialExport(''), {});
+});
+test('proxy local direciona a IA para o backend local junto das demais rotas', () => {
   const proxy = developmentProxyConfig('http://127.0.0.1:3210');
   assert.equal(proxy['/api/ai/**'].target, defaultAiTarget);
+  assert.equal(defaultAiTarget, 'http://127.0.0.1:3000');
   assert.equal(proxy['/api/ai/**'].changeOrigin, true);
+  assert.deepEqual(proxy['/api/ai/**'].pathRewrite, { '^/api': '' });
   assert.equal(proxy['/api/**'].target, 'http://127.0.0.1:3210');
   assert.deepEqual(proxy['/api/**'].pathRewrite, { '^/api': '' });
   assert.deepEqual(Object.keys(proxy), ['/api/ai/**', '/api/**']);

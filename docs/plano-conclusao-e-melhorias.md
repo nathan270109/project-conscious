@@ -1,19 +1,19 @@
 # Plano de conclusão e melhorias — Project Conscious
 
-Atualizado em **12/10/2026** com base no estado do repositório, da infraestrutura AWS e da branch de redesign.
+Atualizado em **12/10/2026** com base no estado do repositório e da branch de redesign. Em 13/10/2026 a infraestrutura AWS publicada (S3, CloudFront, API Gateway, Lambda e bucket de state) foi **destruída** e o Terraform removido: o chat de IA passou a rodar **no backend NestJS local**, acessando o Bedrock Mantle com credenciais do operador (ver `infra/README.md`).
 
 Este documento substitui o plano elaborado em 05/10/2026. O registro detalhado daquela revisão foi preservado em [plano-conclusao-e-melhorias-2026-10-05.md](plano-conclusao-e-melhorias-2026-10-05.md).
 
 ## 1. Estado atual
 
-O MVP está funcional: cadastra um repositório público, executa a análise real em cinco dimensões, apresenta o resultado no dashboard e permite consultar a **Conscious AI** sobre a análise. A aplicação e a API de IA já possuem infraestrutura AWS declarada com Terraform.
+O MVP está funcional: cadastra um repositório público, executa a análise real em cinco dimensões, apresenta o resultado no dashboard e permite consultar a **Conscious AI** sobre a análise. O chat roda no backend local e chama o Bedrock; **não há infraestrutura AWS provisionada**.
 
 Referências do estado revisado:
 
 - `origin/master`: commit `5a2cd06`, incluindo as PRs #66 e #67;
 - branch atual: `feat/unified-design-system`, commit `655ee47`;
 - PR de redesign: [#71 — feat: unifica design system do produto](https://github.com/nathan270109/project-conscious/pull/71), aberta como rascunho;
-- o redesign está implementado e testado, mas ainda não está integrado à `master` nem publicado no CloudFront.
+- o redesign está implementado e testado, mas ainda não está integrado à `master`.
 
 ### Resumo por frente
 
@@ -24,7 +24,7 @@ Referências do estado revisado:
 | Fluxo formulário → scanning → dashboard | Concluído | Uma única análise e um único ID, sem progresso fictício. |
 | Dashboard e explicação dos problemas | Concluído | Score, dimensões, findings, recomendações e estados de falha estão integrados. |
 | Conscious AI | Concluído | Chat contextual, três perguntas prontas e explicação por finding. |
-| Terraform e AWS | Concluído para demonstração | S3 privado, CloudFront, API Gateway, Lambda, Bedrock e state remoto. |
+| IA AWS | Reformulado em 13/10/2026 | Sem Terraform/CloudFront/Lambda: `POST /ai/chat` no backend NestJS chama o Bedrock Mantle com SigV4 local. |
 | Navegação, rotas e responsividade | Concluído | Links reais, menu responsivo, rota 404 e tratamento de acesso direto. |
 | Design system unificado | Implementado; integração pendente | Todas as telas foram atualizadas na PR #71. |
 | CI multiplataforma | Concluído | GitHub Actions valida macOS, Linux e Windows, frontend, backend e inicializadores. |
@@ -55,15 +55,14 @@ Referências do estado revisado:
 
 ### IA e infraestrutura
 
-- [x] Criar a pasta `infra/` com Terraform modular e state remoto com lockfile.
-- [x] Publicar o frontend em S3 privado, distribuído por CloudFront com OAC.
-- [x] Criar API Gateway e Lambda com logs, CORS, throttling e IAM mínimo.
-- [x] Integrar a Lambda ao modelo `google.gemma-4-e2b` no Amazon Bedrock.
-- [x] Validar e truncar pergunta, histórico e findings antes da inferência.
+- [x] Integrar o modelo `google.gemma-4-e2b` no Amazon Bedrock Mantle (endpoint compatível com OpenAI).
+- [x] Validar e truncar pergunta, histórico e findings antes da inferência (portado para `backend/src/ai/`).
 - [x] Criar o chat **Conscious AI** com histórico rolável e contexto da análise atual.
 - [x] Disponibilizar as três perguntas pré-processadas definidas para o produto.
 - [x] Disponibilizar explicação assistida por IA em cada problema encontrado.
-- [x] Documentar implantação, segurança e limitações em `infra/README.md`.
+- [x] Encerrar a infra AWS publicada (13/10/2026): `terraform destroy` das pilhas do site e do chat, remoção do código Terraform e do bucket de state.
+- [x] Mover o atendimento do chat para o backend local com SigV4 manual, sem SDK, em `backend/src/ai/bedrock-mantle.service.ts`.
+- [x] Documentar a decisão e o acesso ao Bedrock em `infra/README.md`.
 
 ### UX, UI e qualidade
 
@@ -100,22 +99,21 @@ Estas são as únicas pendências que bloqueiam o fechamento da versão de demon
    - [ ] Confirmar os checks da PR e tratar apenas regressões reais.
    - [ ] Aprovar e fazer merge da PR #71 em `master`.
 
-2. **Publicar a versão integrada**
+2. **Integrar o redesign localmente**
    - [ ] Atualizar o checkout com a `master` após o merge.
-   - [ ] Gerar novamente o build Angular.
-   - [ ] Executar `terraform plan` e revisar o plano antes do `terraform apply`.
-   - [ ] Publicar no CloudFront o build que contém o design system unificado.
+   - [ ] Gerar novamente o build Angular e do backend.
+   - [ ] Validar o proxy `/api/ai/**` para o backend local com credenciais AWS exportadas.
 
-3. **Realizar o smoke test público final**
+3. **Realizar o smoke test local final**
    - [ ] Verificar home, cadastro, scanning, dashboard, login demonstrativo e 404.
    - [ ] Executar uma análise real de repositório público e abrir o demo salvo.
    - [ ] Testar o chat, as três perguntas prontas e a explicação de um finding.
    - [ ] Conferir atualização de rota e acesso direto sem retornar `Not Found` do servidor.
-   - [ ] Conferir desktop e viewport móvel no endereço público.
+   - [ ] Conferir desktop e viewport móvel em `127.0.0.1`.
 
 4. **Registrar o fechamento**
-   - [ ] Atualizar o README somente se URL, comandos ou limitações mudarem no deploy final.
-   - [ ] Registrar o resultado do smoke test e a revisão publicada.
+    - [ ] Atualizar o README somente se comandos ou limitações mudarem.
+    - [ ] Registrar o resultado do smoke test e a revisão integrada.
    - [ ] Manter as limitações de demonstração descritas de forma explícita.
 
 ## 5. Backlog pós-MVP
@@ -160,8 +158,8 @@ Os pontos abaixo foram retirados do plano ativo porque foram substituídos, perd
 A versão atual poderá ser considerada encerrada quando:
 
 - [ ] a PR #71 estiver revisada e integrada à `master`;
-- [ ] o build integrado estiver publicado pela infraestrutura existente;
-- [ ] o smoke test público final passar nos fluxos principais e na Conscious AI;
-- [ ] as limitações de memória, login demonstrativo e API de IA pública estiverem mantidas na documentação.
+- [ ] o build integrado passar na validação local (frontend + backend + launcher);
+- [ ] o smoke test local final passar nos fluxos principais e na Conscious AI;
+- [ ] as limitações de memória, login demonstrativo e credenciais locais do chat estiverem mantidas na documentação.
 
 Persistência, autenticação completa, progresso real e evolução das heurísticas pertencem ao pós-MVP e não impedem esse encerramento.

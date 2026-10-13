@@ -106,6 +106,42 @@ segura `ANALYSIS_FAILED` (500); isso é diferente do 503 exposto pela leitura di
 de arquivos. Tokens, mensagens internas e stack traces não são enviados no corpo
 de `FAILED`.
 
+## Rota de chat de IA
+
+`POST /ai/chat` é atendida pelo `AiModule` do backend e consome o modelo
+`google.gemma-4-e2b` no Bedrock Mantle com credenciais locais do operador
+(veja `infra/README.md`). Em desenvolvimento o Angular chama `/api/ai/chat`
+via proxy, que remove o prefixo `/api`.
+
+- Corpo (JSON):
+
+```json
+{
+  "question": "Qual o ponto mais crítico da análise?",
+  "analysis": { "..."(resumo do AnalysisResult do dashboard)" },
+  "history": [{ "role": "user", "content": "..." }, { "role": "assistant", "content": "..." }]
+}
+```
+
+`question` é texto obrigatório (até 1000 caracteres após normalização).
+`analysis` é objeto opcional; `history` é lista opcional de até 50 mensagens
+com `role` `user`/`assistant` — o backend mantém apenas as 6 últimas.
+
+O backend sanitiza `analysis` (máximo 10 dimensões e 20 findings, textos
+cortados) e o corpo inteiro em 128 kB antes de chamar o modelo.
+
+| Caso | HTTP | Corpo |
+| --- | --- | --- |
+| Resposta da IA | 200 | `{ "answer": "...", "model": "google.gemma-4-e2b" }` |
+| Pergunta vazia/inválida | 400 | `{ "error": "Escreva uma pergunta sobre a análise." }` |
+| Corpo acima de 128 kB | 413 | `{ "error": "Solicitação muito grande." }` |
+| Limite do modelo atingido | 429 | `{ "error": "O modelo está recebendo muitas solicitações. Tente novamente em instantes." }` |
+| Falha ao consultar o modelo | 502 | `{ "error": "Não foi possível consultar o modelo agora. Tente novamente." }` |
+
+Erros do backend nunca expõem mensagens/detalhes do Bedrock. O frontend
+(`AiChatService`) usa timeout de 35 s, tenta repetir uma vez em 0/429/5xx e
+mostra `error` do corpo quando presente.
+
 ## Tipos do resultado
 
 ### Coleta por clone temporário

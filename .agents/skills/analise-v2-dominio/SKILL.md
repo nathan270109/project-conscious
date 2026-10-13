@@ -1,6 +1,6 @@
 ---
 name: analise-v2-dominio
-description: Domínio do motor de análise V2 do Project Conscious — cinco dimensões, analyzers, profiler, scoring, findings e insight. Use quando criar/ajustar regras de análise, ruleIds, penalidades, ordenação de riscos, insight ou o contrato AnalysisResult. NÃO use para UI/UX, Terraform ou configuração de servidor.
+description: Domínio do motor de análise V2 do Project Conscious — cinco dimensões, analyzers, profiler, scoring, findings e insight. Use quando criar/ajustar regras de análise, ruleIds, penalidades, ordenação de riscos, insight ou o contrato AnalysisResult. NÃO use para UI/UX ou configuração de servidor.
 ---
 
 # Domínio — Análise V2
@@ -45,7 +45,7 @@ Motor que transforma arquivos de um repositório clonado em um `AnalysisResult` 
 - Modo demo (`demo-data/analysis-result.json`) é um `AnalysisResult` real validado (score 72, 9 findings) — se as regras mudarem, o demo fica desatualizado propositalmente (revisão fixada `2770289e…`); só regenerar com decisão explícita.
 - O demo é reproduzido pelos 5 analyzers reais em `demo.service.spec.ts` — mudança de regra quebra esse spec (é o esperado: verifique se a diferença é aceitável).
 - Limites (400 linhas, 8 níveis) estão em constantes nos analyzers; README antigo cita 300/6 — o código é a verdade.
-- A IA de chat recebe findings como contexto com sanitização e anti-injection (`infra/lambda/app.py`); mudanças no formato de findings precisam checar a Lambda também.
+- A IA de chat recebe findings como contexto com sanitização e anti-injection (`backend/src/ai/ai-chat-context.ts`); mudanças no formato de findings precisam checar a sanitização do chat também.
 
 ## Referências
 

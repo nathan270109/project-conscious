@@ -1,6 +1,0 @@
-bucket       = "project-conscious-tfstate-ACCOUNT_ID-us-east-1"
-key          = "project-conscious/ENVIRONMENT/terraform.tfstate"
-region       = "us-east-1"
-profile      = "conscious"
-use_lockfile = true
-encrypt      = true

@@ -32,7 +32,7 @@ Angular 22: zoneless é default (v21+) e **OnPush é o default para componentes 
 2. Rotas sem lazy loading (`app.routes.ts` — todos `component:` direto). Se adicionar rota nova pesada, use `loadComponent` para ela.
 3. Sem interceptors; validação de contrato nos operadores dos services (padrão aceito).
 4. Formulário é template-driven (`NgForm`/FormsModule). Signal Forms (estável em v22) é opção para código novo, mas não reescreva o form existente sem decisão.
-5. Sem SSR/`@defer` (SPA pura publicada em S3). Não adicionar SSR sem mudar o pipeline de deploy (Terraform serve `dist/…/browser` estático).
+5. Sem SSR/`@defer` (SPA pura de dev). Não adicionar SSR sem decisão de arquitetura (hoje o launcher servidor local serve o build estático).
 6. `strict` não está declarado no tsconfig raiz (herda defaults do ng new) — manter flags como estão; não "relaxar".
 
 ## Performance / acessibilidade

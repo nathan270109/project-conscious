@@ -7,8 +7,8 @@ Instruções para agentes de IA (Codex, Claude Code, Cursor, Copilot, Gemini CLI
 **Project Conscious**: aplicação que analisa a qualidade de repositórios GitHub públicos e gera um "Conscious Score" (0–100) com base em **cinco dimensões**: documentação, testes, acessibilidade, organização e manutenibilidade.
 
 - **Frontend**: Angular 22 (standalone, zoneless, signals, novo control flow `@if`/`@for`, Vitest) na raiz.
-- **Backend**: NestJS 12 (ESM, `strict`, Vitest + supertest, oxlint) em `backend/`. Análise real via `git clone --bare --depth=1` de repositórios públicos (sem Octokit, sem token).
-- **Infra**: Terraform em `infra/` — S3 + CloudFront (site), API Gateway HTTP + Lambda Python (chat de IA via Bedrock Mantle). Deploy manual.
+- **Backend**: NestJS 12 (ESM, `strict`, Vitest + supertest, oxlint) em `backend/`. Análise real via `git clone --bare --depth=1` de repositórios públicos (sem Octokit, sem token). O chat de IA (`backend/src/ai/`, `POST /ai/chat`) chama o **Bedrock Mantle** (`google.gemma-4-e2b`) direto da máquina local com SigV4 manual — **sem infra AWS**.
+- **Infra**: `infra/` contém apenas um README explicando a decisão (ver abaixo) — não há Terraform nem recursos AWS provisionados (destruídos em 13/10/2026).
 - **Launcher**: `scripts/start-project.mjs` (multiplataforma, testado com `node --test`).
 - **Docs**: fonte da verdade em `docs/` — especialmente `api-contract.md` (contrato backend↔frontend) e `analise-v2.md` (motor de análise).
 
@@ -47,8 +47,9 @@ backend/src/        # NestJS
   analysis/         # motor: 5 analyzers + profiler + validator
   scoring|risks|insights/  # pós-processamento do resultado
   demo/ + demo-data/       # modo demonstração (JSON salvo)
+  ai/               # chat de IA: sanitização, SigV4 manual, Bedrock Mantle
   config/cors.ts
-infra/              # Terraform (S3, CloudFront, API Gateway, Lambda)
+infra/              # apenas README — não há infra AWS provisionada
 scripts/            # launcher multiplataforma + testes
 docs/               # documentos de arquitetura e contrato
 ```
@@ -69,18 +70,19 @@ docs/               # documentos de arquitetura e contrato
 
 - **NestJS 12, ESM** (`type: module`, `moduleResolution: nodenext`), `strict: true`.
 - Controllers finos; lógica em services; validação de entrada com DTOs (`class-validator`/`class-transformer`) e `ValidationPipe` global (`whitelist`, `forbidNonWhitelisted`, `transform`) já configurado em `backend/src/main.ts`.
-- Nunca expor detalhes internos em erros HTTP: falhas de análise viram corpo `FAILED` seguro (`REPOSITORY_NOT_FOUND` / `ANALYSIS_FAILED`), conforme `docs/api-contract.md`.
+- Nunca expor detalhes internos em erros HTTP: falhas de análise viram corpo `FAILED` seguro (`REPOSITORY_NOT_FOUND` / `ANALYSIS_FAILED`), conforme `docs/api-contract.md`; falhas do chat viram `{error}` seguro (400/413/429/502).
 - Coleta de repositório: **somente** `GithubService.withRepositoryFiles` (clone bare temporário em `.analysis-tmp/scan-*`, limpeza garantida em `finally`). Respeitar `CLONE_LIMITS` (timeout 45s, 100MiB, etc.). Não usar `exec`/shell — sempre `git-command.ts` (execFile, sem credenciais, abort por kill de grupo).
+- Chat de IA: **somente** `backend/src/ai/` chama o Bedrock (`BedrockMantleService` + SigV4 manual com `node:crypto`). Credenciais vêm do env do operador — nunca commitar, nunca usar SDK novo. Reaproveite a sanitização de `ai-chat-context.ts` (não reescreva limites).
 - Testes: Vitest, specs colados ao código (`*.spec.ts`), e2e em `backend/test/*.e2e-spec.ts` com supertest. Respostas do motor validadas com `validateAnalysisResult`.
 - Lint: **oxlint** com `--type-aware` (`.oxlintrc.json`). `no-floating-promises` é error.
 - Nenhum segredo commitado. `CORS_ORIGINS` é env; CORS permite loopback por padrão (ver `backend/src/config/cors.ts`).
 
 ## Contrato e domínio (não quebre)
 
-- `docs/api-contract.md` é a fonte única da verdade das rotas (`POST /projects`, `POST /projects/:id/analyze`, `GET /demo/analysis` via proxy `/api/...`). Mudanças na API exigem atualizar esse doc, o type guard do frontend e os e2e de contrato.
+- `docs/api-contract.md` é a fonte única da verdade das rotas (`POST /projects`, `POST /projects/:id/analyze`, `POST /ai/chat`, `GET /demo/analysis` via proxy `/api/...`). Mudanças na API exigem atualizar esse doc, o type guard do frontend e os e2e de contrato.
 - Formato do resultado: `AnalysisResult` com `dimensions[]`, `findings[]` (ruleIds DOC/TEST/A11Y/ORG/MAINT + severidade CRITICAL/HIGH/MEDIUM/LOW) e `insight`. Penalidades 40/25/10/5; score = média das 5 dimensões, clamp 0–100 (`docs/analise-v2.md`).
 - O backend **não persiste** nada: projetos/análises são em memória (documentado — não "corrigir" sem decisão de arquitetura).
-- O frontend mantém a mesma origem via proxy: `/api/**` → `http://127.0.0.1:3000` (rewrite remove `/api`); `/api/ai/**` → CloudFront da Lambda de IA (`proxy.conf.json`). Não liberar CORS global no backend para "resolver" isso.
+- O frontend mantém a mesma origem via proxy: `/api/**` → `http://127.0.0.1:3000` (rewrite remove `/api`, inclusive `/api/ai/**` que vira `POST /ai/chat` no backend). Não liberar CORS global no backend para "resolver" isso.
 - Modo demo é explícito: `GET /demo/analysis` devolve `backend/src/demo-data/analysis-result.json`; abrir o demo não faz HTTP no frontend.
 
 ## Estilo e convenções
@@ -94,7 +96,7 @@ docs/               # documentos de arquitetura e contrato
 
 - **Não confundir proxy com CORS**: `/api` é removido pelo proxy do Angular; as rotas do backend NÃO têm `setGlobalPrefix('api')`. Não adicionar.
 - **Node/TypeScript atuais**: Angular 22 exige TS 6 e Node 24.x/22.22.x. Não "dar downgrade" de versões para resolver erro de instalação.
-- **`dist/` raiz é build de produção** lido pelo Terraform para publicar no S3 — não commitar, não editar, não limpar antes de um `npm run build` que a publicação dependa.
+- **`dist/` raiz é build de produção** — não commitar, não editar. (Sem publicação automática; não há infra AWS.)
 - **Não persistir em banco "por conveniência"** nem trocar clone git por API do GitHub: decisões de arquitetura já documentadas em `docs/coleta-clone-temporario.md`.
 - Erros de classificação do git dependem de mensagem em inglês (`github.service.ts` regex em `classifyError`) — mudanças ali precisam cobrir mensagens variadas no teste.
 - Scripts `.sh`/`.cmd` devem manter line endings do `.gitattributes`; editar com cuidado.
@@ -108,4 +110,3 @@ Skills aprofundadas por área em `.agents/skills/` (padrão open Agent Skills, S
 - `nestjs-backend` — módulos, DTO, erros, coleta git e limites do backend
 - `analise-v2-dominio` — motor de análise: dimensões, analyzers, scoring, findings
 - `testing-validation` — como rodar e escrever testes em todas as camadas
-- `infra-aws-terraform` — S3/CloudFront/Lambda, state remoto e deploy manual

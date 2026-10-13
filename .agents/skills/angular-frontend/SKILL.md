@@ -1,6 +1,6 @@
 ---
 name: angular-frontend
-description: Trabalha no frontend Angular 22 do Project Conscious (raiz do repo, src/app). Use quando criar/alterar componentes, services, modelos, rotas, testes de frontend, design system ou configuração Angular (standalone, signals, zoneless, Vitest, proxy /api). NÃO use para backend NestJS, infra Terraform ou launcher.
+description: Trabalha no frontend Angular 22 do Project Conscious (raiz do repo, src/app). Use quando criar/alterar componentes, services, modelos, rotas, testes de frontend, design system ou configuração Angular (standalone, signals, zoneless, Vitest, proxy /api). NÃO use para backend NestJS ou launcher.
 ---
 
 # Frontend Angular — Project Conscious
@@ -49,7 +49,7 @@ Rotas (`app.routes.ts`): `home`, `projects/new`, `projects/:id/scanning`, `proje
 
 - Sem interceptors HTTP: validação/tratamento de erro vive nos operadores RxJS dos services. Não "resolva" adicionando interceptor global sem decisão de arquitetura.
 - Cache de projetos é um `Map` em memória no `AnalysisService` — refresh perde tudo (limitação documentada, não bug).
-- O proxy dev (`proxy.conf.json`) remove `/api` antes de chegar ao backend; o backend NÃO tem prefixo `/api`. `/api/ai/**` vai para o CloudFront da Lambda (backend não atende IA).
+- O proxy dev (`proxy.conf.json`) remove `/api` antes de chegar ao backend; o backend NÃO tem prefixo `/api`. `/api/ai/**` também vai para o backend local (`POST /ai/chat`, módulo `ai/` no NestJS).
 - `ProjectDashboard` é legado misto (estado não-signal + `markForCheck`): ao tocar nele, siga as regras acima no que editar; migração completa é decisão de PR separada.
 - `login` é stub (autenticação não existe); `feats.ts` é placeholder morto — não reutilize como base.
 

@@ -1,6 +1,6 @@
 ---
 name: nestjs-backend
-description: Trabalha no backend NestJS 12 do Project Conscious (backend/). Use quando criar/alterar módulos, controllers, services, DTOs, coleta git, CORS, demo, testes de backend ou o fluxo de análise de repositórios. NÃO use para frontend Angular, infra Terraform ou launcher.
+description: Trabalha no backend NestJS 12 do Project Conscious (backend/). Use quando criar/alterar módulos, controllers, services, DTOs, coleta git, CORS, demo, chat de IA com Bedrock ou testes de backend. NÃO use para frontend Angular ou launcher.
 ---
 
 # Backend NestJS — Project Conscious
@@ -23,16 +23,18 @@ NestJS 12, ESM (`type: module`, `moduleResolution: nodenext`), TypeScript `stric
 - URLs aceitas somente `https://github.com/owner/repo` sem credenciais/porta/query/fragment (`github/repository-url.ts`) — reuso no DTO via validador custom `githubRepositoryUrl`.
 - Testes: Vitest; unit `*.spec.ts` colado ao código; e2e em `backend/test/*.e2e-spec.ts` com `@nestjs/testing` + supertest; validação com `validateAnalysisResult` (`analysis/analysis-result.validator.ts`).
 - oxlint type-aware; `no-floating-promises` é **error** — promessas soltas são bug aqui.
+- Chat de IA: **somente** `backend/src/ai/` chama o Bedrock Mantle. Sanitização e limites idênticos à antiga Lambda em `ai-chat-context.ts` (128 kB corpo, 1.000 chars pergunta, 6 mensagens de histórico, 20 findings). Modelo por env `CONSCIOUS_AI_MODEL` (default `google.gemma-4-e2b`); credenciais AWS de env do operador — jamais commitar nem trocar SigV4 manual por SDK novo sem decisão.
 - Nenhum segredo commitado. CORS em `backend/src/config/cors.ts`: loopback liberado por padrão + env `CORS_ORIGINS`.
 
 ## Módulos e fluxo de análise
 
 ```
-app.module.ts → ObserveModule(telemetria), GithubModule, ProjectsModule, AnalysisModule, DemoModule
+app.module.ts → ObserveModule(telemetria), GithubModule, ProjectsModule, AnalysisModule, DemoModule, AiModule
 Projects: POST /projects (cadastro em memória) → POST /projects/:id/analyze
 AnalysisModule: 5 analyzers (DOC/TEST/A11Y/ORG/MAINT) + RepositoryProfiler + engine (DI via token ANALYSIS_ENGINE)
 Scoring → Risks (ordenação) → Insights → validateAnalysisResult
 Demo: GET /demo/analysis → backend/src/demo-data/analysis-result.json
+Ai: POST /ai/chat → sanitização (ai-chat-context.ts) → SigV4 manual (bedrock-mantle.service.ts) → Bedrock Mantle
 ```
 
 Detalhes de regras/penalidades: skill `analise-v2-dominio` e `docs/analise-v2.md`.

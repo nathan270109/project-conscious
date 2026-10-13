@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process';
+import { execFile, spawn } from 'node:child_process';
 import { createServer } from 'node:net';
 import { once } from 'node:events';
 import { access, mkdir, mkdtemp, writeFile } from 'node:fs/promises';
@@ -6,9 +6,36 @@ import { createWriteStream } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { emitKeypressEvents } from 'node:readline';
+import { promisify } from 'node:util';
 
+const execFileAsync = promisify(execFile);
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-export const defaultAiTarget = 'https://d373x30t8ya2si.cloudfront.net';
+export const defaultAiTarget = 'http://127.0.0.1:3000';
+
+export function parseAwsCredentialExport(stdout) {
+  const credentials = {};
+  for (const line of String(stdout).split('\n')) {
+    const match = line.match(/^export (AWS_[A-Z_]+)=(.*)$/);
+    if (!match) continue;
+    let value = match[2];
+    const quoted =
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"));
+    if (quoted) value = value.slice(1, -1);
+    credentials[match[1]] = value;
+  }
+  return credentials;
+}
+
+export async function awsCredentialEnv() {
+  const profile = process.env.AWS_PROFILE || 'default';
+  const { stdout } = await execFileAsync(
+    'aws',
+    ['configure', 'export-credentials', '--profile', profile, '--format', 'env'],
+    { timeout: 15_000 },
+  );
+  return parseAwsCredentialExport(stdout);
+}
 
 export function developmentProxyConfig(
   backendUrl,
@@ -18,7 +45,8 @@ export function developmentProxyConfig(
     '/api/ai/**': {
       target: aiTarget,
       changeOrigin: true,
-      secure: true,
+      secure: false,
+      pathRewrite: { '^/api': '' },
     },
     '/api/**': {
       target: backendUrl,
@@ -214,8 +242,14 @@ export async function main(args = process.argv.slice(2)) {
     const frontInstalled = await exists(join(root, 'node_modules/@angular/cli/bin/ng.js'));
     const backInstalled = await exists(join(backend, 'node_modules/@nestjs/cli/bin/nest.js'));
     if (args.includes('--check')) {
+      let credenciais = 'não';
+      try {
+        credenciais = (await awsCredentialEnv()).AWS_ACCESS_KEY_ID ? 'sim' : 'não';
+      } catch {
+        credenciais = 'não';
+      }
       console.log(
-        `  Node: ${process.version}\n  Git: disponível\n  npm: disponível\n  Frontend instalado: ${frontInstalled}\n  Backend instalado: ${backInstalled}\n  Sistema: ${process.platform}\n\nVerificação concluída; nenhum servidor iniciado.`,
+        `  Node: ${process.version}\n  Git: disponível\n  npm: disponível\n  Frontend instalado: ${frontInstalled}\n  Backend instalado: ${backInstalled}\n  Credenciais AWS para o chat: ${credenciais}\n  Sistema: ${process.platform}\n\nVerificação concluída; nenhum servidor iniciado.`,
       );
       return;
     }
@@ -235,12 +269,29 @@ export async function main(args = process.argv.slice(2)) {
       proxy,
       JSON.stringify(developmentProxyConfig(backendUrl), null, 2),
     );
+    // Credenciais AWS do operador para o chat: resolve do perfil local quando
+    // o ambiente ainda não as traz. Falha aqui não impede o início; o chat
+    // responderá 502 com mensagem segura e o operador pode refazer o login.
+    let awsEnv = {};
+    if (!process.env.AWS_ACCESS_KEY_ID) {
+      try {
+        awsEnv = await awsCredentialEnv();
+        if (!awsEnv.AWS_ACCESS_KEY_ID) awsEnv = {};
+      } catch {
+        awsEnv = {};
+      }
+      console.log(
+        awsEnv.AWS_ACCESS_KEY_ID
+          ? 'Credenciais do Bedrock resolvidas do perfil AWS local.'
+          : 'Sem credenciais AWS: o chat responderá 502 até refazer aws login.',
+      );
+    }
     const api = startChild(
       'backend',
       process.execPath,
       [join(backend, 'dist/main.js')],
       backend,
-      { PORT: String(backendPort), HOST: '127.0.0.1' },
+      { PORT: String(backendPort), HOST: '127.0.0.1', ...awsEnv },
       true,
     );
     await ready(
