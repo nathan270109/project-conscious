@@ -1,11 +1,13 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule, ObserveInstrument } from './app.module.js';
+import { corsOrigin } from './config/cors.js';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     instrument: ObserveInstrument,
   });
+  app.enableCors({ origin: corsOrigin });
   app.enableShutdownHooks();
   // Canal privado do processo pai, sem endpoint HTTP de desligamento.
   if (process.send) {
