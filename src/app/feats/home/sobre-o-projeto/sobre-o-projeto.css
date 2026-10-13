@@ -93,6 +93,18 @@
     font-weight: 200;
 }
 
+/* Desktop */
+@media (max-width: 1440px) {
+
+    .container {
+        margin: var(--margin);
+    }
+
+    .box {
+        width: calc((100% - 30px) / 3);
+    }
+}
+
 /* Tablet */
 @media (max-width: 1024px) {
 
@@ -101,11 +113,11 @@
     }
 
     .boxes {
-        gap: 20px;
+        gap: 15px;
     }
 
     .box {
-        width: 320px;
+        width: 250px;
     }
 
     .textos h2 {
@@ -117,7 +129,7 @@
 @media (max-width: 768px) {
 
     .container {
-        margin: var(--margin-responsividade);
+        margin: 80px 70px;
         padding: 0;
     }
 
@@ -179,6 +191,10 @@
 
 /* Celulares pequenos */
 @media (max-width: 375px) {
+
+    .container {
+        margin: var(--margin-responsividade);
+    }
 
     .textos h2 {
         font-size: 30px;

@@ -30,7 +30,7 @@
   } @else {
     <header class="dashboard__header">
       <div>
-        <p class="dashboard__eyebrow">Project Conscious</p>
+        <h3 class="dashboard__eyebrow">Project Conscious</h3>
 
         <h1>Dashboard do projeto</h1>
 
@@ -63,13 +63,13 @@
     </header>
 
     <section class="dashboard__section" aria-labelledby="score-title">
-      <h2 id="score-title">Conscious Score</h2>
+      <h3 id="score-title">Conscious Score</h3>
 
       <strong class="dashboard__score"> {{ result.score }}/100 </strong>
     </section>
 
     <section class="dashboard__section" aria-labelledby="dimensions-title">
-      <h2 id="dimensions-title">Dimensões da análise</h2>
+      <h3 id="dimensions-title">Dimensões da análise</h3>
 
       <div class="dimensions-grid">
         @for (dimension of result.dimensions; track dimension.category) {
@@ -94,7 +94,7 @@
     </section>
 
     <section class="dashboard__section" aria-labelledby="risks-title">
-      <h2 id="risks-title">Risk Radar</h2>
+      <h3 id="risks-title">Risk Radar</h3>
 
       @if (result.findings.length > 0) {
         <div class="risk-list">
@@ -156,7 +156,7 @@
     </section>
 
     <section class="dashboard__section" aria-labelledby="insight-title">
-      <h2 id="insight-title">Conscious Insight</h2>
+       <h3 id="insight-title">Conscious Insight</h3>
 
       <p class="insight__context">
         Recomendação baseada nas métricas e evidências identificadas na análise.
@@ -164,7 +164,7 @@
 
       @if (result.insight; as insight) {
         <div class="insight__text">
-          <h3>{{ insight.title }}</h3>
+          <h3 id="title">{{ insight.title }}</h3>
           <p>{{ insight.message }}</p>
         </div>
       } @else {
