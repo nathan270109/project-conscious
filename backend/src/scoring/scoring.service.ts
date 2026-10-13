@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import {
     AnalysisCategory,
     DimensionScore,
-    Finding,
+    AnalyzerResult,
     Severity,
 } from '../analysis/types/analysis.types.js';
 
@@ -29,10 +29,13 @@ export class ScoringService {
         LOW: 5,
     };
 
-    calculate(findings: Finding[]): ScoringResult {
+    calculate(results: readonly AnalyzerResult[]): ScoringResult {
         const dimensions = this.categories.map((category) => ({
             category,
-            score: this.calculateDimensionScore(category, findings),
+            score: this.calculateDimensionScore(
+                category,
+                results.find((result) => result.category === category),
+            ),
         }));
 
         const score = Math.round(
@@ -48,15 +51,18 @@ export class ScoringService {
 
     private calculateDimensionScore(
         category: AnalysisCategory,
-        findings: Finding[],
+        result: AnalyzerResult | undefined,
     ): number {
-        const penalty = findings
-            .filter((finding) => finding.category === category)
+        if (!result || result.category !== category) return 0;
+        const penalty = result.findings
             .reduce(
-                (sum, finding) => sum + this.severityPenalty[finding.severity],
+                (sum, finding) => {
+                    const factor = 1 + Math.min(2, Math.log2(finding.occurrences)) * 0.25;
+                    return sum + this.severityPenalty[finding.severity] * factor;
+                },
                 0,
             );
 
-        return Math.max(0, Math.min(100, 100 - penalty));
+        return Math.round(Math.max(0, Math.min(100, 100 - penalty)));
     }
 }

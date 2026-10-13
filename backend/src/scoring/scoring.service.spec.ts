@@ -1,106 +1,27 @@
+import type { AnalyzerResult, AnalysisCategory, Finding, Severity } from '../analysis/types/analysis.types.js';
 import { ScoringService } from './scoring.service.js';
 
+const finding = (severity: Severity, occurrences = 1): Finding => ({
+  ruleId: 'RULE001', category: 'DOCUMENTATION', severity, title: 'Problema', message: 'Descrição',
+  whyItMatters: 'Impacto', remediation: 'Correção', evidence: null, file: 'file.ts', line: null, occurrences,
+});
+const categories: AnalysisCategory[] = ['DOCUMENTATION', 'TESTS', 'ACCESSIBILITY', 'ORGANIZATION', 'MAINTAINABILITY'];
+const results = (documentation: Finding[] = []): AnalyzerResult[] => categories.map((category) => ({
+  category, analyzedItems: 1, findings: category === 'DOCUMENTATION' ? documentation : [],
+}));
+
 describe('ScoringService', () => {
-    const service = new ScoringService();
-
-    it('returns score 100 in all dimensions when there are no findings', () => {
-        const result = service.calculate([]);
-
-        expect(result.score).toBe(100);
-        expect(result.dimensions).toEqual([
-            { category: 'DOCUMENTATION', score: 100 },
-            { category: 'TESTS', score: 100 },
-            { category: 'ACCESSIBILITY', score: 100 },
-            { category: 'ORGANIZATION', score: 100 },
-            { category: 'MAINTAINABILITY', score: 100 },
-        ]);
-    });
-
-    it('calculates dimension scores and conscious score from known findings', () => {
-        const result = service.calculate([
-            {
-                category: 'DOCUMENTATION',
-                severity: 'HIGH',
-                message: 'README não encontrado.',
-                file: 'README',
-                line: null,
-            },
-            {
-                category: 'DOCUMENTATION',
-                severity: 'MEDIUM',
-                message: 'README não possui instalação.',
-                file: 'README',
-                line: null,
-            },
-            {
-                category: 'TESTS',
-                severity: 'LOW',
-                message: 'Poucos testes encontrados.',
-                file: 'src/app.spec.ts',
-                line: 1,
-            },
-            {
-                category: 'ACCESSIBILITY',
-                severity: 'CRITICAL',
-                message: 'Imagem sem texto alternativo.',
-                file: 'src/app.html',
-                line: 3,
-            },
-            {
-                category: 'MAINTAINABILITY',
-                severity: 'MEDIUM',
-                message: 'TODO encontrado.',
-                file: 'src/app.ts',
-                line: 1,
-            },
-            {
-                category: 'MAINTAINABILITY',
-                severity: 'MEDIUM',
-                message: 'console.log encontrado.',
-                file: 'src/app.ts',
-                line: 2,
-            },
-        ]);
-
-        expect(result.dimensions).toEqual([
-            { category: 'DOCUMENTATION', score: 65 },
-            { category: 'TESTS', score: 95 },
-            { category: 'ACCESSIBILITY', score: 60 },
-            { category: 'ORGANIZATION', score: 100 },
-            { category: 'MAINTAINABILITY', score: 80 },
-        ]);
-
-        expect(result.score).toBe(80);
-    });
-
-    it('never returns a score below zero', () => {
-        const result = service.calculate([
-            {
-                category: 'DOCUMENTATION',
-                severity: 'CRITICAL',
-                message: 'Problema 1',
-                file: 'README.md',
-                line: null,
-            },
-            {
-                category: 'DOCUMENTATION',
-                severity: 'CRITICAL',
-                message: 'Problema 2',
-                file: 'README.md',
-                line: null,
-            },
-            {
-                category: 'DOCUMENTATION',
-                severity: 'CRITICAL',
-                message: 'Problema 3',
-                file: 'README.md',
-                line: null,
-            },
-        ]);
-
-        expect(result.dimensions[0]).toEqual({
-            category: 'DOCUMENTATION',
-            score: 0,
-        });
-    });
+  const service = new ScoringService();
+  it('returns 100 only for executed analyzers without findings', () => {
+    expect(service.calculate(results()).score).toBe(100);
+    expect(service.calculate([]).dimensions.every((dimension) => dimension.score === 0)).toBe(true);
+  });
+  it('uses severity and capped logarithmic repetition penalties', () => {
+    expect(service.calculate(results([finding('HIGH')])).dimensions[0].score).toBe(75);
+    const repeated = service.calculate(results([finding('LOW', 16)])).dimensions[0].score;
+    expect(repeated).toBe(93);
+  });
+  it('never returns a dimension below zero', () => {
+    expect(service.calculate(results([finding('CRITICAL'), finding('CRITICAL'), finding('CRITICAL')])).dimensions[0].score).toBe(0);
+  });
 });

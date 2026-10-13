@@ -1,65 +1,56 @@
 import { Injectable } from '@nestjs/common';
-import { RepositoryFile } from '../../github/github.service.js';
-import { Analyzer } from './analyzer.interface.js';
-import { AnalyzerResult, Finding } from '../types/analysis.types.js';
+import type { RepositoryFile } from '../../github/github.service.js';
+import { aggregateFindings, createFinding } from '../finding.utils.js';
+import type { RepositoryProfile } from '../repository-profiler.service.js';
+import type { AnalyzerResult, Finding, Severity } from '../types/analysis.types.js';
+import type { Analyzer } from './analyzer.interface.js';
 
-/** Verifica a profundidade dos caminhos e a convenção de nomes do repositório. */
 @Injectable()
 export class OrganizationAnalyzer implements Analyzer {
-  /** Mantém caminhos com até seis diretórios fáceis de navegar. */
-  private static readonly MAX_DIRECTORY_DEPTH = 6;
+  private static readonly MAX_DIRECTORY_DEPTH = 8;
 
-  /** Analisa cada arquivo e retorna somente os problemas encontrados. */
-  analyze(files: RepositoryFile[]): AnalyzerResult {
+  analyze(files: RepositoryFile[], profile: RepositoryProfile): AnalyzerResult {
     const findings: Finding[] = [];
-
     for (const file of files) {
-      const pathParts = file.path.split('/').filter(Boolean);
-      const directoryDepth = Math.max(0, pathParts.length - 1);
-
-      if (directoryDepth > OrganizationAnalyzer.MAX_DIRECTORY_DEPTH) {
-        findings.push({
-          category: 'ORGANIZATION',
-          severity: 'MEDIUM',
-          message: `Caminho possui ${directoryDepth} níveis de pastas; o limite é ${OrganizationAnalyzer.MAX_DIRECTORY_DEPTH}.`,
-          file: file.path,
-          line: null,
-        });
-      }
-
-      if (!this.hasValidNames(pathParts)) {
-        findings.push({
-          category: 'ORGANIZATION',
-          severity: 'LOW',
-          message:
-            'Nome de arquivo ou pasta fora do padrão: use letras minúsculas, números e hífens.',
-          file: file.path,
-          line: null,
-        });
-      }
+      const parts = file.path.split('/').filter(Boolean);
+      const depth = Math.max(0, parts.length - 1);
+      if (depth > OrganizationAnalyzer.MAX_DIRECTORY_DEPTH) findings.push(this.finding(
+        'ORG001', 'MEDIUM', 'Caminho excessivamente profundo',
+        `O arquivo está em ${depth} níveis de pastas; a referência adotada é ${OrganizationAnalyzer.MAX_DIRECTORY_DEPTH}.`,
+        'Estruturas profundas aumentam custo de navegação, imports e descoberta de responsabilidades.',
+        'Reavalie agrupamentos intermediários e mantenha módulos próximos do domínio que representam.',
+        file.path,
+      ));
+      if (!this.validFileName(parts.at(-1) ?? '', profile.framework)) findings.push(this.finding(
+        'ORG002', 'LOW', 'Nome de arquivo diverge da convenção detectada',
+        'O nome não segue a convenção esperada para o projeto.',
+        'Convenções inconsistentes tornam buscas, imports e localização de responsabilidades menos previsíveis.',
+        'Renomeie o arquivo seguindo a convenção do framework ou documente a exceção arquitetural.',
+        file.path,
+      ));
     }
-
-    return {
-      category: 'ORGANIZATION',
-      score: Math.max(0, 100 - findings.length * 20),
-      findings,
-    };
+    if (profile.sourceFiles.length >= 12 && !profile.hasCi) findings.push(this.finding(
+      'ORG003', 'MEDIUM', 'Automação de integração contínua não detectada',
+      `O projeto possui ${profile.sourceFiles.length} arquivos de código, mas nenhuma configuração de CI reconhecida.`,
+      'Sem verificação automática, lint, testes e build podem divergir entre contribuições.',
+      'Adicione um workflow que instale dependências e execute lint, testes e build.',
+      '.github/workflows',
+    ));
+    return { category: 'ORGANIZATION', analyzedItems: files.length,
+      findings: aggregateFindings(findings) };
   }
 
-  /** Pastas usam kebab-case; arquivos aceitam extensões e nomes convencionais. */
-  private hasValidNames(pathParts: string[]): boolean {
-    const directoryPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-    const filePattern = /^[a-z0-9]+(?:[-.][a-z0-9]+)*$/;
-    const fileName = pathParts.at(-1) ?? '';
-    const directories = pathParts.slice(0, -1);
+  private validFileName(name: string, framework: RepositoryProfile['framework']): boolean {
+    if (/^(README|LICENSE|CHANGELOG|Dockerfile)(\.[a-z0-9]+)?$/i.test(name)) return true;
+    if (/^(package|tsconfig|angular)(\.[a-z0-9-]+)*\.json$/i.test(name)) return true;
+    if (/^\.[a-z0-9._-]+$/i.test(name)) return true;
+    if (framework === 'react' && /^[A-Z][A-Za-z0-9]*(?:\.(?:test|spec))?\.[cm]?[jt]sx?$/.test(name)) return true;
+    return /^[a-z0-9]+(?:[.-][a-z0-9]+)*$/.test(name);
+  }
 
-    const validDirectories = directories.every((name) =>
-      directoryPattern.test(name),
-    );
-    const validFileName =
-      filePattern.test(fileName) ||
-      /^(README|LICENSE|CHANGELOG)(\.[a-z0-9]+)?$/i.test(fileName);
-
-    return validDirectories && validFileName;
+  private finding(ruleId: string, severity: Severity, title: string, message: string,
+    whyItMatters: string, remediation: string, file: string): Finding {
+    return createFinding({ ruleId, category: 'ORGANIZATION', severity, title, message,
+      whyItMatters, remediation, evidence: null, file, line: null });
   }
 }

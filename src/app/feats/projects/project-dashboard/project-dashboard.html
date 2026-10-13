@@ -114,7 +114,13 @@
                 <span class="risk-card__category">
                   {{ getCategoryLabel(finding.category) }}
                 </span>
+
+                @if (finding.occurrences > 1) {
+                  <span class="risk-card__occurrences">{{ finding.occurrences }} ocorrências</span>
+                }
               </div>
+
+              <h3 class="risk-card__title">{{ finding.title }}</h3>
 
               <p class="risk-card__message">
                 {{ finding.message }}
@@ -129,6 +135,21 @@
                   }
                 </code>
               }
+
+              @if (finding.evidence) {
+                <code class="risk-card__evidence">{{ finding.evidence }}</code>
+              }
+
+              <div class="risk-card__details">
+                <div>
+                  <strong>Por que importa</strong>
+                  <p>{{ finding.whyItMatters }}</p>
+                </div>
+                <div>
+                  <strong>Como corrigir</strong>
+                  <p>{{ finding.remediation }}</p>
+                </div>
+              </div>
 
               <div class="risk-card__ai">
                 <button

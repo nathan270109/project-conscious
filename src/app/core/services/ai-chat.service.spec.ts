@@ -15,7 +15,12 @@ describe('AiChatService', () => {
     findings: [{
       severity: 'HIGH',
       category: 'Documentação',
+      title: 'README incompleto',
       problem: 'README incompleto',
+      whyItMatters: 'Onboarding não é reproduzível.',
+      remediation: 'Documente os comandos reais.',
+      evidence: null,
+      occurrences: 1,
       file: 'README.md',
       line: null,
     }],

@@ -1,117 +1,43 @@
+import type { RepositoryFile } from '../../github/github.service.js';
+import { RepositoryProfiler } from '../repository-profiler.service.js';
 import { AccessibilityAnalyzer } from './accessibility.analyzer.js';
 
-// Bloco de testes unitários para a classe AccessibilityAnalyzer
 describe('AccessibilityAnalyzer', () => {
   const analyzer = new AccessibilityAnalyzer();
+  const profiler = new RepositoryProfiler();
+  const analyze = (files: RepositoryFile[]) => analyzer.analyze(files, profiler.profile(files));
 
-  it.each(['field[', 'field.name', 'field+name', 'field(name)'])(
-    'treats the ID %s as literal text',
-    (id) => {
-      const result = analyzer.analyze([
-        {
-          path: 'src/app.html',
-          content: `<label for="${id}">Nome</label>\n<input id="${id}">`,
-        },
-      ]);
-      expect(result.findings).toEqual([]);
-    },
-  );
-
-  it('does not match a different label through regex metacharacters', () => {
-    const result = analyzer.analyze([
-      {
-        path: 'src/app.html',
-        content:
-          '<label for="fieldXname">Nome</label>\n<input id="field.name">',
-      },
-    ]);
-    expect(result.findings).toEqual([
-      {
-        category: 'ACCESSIBILITY',
-        severity: 'HIGH',
-        message: 'Campo input sem label associada.',
-        file: 'src/app.html',
-        line: 2,
-      },
-    ]);
-  });
-
-  // Cenário 1: Garante que um HTML totalmente acessível retorna pontuação máxima e nenhum erro (findings)
-  it('returns no findings for accessible HTML', () => {
-    const result = analyzer.analyze([
-      {
-        path: 'src/app.html',
-        content: `
-          <label for="email">E-mail</label>
-          <input id="email" type="email">
-          <img src="logo.png" alt="Logo Project Conscious">
-          <button>Enviar</button>
-        `,
-      },
-    ]);
-
-    expect(result.score).toBe(100);
+  it('recognizes valid accessible-name strategies', () => {
+    const result = analyze([{ path: 'src/app.html', content:
+      '<label>Email <input type="email"></label><input type="hidden"><input aria-label="Busca">' +
+      '<button aria-label="Fechar"><span>×</span></button><a href="/docs">Documentação</a>' +
+      '<div role="button" tabindex="0" (click)="save()" (keydown)="save()">Salvar</div>' }]);
     expect(result.findings).toEqual([]);
   });
 
-  // Cenário 2: Valida se detecta corretamente uma tag <img> que não possui o atributo 'alt' obrigatório
-  it('finds an image without alt', () => {
-    const result = analyzer.analyze([
-      {
-        path: 'src/app.html',
-        content: '<img src="dashboard.png">',
-      },
+  it('returns actionable findings and omits reference and confidence', () => {
+    const result = analyze([{ path: 'src/app.html',
+      content: '<img src="hero.png">\n<input type="email">\n<button></button>\n<a href="/x"></a>' }]);
+    expect(result.findings.map((finding) => finding.ruleId)).toEqual([
+      'A11Y001', 'A11Y002', 'A11Y003', 'A11Y004',
     ]);
-
-    expect(result.findings).toEqual([
-      {
-        category: 'ACCESSIBILITY',
-        severity: 'HIGH',
-        message: 'Imagem sem atributo alt.',
-        file: 'src/app.html',
-        line: 1,
-      },
-    ]);
+    expect(result.findings[0]).toMatchObject({ evidence: '<img src="hero.png">', line: 1,
+      whyItMatters: expect.any(String), remediation: expect.any(String) });
+    expect(result.findings[0]).not.toHaveProperty('reference');
+    expect(result.findings[0]).not.toHaveProperty('confidence');
   });
 
-  // Cenário 3: Valida se detecta um campo <input> que não possui uma tag <label for="..."> correspondente
-  it('finds an input without an associated label', () => {
-    const result = analyzer.analyze([
-      {
-        path: 'src/app.html',
-        content: '<input id="email" type="email">',
-      },
-    ]);
-
-    expect(result.findings).toHaveLength(1);
-    expect(result.findings[0].message).toBe('Campo input sem label associada.');
+  it('aggregates repeated violations and detects missing document language', () => {
+    const repeated = analyze([{ path: 'src/gallery.html', content: '<img src="a"><img src="b">' }]);
+    expect(repeated.findings[0]).toMatchObject({ ruleId: 'A11Y001', occurrences: 2 });
+    const document = analyze([{ path: 'index.html',
+      content: '<!doctype html><html><body><main>Conteúdo</main></body></html>' }]);
+    expect(document.findings).toEqual([expect.objectContaining({ ruleId: 'A11Y006' })]);
   });
 
-  // Cenário 4: Valida se detecta um botão vazio (<button></button>) sem conteúdo de texto ou nome acessível
-  it('finds a button without text or accessible name', () => {
-    const result = analyzer.analyze([
-      {
-        path: 'src/app.html',
-        content: '<button></button>',
-      },
-    ]);
-
-    expect(result.findings).toHaveLength(1);
-    expect(result.findings[0].message).toBe(
-      'Botão sem texto ou nome acessível.',
-    );
-  });
-
-  // Cenário 5: Garante que o analisador ignora conteúdos parecidos com HTML dentro de arquivos TypeScript (.ts) para evitar falsos positivos
-  it('ignores HTML-like content in TypeScript files', () => {
-    const result = analyzer.analyze([
-      {
-        path: 'src/example.ts',
-        content: 'const template = "<img src=\\"logo.png\\">";',
-      },
-    ]);
-
-    expect(result.score).toBe(100);
-    expect(result.findings).toEqual([]);
+  it('reports a coverage gap for a frontend without external HTML', () => {
+    const files = [{ path: 'package.json', content: '{"dependencies":{"react":"1"}}' },
+      { path: 'src/App.tsx', content: 'export const App = () => <main />' }];
+    expect(analyze(files).findings[0].ruleId).toBe('A11Y000');
   });
 });

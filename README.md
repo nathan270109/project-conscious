@@ -71,8 +71,8 @@ Limites e cuidados para apresentação/produção estão em
 Com o Angular iniciado, abra `/projects/new` e clique em **Abrir demonstração
 salva**. O dashboard usa a análise salva do
 [Project Conscious Demo](https://github.com/katherinykamili/project-conscious-demo),
-revisão `2770289e71c3ea7ef0e89ba056f67ba99f4110ee`: score 74, cinco dimensões
-e dez findings. O selo **Modo demonstração: análise salva**, a origem e a data
+revisão `2770289e71c3ea7ef0e89ba056f67ba99f4110ee`: score 72, cinco dimensões
+e nove findings V2. O selo **Modo demonstração: análise salva**, a origem e a data
 identificam esse resultado. Recarregar essa rota também funciona.
 
 O JSON `backend/src/demo-data/analysis-result.json` é incluído no bundle Angular;
@@ -95,9 +95,12 @@ Os arquivos da revisão estão preservados em
 `backend/src/demo-data/repository-snapshot.json`, com seus hashes Git.
 `demo.service.spec.ts` reproduz o resultado com os cinco analisadores reais.
 O resultado reflete as heurísticas atuais: por exemplo, a regra de descrição
-do README procura palavras específicas e não reconhece a frase curta
-“Projeto de demonstração.”. Esse apontamento é uma limitação da regra;
-não significa ausência literal de qualquer texto descritivo.
+considera substância mínima e não trata a frase curta “Projeto de demonstração.”
+como uma apresentação suficiente. Esse apontamento avalia a utilidade da
+documentação, não a ausência literal de qualquer texto descritivo.
+
+Regras, pontuação e limitações da nova análise estão em
+[Análise V2](docs/analise-v2.md).
 
 Validação automatizada:
 

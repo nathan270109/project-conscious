@@ -1,47 +1,23 @@
+import type { RepositoryFile } from '../../github/github.service.js';
+import { RepositoryProfiler } from '../repository-profiler.service.js';
 import { OrganizationAnalyzer } from './organization.analyzer.js';
 
 describe('OrganizationAnalyzer', () => {
   const analyzer = new OrganizationAnalyzer();
+  const profiler = new RepositoryProfiler();
+  const analyze = (files: RepositoryFile[]) => analyzer.analyze(files, profiler.profile(files));
 
-  it('accepts a path at the six-directory limit', () => {
-    const result = analyzer.analyze([
-      { path: 'one/two/three/four/five/six/file.ts', content: '' },
-    ]);
-
-    expect(result.findings).toEqual([]);
+  it('uses framework-aware file conventions', () => {
+    const react = [{ path: 'package.json', content: '{"dependencies":{"react":"1"}}' },
+      { path: 'src/UserCard.tsx', content: '' }];
+    expect(analyze(react).findings).toEqual([]);
+    expect(analyze([{ path: 'src/Bad_Name.ts', content: '' }]).findings[0].ruleId).toBe('ORG002');
   });
 
-  it('reports paths deeper than six directories as medium severity', () => {
-    const result = analyzer.analyze([
-      { path: 'one/two/three/four/five/six/seven/file.ts', content: '' },
-    ]);
-
-    expect(result.findings).toEqual([
-      {
-        category: 'ORGANIZATION',
-        severity: 'MEDIUM',
-        message:
-          'Caminho possui 7 níveis de pastas; o limite é 6.',
-        file: 'one/two/three/four/five/six/seven/file.ts',
-        line: null,
-      },
-    ]);
-  });
-
-  it('reports names outside the lowercase kebab-case convention', () => {
-    const result = analyzer.analyze([
-      { path: 'src/Bad_Folder/BadFile.ts', content: '' },
-    ]);
-
-    expect(result.findings).toEqual([
-      {
-        category: 'ORGANIZATION',
-        severity: 'LOW',
-        message:
-          'Nome de arquivo ou pasta fora do padrão: use letras minúsculas, números e hífens.',
-        file: 'src/Bad_Folder/BadFile.ts',
-        line: null,
-      },
-    ]);
+  it('detects excessive depth and missing CI in larger projects', () => {
+    const deep = analyze([{ path: 'a/b/c/d/e/f/g/h/i/file.ts', content: '' }]);
+    expect(deep.findings[0].ruleId).toBe('ORG001');
+    const many = Array.from({ length: 12 }, (_, index) => ({ path: `src/file-${index}.ts`, content: '' }));
+    expect(analyze(many).findings.some((finding) => finding.ruleId === 'ORG003')).toBe(true);
   });
 });

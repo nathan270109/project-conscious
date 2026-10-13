@@ -1,119 +1,28 @@
+import type { RepositoryFile } from '../../github/github.service.js';
+import { RepositoryProfiler } from '../repository-profiler.service.js';
 import { DocumentationAnalyzer } from './documentation.analyzer.js';
 
 describe('DocumentationAnalyzer', () => {
   const analyzer = new DocumentationAnalyzer();
+  const profiler = new RepositoryProfiler();
+  const analyze = (files: RepositoryFile[]) => analyzer.analyze(files, profiler.profile(files));
 
-  it('returns score 100 when README has description, installation and execution', () => {
-    const result = analyzer.analyze([
-      {
-        path: 'README.md',
-        content: `
-          # Project Conscious
-
-          ## Descrição
-          Plataforma para análise de software.
-
-          ## Instalação
-          npm install
-
-          ## Como executar
-          npm run start
-        `,
-      },
-    ]);
-
-    expect(result.score).toBe(100);
-    expect(result.findings).toEqual([]);
+  it('accepts substantive, executable documentation', () => {
+    const files = [{ path: 'package.json', content: '{"scripts":{"start":"node .","test":"vitest"}}' },
+      { path: 'src/app.spec.ts', content: 'test("x",()=>expect(1).toBe(1))' },
+      { path: 'README.md', content: '# Produto\nEste produto analisa repositórios e apresenta riscos técnicos explicáveis para equipes tomarem decisões com evidências.\n## Instalação\n```sh\nnpm install\n```\n## Execução\n```sh\nnpm run start\n```\n## Testes\n```sh\nnpm test\n```' }];
+    expect(analyze(files).findings).toEqual([]);
   });
 
-  it('returns findings when README is incomplete', () => {
-    const result = analyzer.analyze([
-      {
-        path: 'README.md',
-        content: '# Project Conscious\n\nProjeto de demonstração.',
-      },
-    ]);
-
-    expect(result.score).toBe(10);
-    expect(result.findings).toHaveLength(3);
-    expect(result.findings[0].message).toBe(
-      'README não possui uma descrição do projeto.',
-    );
+  it('finds missing and shallow documentation', () => {
+    expect(analyze([{ path: 'src/app.ts', content: '' }]).findings[0].ruleId).toBe('DOC001');
+    expect(analyze([{ path: 'README.md', content: '# Projeto\nCurto.' }]).findings.map((f) => f.ruleId))
+      .toEqual(['DOC002', 'DOC003', 'DOC004']);
   });
 
-  it('returns an installation finding when only installation is missing', () => {
-    const result = analyzer.analyze([
-      {
-        path: 'README.md',
-        content: `
-          # Project Conscious
-
-          ## Descrição
-          Plataforma para análise de software.
-
-          ## Como executar
-          npm run start
-        `,
-      },
-    ]);
-
-    expect(result.score).toBe(70);
-    expect(result.findings).toEqual([
-      {
-        category: 'DOCUMENTATION',
-        severity: 'MEDIUM',
-        message: 'README não possui instruções de instalação.',
-        file: 'README.md',
-        line: null,
-      },
-    ]);
-  });
-
-  it('returns an execution finding when only execution is missing', () => {
-    const result = analyzer.analyze([
-      {
-        path: 'README.md',
-        content: `
-          # Project Conscious
-
-          ## Descrição
-          Plataforma para análise de software.
-
-          ## Instalação
-          npm install
-        `,
-      },
-    ]);
-
-    expect(result.score).toBe(70);
-    expect(result.findings).toEqual([
-      {
-        category: 'DOCUMENTATION',
-        severity: 'MEDIUM',
-        message: 'README não possui instruções de execução.',
-        file: 'README.md',
-        line: null,
-      },
-    ]);
-  });
-
-  it('returns a high severity finding when README does not exist', () => {
-    const result = analyzer.analyze([
-      {
-        path: 'src/app.ts',
-        content: 'export const app = true;',
-      },
-    ]);
-
-    expect(result.score).toBe(0);
-    expect(result.findings).toEqual([
-      {
-        category: 'DOCUMENTATION',
-        severity: 'HIGH',
-        message: 'README não encontrado no repositório.',
-        file: 'README',
-        line: null,
-      },
-    ]);
+  it('verifies documented scripts against package.json', () => {
+    const files = [{ path: 'package.json', content: '{"scripts":{"start":"node ."}}' },
+      { path: 'README.md', content: '# Produto\nDescrição extensa do produto, público, capacidades, limites e objetivo para tornar o onboarding confiável.\n## Instalação\nnpm install\n## Execução\nnpm run dev' }];
+    expect(analyze(files).findings).toEqual([expect.objectContaining({ ruleId: 'DOC006' })]);
   });
 });

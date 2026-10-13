@@ -418,14 +418,6 @@
     .dados h3 {
         font-size: 12px;
     }
-
-    .dados p {
-        font-size: 10px;
-    }
-
-    .texto-inferior p {
-        font-size: 12px;
-    }
 }
 
 /* Unified section */
@@ -468,4 +460,8 @@
   .mapa-meio, .area-dimensao { grid-template-columns: minmax(130px,1fr) 42px 62px 34px; gap: 7px; margin-inline: 14px; }
   .dados p { max-width: 24ch; }
   .risco { min-width: 0; padding-inline: 4px; }
+}
+@media (max-width: 375px) {
+  .dados p { font-size: 10px; }
+  .texto-inferior p { font-size: 12px; }
 }

@@ -12,6 +12,7 @@ import { MaintainabilityAnalyzer } from './analyzers/maintainability.analyzer.js
 import { ScoringService } from '../scoring/scoring.service.js';
 import { RisksService } from '../risks/risks.service.js';
 import { InsightsService } from '../insights/insights.service.js';
+import { RepositoryProfiler } from './repository-profiler.service.js';
 
 @Injectable()
 export class RepositoryAnalysisEngine implements AnalysisEngine {
@@ -24,20 +25,23 @@ export class RepositoryAnalysisEngine implements AnalysisEngine {
     private readonly scoring: ScoringService,
     private readonly risks: RisksService,
     private readonly insights: InsightsService,
+    private readonly profiler: RepositoryProfiler,
   ) {}
 
   analyze(files: RepositoryFile[]): AnalysisEngineOutput {
     // Falhas interrompem a análise; não substituímos categorias não analisadas por 100.
-    const findings = [
+    const profile = this.profiler.profile(files);
+    const analyzerResults = [
       this.documentation,
       this.tests,
       this.accessibility,
       this.organization,
       this.maintainability,
-    ].flatMap((analyzer) => analyzer.analyze(files).findings);
+    ].map((analyzer) => analyzer.analyze(files, profile));
+    const findings = analyzerResults.flatMap((result) => result.findings);
 
     // As notas finais seguem exclusivamente as penalidades do ScoringService.
-    const { score, dimensions } = this.scoring.calculate(findings);
+    const { score, dimensions } = this.scoring.calculate(analyzerResults);
     const orderedFindings = this.risks.sortByPriority(findings);
 
     return {
