@@ -70,6 +70,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    align-self: flex-start;
     border: 1px solid var(--cinza-borda);
     box-shadow: var(--sombra);
     transition: .4s;
@@ -247,7 +248,7 @@
 @media (max-width: 1024px){
 
     .box {
-        gap: 35px;
+        gap: 70px;
         padding: 40px 30px;
     }
 
