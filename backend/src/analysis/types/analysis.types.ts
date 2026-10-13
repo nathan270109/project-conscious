@@ -8,16 +8,22 @@ export type AnalysisCategory =
 export type Severity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 
 export interface Finding {
+  ruleId: string;
   category: AnalysisCategory;
   severity: Severity;
+  title: string;
   message: string;
+  whyItMatters: string;
+  remediation: string;
+  evidence: string | null;
   file: string;
   line: number | null;
+  occurrences: number;
 }
 
 export interface AnalyzerResult {
   category: AnalysisCategory;
-  score: number;
+  analyzedItems: number;
   findings: Finding[];
 }
 
@@ -64,4 +70,4 @@ export interface FailedAnalysisResult extends AnalysisResultBase {
 export type AnalysisResult =
   | CompletedAnalysisResult
   | FailedAnalysisResult;
-  
+

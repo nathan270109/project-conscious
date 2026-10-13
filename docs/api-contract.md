@@ -157,11 +157,17 @@ type DimensionScore = {
 };
 
 type Finding = {
+  ruleId: string;
   category: AnalysisCategory;
   severity: Severity;
+  title: string;
   message: string;
+  whyItMatters: string;
+  remediation: string;
+  evidence: string | null;
   file: string;
   line: number | null;
+  occurrences: number;
 };
 
 type Insight = {
@@ -187,6 +193,9 @@ type AnalysisResult = {
   error?: AnalysisError;
 };
 ```
+
+`reference` e `confidence` não fazem parte do resultado público. O dashboard
+prioriza localização, evidência, impacto e correção sem sobrecarregar a leitura.
 
 ## Regras por status
 
@@ -227,11 +236,17 @@ nem resultados reais do novo gerador.
   ],
   "findings": [
     {
+      "ruleId": "A11Y001",
       "category": "ACCESSIBILITY",
       "severity": "HIGH",
+      "title": "Imagem sem alternativa textual definida",
       "message": "Imagem sem texto alternativo.",
+      "whyItMatters": "Usuários de leitor de tela podem perder uma informação relevante.",
+      "remediation": "Adicione alt descritivo ou alt vazio quando a imagem for decorativa.",
+      "evidence": "<img src=\"profile.png\">",
       "file": "src/app/profile/profile.component.html",
-      "line": 12
+      "line": 12,
+      "occurrences": 1
     }
   ],
   "insight": {

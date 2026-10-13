@@ -34,10 +34,18 @@ function isScore(value: unknown): boolean {
 function isFinding(value: unknown): boolean {
   return (
     isRecord(value) &&
+    isText(value.ruleId) &&
     isCategory(value.category) &&
     severities.some((severity) => severity === value.severity) &&
+    isText(value.title) &&
     isText(value.message) &&
+    isText(value.whyItMatters) &&
+    isText(value.remediation) &&
+    (value.evidence === null || typeof value.evidence === 'string') &&
     isText(value.file) &&
+    typeof value.occurrences === 'number' &&
+    Number.isSafeInteger(value.occurrences) &&
+    value.occurrences > 0 &&
     (value.line === null ||
       (typeof value.line === 'number' &&
         Number.isSafeInteger(value.line) &&

@@ -9,6 +9,17 @@ const text = (value: unknown): value is string =>
 const score = (value: unknown): value is number =>
   typeof value === 'number' && Number.isFinite(value) && value >= 0 && value <= 100;
 const category = (value: unknown) => typeof value === 'string' && categories.includes(value);
+const finding = (value: unknown) =>
+  object(value) && text(value['ruleId']) && category(value['category']) &&
+  typeof value['severity'] === 'string' && severities.includes(value['severity']) &&
+  text(value['title']) && text(value['message']) && text(value['whyItMatters']) &&
+  text(value['remediation']) &&
+  (value['evidence'] === null || typeof value['evidence'] === 'string') &&
+  text(value['file']) &&
+  (value['line'] === null ||
+    (typeof value['line'] === 'number' && Number.isSafeInteger(value['line']) && value['line'] > 0)) &&
+  typeof value['occurrences'] === 'number' && Number.isSafeInteger(value['occurrences']) &&
+  value['occurrences'] > 0;
 
 export function isAnalysisResult(value: unknown, projectId: string): value is AnalysisResult {
   if (
@@ -39,17 +50,7 @@ export function isAnalysisResult(value: unknown, projectId: string): value is An
     value['dimensions'].length === 5 &&
     value['dimensions'].every((d) => object(d) && category(d['category']) && score(d['score'])) &&
     new Set(value['dimensions'].map((d) => d.category)).size === 5 &&
-    value['findings'].every(
-      (f) =>
-        object(f) &&
-        category(f['category']) &&
-        typeof f['severity'] === 'string' &&
-        severities.includes(f['severity']) &&
-        text(f['message']) &&
-        text(f['file']) &&
-        (f['line'] === null ||
-          (typeof f['line'] === 'number' && Number.isSafeInteger(f['line']) && f['line'] > 0)),
-    ) &&
+    value['findings'].every(finding) &&
     object(value['insight']) &&
     category(value['insight']['category']) &&
     text(value['insight']['title']) &&

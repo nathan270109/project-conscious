@@ -3,104 +3,90 @@
   "status": "COMPLETED",
   "analyzedAt": "2026-10-05T18:31:40.811Z",
   "demoMode": true,
-  "score": 74,
+  "score": 72,
   "dimensions": [
-    {
-      "category": "DOCUMENTATION",
-      "score": 70
-    },
-    {
-      "category": "TESTS",
-      "score": 75
-    },
-    {
-      "category": "ACCESSIBILITY",
-      "score": 40
-    },
-    {
-      "category": "ORGANIZATION",
-      "score": 95
-    },
-    {
-      "category": "MAINTAINABILITY",
-      "score": 90
-    }
+    { "category": "DOCUMENTATION", "score": 70 },
+    { "category": "TESTS", "score": 75 },
+    { "category": "ACCESSIBILITY", "score": 25 },
+    { "category": "ORGANIZATION", "score": 95 },
+    { "category": "MAINTAINABILITY", "score": 95 }
   ],
   "findings": [
     {
-      "category": "ACCESSIBILITY",
-      "severity": "HIGH",
-      "message": "Imagem sem atributo alt.",
-      "file": "src/app.html",
-      "line": 4
+      "ruleId": "A11Y001", "category": "ACCESSIBILITY", "severity": "HIGH",
+      "title": "Imagem sem alternativa textual definida",
+      "message": "A imagem não possui o atributo alt; não é possível distinguir conteúdo informativo de decoração.",
+      "whyItMatters": "Usuários de leitor de tela podem perder uma informação ou ouvir apenas o nome do arquivo.",
+      "remediation": "Use alt descritivo para conteúdo ou alt=\"\" para imagem puramente decorativa.",
+      "evidence": "<img src=\"dashboard.png\">", "file": "src/app.html", "line": 4, "occurrences": 1
     },
     {
-      "category": "ACCESSIBILITY",
-      "severity": "HIGH",
-      "message": "Campo input sem label associada.",
-      "file": "src/app.html",
-      "line": 6
+      "ruleId": "A11Y002", "category": "ACCESSIBILITY", "severity": "HIGH",
+      "title": "Controle de formulário sem nome acessível",
+      "message": "O elemento <input> não está associado a label, aria-label ou aria-labelledby.",
+      "whyItMatters": "Tecnologias assistivas podem anunciar o campo sem informar sua finalidade.",
+      "remediation": "Associe um label por for/id, envolva o controle em label ou use aria-labelledby quando apropriado.",
+      "evidence": "<input type=\"email\" placeholder=\"Digite seu e-mail\">", "file": "src/app.html", "line": 6, "occurrences": 1
     },
     {
-      "category": "TESTS",
-      "severity": "HIGH",
-      "message": "Nenhum arquivo de teste foi encontrado no repositório.",
-      "file": "tests",
-      "line": null
+      "ruleId": "A11Y003", "category": "ACCESSIBILITY", "severity": "HIGH",
+      "title": "Botão sem nome acessível",
+      "message": "O botão não possui texto, aria-label, aria-labelledby, title ou imagem com alt.",
+      "whyItMatters": "O usuário pode encontrar um controle anunciado apenas como “botão”, sem compreender sua ação.",
+      "remediation": "Adicione texto visível ou um nome acessível equivalente à ação executada.",
+      "evidence": "<button>", "file": "src/app.html", "line": 8, "occurrences": 1
     },
     {
-      "category": "ACCESSIBILITY",
-      "severity": "MEDIUM",
-      "message": "Botão sem texto ou nome acessível.",
-      "file": "src/app.html",
-      "line": 8
+      "ruleId": "TEST002", "category": "TESTS", "severity": "HIGH",
+      "title": "Código-fonte sem testes detectáveis",
+      "message": "Foram encontrados 3 arquivos de código e nenhum arquivo de teste reconhecido.",
+      "whyItMatters": "Mudanças podem introduzir regressões sem uma verificação automatizada próxima ao comportamento alterado.",
+      "remediation": "Adicione testes unitários para os fluxos centrais e um script de execução no package.json.",
+      "evidence": null, "file": "tests", "line": null, "occurrences": 1
     },
     {
-      "category": "DOCUMENTATION",
-      "severity": "MEDIUM",
-      "message": "README não possui uma descrição do projeto.",
-      "file": "README.md",
-      "line": null
+      "ruleId": "DOC002", "category": "DOCUMENTATION", "severity": "MEDIUM",
+      "title": "Objetivo do projeto pouco explicado",
+      "message": "O README não contém uma apresentação substantiva do problema e da solução.",
+      "whyItMatters": "Novos contribuidores não conseguem confirmar rapidamente o propósito e o escopo do projeto.",
+      "remediation": "Inclua após o título um parágrafo com objetivo, público, principais capacidades e limites.",
+      "evidence": null, "file": "README.md", "line": null, "occurrences": 1
     },
     {
-      "category": "DOCUMENTATION",
-      "severity": "MEDIUM",
-      "message": "README não possui instruções de instalação.",
-      "file": "README.md",
-      "line": null
+      "ruleId": "DOC003", "category": "DOCUMENTATION", "severity": "MEDIUM",
+      "title": "Instalação não reproduzível pelo README",
+      "message": "Não foi encontrada uma seção de instalação com ao menos um comando executável.",
+      "whyItMatters": "A ausência de passos reproduzíveis aumenta falhas de onboarding e diferenças entre ambientes.",
+      "remediation": "Documente pré-requisitos e o comando de instalação do gerenciador usado pelo projeto.",
+      "evidence": null, "file": "README.md", "line": null, "occurrences": 1
     },
     {
-      "category": "DOCUMENTATION",
-      "severity": "MEDIUM",
-      "message": "README não possui instruções de execução.",
-      "file": "README.md",
-      "line": null
+      "ruleId": "DOC004", "category": "DOCUMENTATION", "severity": "MEDIUM",
+      "title": "Execução local não está demonstrada",
+      "message": "O README não apresenta uma seção de execução com comando verificável.",
+      "whyItMatters": "Mesmo com dependências instaladas, o usuário não sabe como iniciar ou validar a aplicação.",
+      "remediation": "Inclua o comando real de inicialização e descreva portas, serviços dependentes e resultado esperado.",
+      "evidence": null, "file": "README.md", "line": null, "occurrences": 1
     },
     {
-      "category": "MAINTAINABILITY",
-      "severity": "LOW",
-      "message": "console.log é um sinal de manutenção; confirme se o log é intencional.",
-      "file": "src/app.ts",
-      "line": 1
+      "ruleId": "MAINT001", "category": "MAINTAINABILITY", "severity": "LOW",
+      "title": "Log de depuração em código de produção",
+      "message": "Uma chamada console.log foi encontrada fora de arquivo de teste.",
+      "whyItMatters": "Logs não estruturados podem poluir a saída, expor dados e dificultar observabilidade.",
+      "remediation": "Remova o log ou use o mecanismo estruturado e configurável do projeto.",
+      "evidence": "console.log('Aplicação iniciada');", "file": "src/app.ts", "line": 1, "occurrences": 1
     },
     {
-      "category": "MAINTAINABILITY",
-      "severity": "LOW",
-      "message": "TODO indica uma pendência de manutenção.",
-      "file": "src/app.ts",
-      "line": 3
-    },
-    {
-      "category": "ORGANIZATION",
-      "severity": "LOW",
-      "message": "Nome de arquivo ou pasta fora do padrão: use letras minúsculas, números e hífens.",
-      "file": "src/Utils.ts",
-      "line": null
+      "ruleId": "ORG002", "category": "ORGANIZATION", "severity": "LOW",
+      "title": "Nome de arquivo diverge da convenção detectada",
+      "message": "O nome não segue a convenção esperada para o projeto.",
+      "whyItMatters": "Convenções inconsistentes tornam buscas, imports e localização de responsabilidades menos previsíveis.",
+      "remediation": "Renomeie o arquivo seguindo a convenção do framework ou documente a exceção arquitetural.",
+      "evidence": null, "file": "src/Utils.ts", "line": null, "occurrences": 1
     }
   ],
   "insight": {
-    "category": "ACCESSIBILITY",
-    "title": "Melhore a acessibilidade",
-    "message": "Acessibilidade apresentou a menor nota: 40/100. Como primeira ação, revise o apontamento de acessibilidade: Imagem sem atributo alt. Revise esse apontamento no arquivo src/app.html:4."
+    "category": "ACCESSIBILITY", "title": "Melhore a acessibilidade",
+    "message": "Acessibilidade apresentou a menor nota: 25/100. Como primeira ação, revise o apontamento de acessibilidade: A imagem não possui o atributo alt; não é possível distinguir conteúdo informativo de decoração. Revise esse apontamento no arquivo src/app.html:4."
   }
 }

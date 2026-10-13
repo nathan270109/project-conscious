@@ -13,11 +13,17 @@ export interface DimensionScore {
 }
 
 export interface Finding {
+    ruleId: string;
     category: FindingCategory;
     severity: Severity;
+    title: string;
     message: string;
+    whyItMatters: string;
+    remediation: string;
+    evidence: string | null;
     file: string;
     line: number | null;
+    occurrences: number;
 }
 
 export interface Insight {

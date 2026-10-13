@@ -139,7 +139,8 @@ export class ProjectDashboard {
     this.explainingFindingIndex = index;
     const location = finding.line === null ? finding.file : `${finding.file}:${finding.line}`;
     const question =
-      `Explique em linguagem simples o problema "${finding.message}" em ${location}. ` +
+      `Explique em linguagem simples o problema "${finding.title}": ${finding.message} Em ${location}. ` +
+      `Impacto identificado: ${finding.whyItMatters} Correção sugerida: ${finding.remediation} ` +
       'Descreva o impacto prático, a prioridade e um próximo passo verificável sem inventar evidências.';
 
     this.aiChatService.ask(question, analysis).subscribe({
@@ -176,7 +177,12 @@ export class ProjectDashboard {
       findings: this.result.findings.map((finding) => ({
         severity: finding.severity,
         category: this.getCategoryLabel(finding.category),
+        title: finding.title,
         problem: finding.message,
+        whyItMatters: finding.whyItMatters,
+        remediation: finding.remediation,
+        evidence: finding.evidence,
+        occurrences: finding.occurrences,
         file: finding.file,
         line: finding.line,
       })),
