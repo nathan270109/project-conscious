@@ -30,7 +30,7 @@ describe('Footer', () => {
     expect(brand?.querySelector('img')?.getAttribute('alt')).toBeTruthy();
     const links = Array.from(element.querySelectorAll('nav[aria-label="Navegação do footer"] a'));
     expect(links.map(link => link.textContent?.trim())).toEqual(['Início', 'Sobre', 'Contato', 'Diagnóstico', 'Login']);
-    expect(links[0].getAttribute('href')).toBe('/home#top');
+    expect(links[0].getAttribute('href')).toBe('/home#section-hero');
     expect(links[1].getAttribute('href')).toBe('/home#section-sobre-o-projeto');
     expect(links[2].getAttribute('href')).toBe('/home#contato');
     expect(links[3].getAttribute('href')).toMatch(/^\/projects\/new\/?$/);
